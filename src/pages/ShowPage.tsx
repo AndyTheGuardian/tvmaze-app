@@ -45,13 +45,13 @@ export function ShowPage() {
           backgroundImage: `url(${show?.image?.original})`,
         }}
       />
-      <div className="fixed inset-0 -z-10 bg-black/70 pointer-events-none" />
+      <div className="fixed inset-0 -z-10 bg-black/60 pointer-events-none" />
       <main className="relative z-10 mx-auto max-w-5xl p-3 md:p-6">
         <div className="rounded-2xl bg-black/50 p-6">
-          <h1 className="mb-6 text-gray-100 text-2xl font-bold">
+          <h1 className="mb-4 text-gray-100 text-2xl font-bold">
             {show?.name}
           </h1>
-          <div className="mb-6 flex gap-2">
+          <div className="mb-4 flex gap-2">
             {show?.genres.map((genre) => (
               <span
                 key={genre}
