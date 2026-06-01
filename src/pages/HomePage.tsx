@@ -1,11 +1,16 @@
-import { useState } from "react";
 import { useShows } from "../hooks/useShows";
-
 import { SearchBar } from "../components/SearchBar";
 import { ShowCard } from "../components/ShowCard";
+import { useSearchParams } from "react-router-dom";
 
 export function HomePage() {
-  const [search, setSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const search = searchParams.get("q") ?? "";
+
+  const handleSearchChange = (value: string) => {
+    setSearchParams(value ? { q: value } : {});
+  };
 
   const { data = [], isLoading } = useShows(search);
 
@@ -26,7 +31,7 @@ export function HomePage() {
         <div className="mx-auto max-w-5xl p-3 md:p-6 bg-black/70 rounded-lg">
           <h1 className="mb-6 text-2xl font-bold">Episode Guide</h1>
 
-          <SearchBar value={search} onChange={setSearch} />
+          <SearchBar value={search} onChange={handleSearchChange} />
 
           {isLoading && <p className="mt-4">Loading...</p>}
 

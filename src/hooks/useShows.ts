@@ -6,5 +6,6 @@ export function useShows(search: string) {
     queryKey: ["shows", search],
     queryFn: () => searchShows(search),
     enabled: search.length > 2,
+    staleTime: 1000 * 60 * 10,
   });
 }

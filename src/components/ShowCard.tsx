@@ -10,16 +10,17 @@ export function ShowCard({ show }: Props) {
     <Link to={`/show/${show.id}`}>
       <div
         className="overflow-hidden rounded-lg 
-      border border-gray-400 bg-gray-100 text-gray-950
+        border-0 border-gray-200/80
+       bg-gray-200/80 text-gray-950
       shadow-sm 
       hover:shadow-lg hover:scale-105 active:scale-95
-      transition-transform duration-300 `, hover:transform-"
+      transition-transform duration-300"
       >
         {show.image && (
           <img
             src={show.image.medium}
             alt={show.name}
-            className="h-60 w-full object-cover"
+            className="h-72 w-full object-cover"
           />
         )}
 

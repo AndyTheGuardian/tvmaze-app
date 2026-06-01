@@ -16,10 +16,10 @@ export function FavoritesPage() {
   return (
     <div className="mx-auto max-w-5xl p-6 bg-gray-900 min-h-screen">
       <h1 className="mb-6 text-2xl font-bold">Favorite Shows</h1>
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
         {favorites.map((show) => (
           <Link key={show.id} to={`/show/${show.id}`}>
-            <div className="overflow-hidden rounded-lg shadow border bg-gray-200">
+            <div className="overflow-hidden rounded-lg shadow bg-gray-200/70">
               {show.image && (
                 <img
                   src={show.image}

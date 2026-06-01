@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { useShow } from "../hooks/useShow";
 import { useEpisodes } from "../hooks/useEpisodes";
@@ -7,9 +7,11 @@ import { htmlToText } from "../utils/htmlToText";
 import { groupEpisodesBySeason } from "../utils/groupEpisodesBySeason";
 import { formatEpisode } from "../utils/formatEpisode";
 import type { Episode } from "../types/tvmaze";
-import { Heart } from "lucide-react";
+import { Heart, ExternalLink } from "lucide-react";
 import { isFavorite, toggleFavorite } from "../utils/favorites";
 import { EpisodeDrawer } from "../components/EpisodeDrawer";
+import { getYear } from "../utils/getYear";
+import { getStation } from "../utils/getStation";
 
 export function ShowPage() {
   const { id } = useParams();
@@ -58,10 +60,13 @@ export function ShowPage() {
       <div className="fixed inset-0 z-10 bg-black/60 pointer-events-none" />
       <main className="relative z-20 mx-auto max-w-5xl p-3 md:p-6">
         <div className="rounded-2xl bg-black/50 p-6">
-          <div className="flex">
-            <h1 className="flex-1 mb-4 text-gray-100 text-2xl font-bold">
+          <div className="flex gap-2">
+            <h1 className="flex-1 mb-3 text-gray-100 text-2xl font-bold">
               {show?.name}
             </h1>
+            <div className="mt-2 text-sm font-semibold">
+              {show?.rating?.average}
+            </div>
             <Heart
               size={20}
               fill={favorite ? "white" : "none"}
@@ -80,16 +85,44 @@ export function ShowPage() {
               }}
             />
           </div>
-          <div className="mb-4 flex gap-2">
-            {show?.genres.map((genre) => (
-              <span
-                key={genre}
-                className="rounded-full bg-gray-200/70 text-gray-950 px-3 py-1 text-sm"
-              >
-                {genre}
-              </span>
-            ))}
+          <div className="flex gap-1">
+            <div className="flex-1 mb-4 flex gap-2">
+              {show?.genres.map((genre) => (
+                <span
+                  key={genre}
+                  className="rounded-full bg-gray-200/70 text-gray-950 px-3 py-1 text-sm"
+                >
+                  {genre}
+                </span>
+              ))}
+            </div>
+            <Link
+              className="text-sm font-semibold"
+              to={`https://www.imdb.com/title/${show?.externals.imdb}`}
+            >
+              <div className="flex mt-1 text-gray-300/70">
+                IMDB
+                <ExternalLink size={14} className="ml-0.5 mt-0.5" />
+              </div>
+            </Link>
           </div>
+          <div className="mb-4 flex gap-2">
+            <div className="flex-none text-sm font-semibold">
+              {getStation(show?.network?.name, show?.webChannel?.name)}
+            </div>
+            <div className="flex-1 flex gap-2">
+              {show?.schedule.days.map((day) => (
+                <span key={day} className="text-gray-300 mt-0.75 text-xs">
+                  {day}s
+                </span>
+              ))}
+            </div>
+            <div className="text-sm font-semibold">
+              {getYear(show?.premiered)}-{getYear(show?.ended)}
+            </div>
+            <div className="text-sm font-semibold">{show?.status}</div>
+          </div>
+
           <p className="mb-4 text-gray-100">{htmlToText(show?.summary)}</p>
 
           <div className="md:sticky md:top-0 z-50 mb-6 flex flex-wrap gap-2">
@@ -113,7 +146,8 @@ export function ShowPage() {
               <div
                 key={episode.id}
                 onClick={() => setSelectedEpisode(episode)}
-                className="flex items-start gap-2 rounded-lg shadow bg-gray-200/70 p-3 text-gray-950"
+                className="flex items-start gap-2 rounded-lg shadow 
+                bg-gray-200/70 p-3 text-gray-950"
               >
                 <div className="flex-none w-1/4 md:w-44">
                   <div className="font-semibold">
