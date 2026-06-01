@@ -38,9 +38,12 @@ export function ShowPage() {
   }
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen -z-30 overflow-x-hidden bg-black">
       <div
-        className="fixed inset-0 -z-20 bg-cover bg-top pointer-events-none bg-black"
+        className="fixed inset-0 
+        scale-105 -z-20 
+        bg-cover bg-top 
+        pointer-events-none"
         style={{
           backgroundImage: `url(${show?.image?.original})`,
         }}
