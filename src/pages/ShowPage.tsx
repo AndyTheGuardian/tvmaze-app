@@ -64,14 +64,14 @@ export function ShowPage() {
             <h1 className="flex-1 mb-3 text-gray-100 text-2xl font-bold">
               {show?.name}
             </h1>
-            <div className="mt-2 text-sm font-semibold">
+            <div className="mt-2 mr-1 text-sm font-semibold">
               {show?.rating?.average}
             </div>
             <Heart
               size={20}
               fill={favorite ? "white" : "none"}
               stroke="white"
-              className="mt-1"
+              className="mt-1.5"
               onClick={() => {
                 if (!show) return;
 
@@ -157,9 +157,15 @@ export function ShowPage() {
 
                   <div className="text-sm text-gray-800">{episode.airdate}</div>
                 </div>
-                <div className="flex-1 min-w-0 *:text-wrap">
-                  {htmlToText(episode.summary) === ""
-                    ? "* Not available yet *"
+                <div
+                  className={`flex-1 min-w-0 text-wrap ${
+                    episode.summary === ""
+                      ? "italic text-gray-900/80 flex items-center justify-center"
+                      : ""
+                  }`}
+                >
+                  {episode.summary === ""
+                    ? "Summary not available"
                     : htmlToText(episode.summary)}
                 </div>
               </div>
