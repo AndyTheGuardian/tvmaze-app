@@ -38,18 +38,18 @@ export function ShowPage() {
   }
 
   return (
-    <div className="relative min-h-screen -z-30  bg-black">
+    <div className="relative min-h-screen  bg-black">
       <div
         className="fixed inset-0 
-        scale-105 -z-20 
+        scale-105 z-0 
         bg-cover bg-top 
         pointer-events-none"
         style={{
           backgroundImage: `url(${show?.image?.original})`,
         }}
       />
-      <div className="fixed inset-0 -z-10 bg-black/60 pointer-events-none" />
-      <main className="relative z-10 mx-auto max-w-5xl p-3 md:p-6">
+      <div className="fixed inset-0 z-10 bg-black/60 pointer-events-none" />
+      <main className="relative z-20 mx-auto max-w-5xl p-3 md:p-6">
         <div className="rounded-2xl bg-black/50 p-6">
           <h1 className="mb-4 text-gray-100 text-2xl font-bold">
             {show?.name}
@@ -66,7 +66,7 @@ export function ShowPage() {
           </div>
           <p className="mb-4 text-gray-100">{htmlToText(show?.summary)}</p>
 
-          <div className="md:sticky md:top-0 z-30 mb-6 flex flex-wrap gap-2">
+          <div className="md:sticky md:top-0 z-50 mb-6 flex flex-wrap gap-2">
             {seasonNumbers.map((season) => (
               <button
                 key={season}
@@ -84,8 +84,11 @@ export function ShowPage() {
 
           <div className="space-y-3">
             {seasons[activeSeason!]?.map((episode: Episode) => (
-              <div className="flex items-start gap-2 rounded-lg shadow bg-gray-200/70 p-3">
-                <div key={episode.id} className="flex-none w-1/4 md:w-44">
+              <div
+                key={episode.id}
+                className="flex items-start gap-2 rounded-lg shadow bg-gray-200/70 p-3"
+              >
+                <div className="flex-none w-1/4 md:w-44">
                   <div className="font-semibold">
                     {formatEpisode(episode.season, episode.number)}
                   </div>
