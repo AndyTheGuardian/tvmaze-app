@@ -9,6 +9,7 @@ import { formatEpisode } from "../utils/formatEpisode";
 import type { Episode } from "../types/tvmaze";
 import { Heart } from "lucide-react";
 import { isFavorite, toggleFavorite } from "../utils/favorites";
+import { EpisodeDrawer } from "../components/EpisodeDrawer";
 
 export function ShowPage() {
   const { id } = useParams();
@@ -19,6 +20,8 @@ export function ShowPage() {
 
   const { data: episodes = [] } = useEpisodes(showId);
 
+  const [favorite, setFavorite] = useState(() => isFavorite(showId));
+
   const seasons = useMemo(() => groupEpisodesBySeason(episodes), [episodes]);
 
   const seasonNumbers = Object.keys(seasons)
@@ -27,6 +30,8 @@ export function ShowPage() {
 
   const [selectedSeason, setSelectedSeason] = useState<number>();
 
+  const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(null);
+
   useEffect(() => {
     if (seasonNumbers.length > 0 && selectedSeason === undefined) {
       setSelectedSeason(seasonNumbers[0]);
@@ -34,8 +39,6 @@ export function ShowPage() {
   }, [seasonNumbers, selectedSeason]);
 
   const activeSeason = selectedSeason;
-
-  const [favorite, setFavorite] = useState(() => isFavorite(showId));
 
   if (seasonNumbers.length === 0) {
     return <div>No episodes found.</div>;
@@ -109,6 +112,7 @@ export function ShowPage() {
             {seasons[activeSeason!]?.map((episode: Episode) => (
               <div
                 key={episode.id}
+                onClick={() => setSelectedEpisode(episode)}
                 className="flex items-start gap-2 rounded-lg shadow bg-gray-200/70 p-3 text-gray-950"
               >
                 <div className="flex-none w-1/4 md:w-44">
@@ -126,6 +130,15 @@ export function ShowPage() {
                 </div>
               </div>
             ))}
+            <EpisodeDrawer
+              episode={selectedEpisode}
+              open={selectedEpisode !== null}
+              onOpenChange={(open) => {
+                if (!open) {
+                  setSelectedEpisode(null);
+                }
+              }}
+            />
           </div>
         </div>
       </main>

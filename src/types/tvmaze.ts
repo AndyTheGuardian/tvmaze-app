@@ -15,5 +15,11 @@ export interface Episode {
   season: number;
   number: number;
   airdate: string;
+  runtime: number;
   summary?: string | null;
+
+  image?: {
+    medium: string;
+    original: string;
+  };
 }

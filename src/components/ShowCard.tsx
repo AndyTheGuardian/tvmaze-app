@@ -19,7 +19,7 @@ export function ShowCard({ show }: Props) {
           <img
             src={show.image.medium}
             alt={show.name}
-            className="h-72 w-full object-cover"
+            className="h-60 w-full object-cover"
           />
         )}
 

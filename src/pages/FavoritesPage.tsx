@@ -11,6 +11,8 @@ export function FavoritesPage() {
     setFavorites(getFavorites());
   }, []);
 
+  favorites.sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <div className="mx-auto max-w-5xl p-6 bg-gray-900 min-h-screen">
       <h1 className="mb-6 text-2xl font-bold">Favorite Shows</h1>
@@ -33,7 +35,11 @@ export function FavoritesPage() {
           </Link>
         ))}
       </div>
-      {favorites.length === 0 && <p>No favorites yet.</p>}
+      {favorites.length === 0 && (
+        <div className="rounded-lg bg-black/40 p-6 text-center">
+          No favorites yet.
+        </div>
+      )}
     </div>
   );
 }
