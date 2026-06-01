@@ -97,7 +97,7 @@ export function ShowPage() {
                 className={`rounded px-4 py-2 ${
                   activeSeason === season
                     ? "bg-blue-600 text-white"
-                    : "bg-gray-200/80"
+                    : "bg-gray-200/80 text-gray-950"
                 }`}
               >
                 Season {season}
