@@ -38,7 +38,7 @@ export function ShowPage() {
   }
 
   return (
-    <div className="relative min-h-screen -z-30 overflow-x-hidden bg-black">
+    <div className="relative min-h-screen -z-30  bg-black">
       <div
         className="fixed inset-0 
         scale-105 -z-20 
@@ -66,7 +66,7 @@ export function ShowPage() {
           </div>
           <p className="mb-4 text-gray-100">{htmlToText(show?.summary)}</p>
 
-          <div className="mb-6 flex flex-wrap gap-2">
+          <div className="md:sticky md:top-0 z-30 mb-6 flex flex-wrap gap-2">
             {seasonNumbers.map((season) => (
               <button
                 key={season}
