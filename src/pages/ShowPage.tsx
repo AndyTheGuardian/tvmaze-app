@@ -7,6 +7,8 @@ import { htmlToText } from "../utils/htmlToText";
 import { groupEpisodesBySeason } from "../utils/groupEpisodesBySeason";
 import { formatEpisode } from "../utils/formatEpisode";
 import type { Episode } from "../types/tvmaze";
+import { Heart } from "lucide-react";
+import { isFavorite, toggleFavorite } from "../utils/favorites";
 
 export function ShowPage() {
   const { id } = useParams();
@@ -33,12 +35,14 @@ export function ShowPage() {
 
   const activeSeason = selectedSeason;
 
+  const [favorite, setFavorite] = useState(() => isFavorite(showId));
+
   if (seasonNumbers.length === 0) {
     return <div>No episodes found.</div>;
   }
 
   return (
-    <div className="relative min-h-screen  bg-black">
+    <div className="relative min-h-screen bg-black">
       <div
         className="fixed inset-0 
         scale-105 z-0 
@@ -51,14 +55,33 @@ export function ShowPage() {
       <div className="fixed inset-0 z-10 bg-black/60 pointer-events-none" />
       <main className="relative z-20 mx-auto max-w-5xl p-3 md:p-6">
         <div className="rounded-2xl bg-black/50 p-6">
-          <h1 className="mb-4 text-gray-100 text-2xl font-bold">
-            {show?.name}
-          </h1>
+          <div className="flex">
+            <h1 className="flex-1 mb-4 text-gray-100 text-2xl font-bold">
+              {show?.name}
+            </h1>
+            <Heart
+              size={20}
+              fill={favorite ? "white" : "none"}
+              stroke="white"
+              className="mt-1"
+              onClick={() => {
+                if (!show) return;
+
+                toggleFavorite({
+                  id: show.id,
+                  name: show.name,
+                  image: show.image?.medium,
+                });
+
+                setFavorite(!favorite);
+              }}
+            />
+          </div>
           <div className="mb-4 flex gap-2">
             {show?.genres.map((genre) => (
               <span
                 key={genre}
-                className="rounded-full bg-gray-200/70 px-3 py-1 text-sm"
+                className="rounded-full bg-gray-200/70 text-gray-950 px-3 py-1 text-sm"
               >
                 {genre}
               </span>
@@ -86,7 +109,7 @@ export function ShowPage() {
             {seasons[activeSeason!]?.map((episode: Episode) => (
               <div
                 key={episode.id}
-                className="flex items-start gap-2 rounded-lg shadow bg-gray-200/70 p-3"
+                className="flex items-start gap-2 rounded-lg shadow bg-gray-200/70 p-3 text-gray-950"
               >
                 <div className="flex-none w-1/4 md:w-44">
                   <div className="font-semibold">

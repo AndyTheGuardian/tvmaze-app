@@ -10,7 +10,7 @@ export function ShowCard({ show }: Props) {
     <Link to={`/show/${show.id}`}>
       <div
         className="overflow-hidden rounded-lg 
-      border border-gray-400 bg-gray-100 
+      border border-gray-400 bg-gray-100 text-gray-950
       shadow-sm 
       hover:shadow-lg hover:scale-105 active:scale-95
       transition-transform duration-300 `, hover:transform-"

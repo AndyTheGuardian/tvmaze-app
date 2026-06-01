@@ -11,6 +11,7 @@ export function SearchBar({ value, onChange }: Props) {
       placeholder="Search TV shows..."
       className="w-full rounded-lg border border-gray-400 
       bg-gray-200 p-2 
+      text-gray-950
       focus:outline-none focus:border-gray-600 "
     />
   );
