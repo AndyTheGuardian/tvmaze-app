@@ -25,5 +25,5 @@ export async function getShow(showId: number): Promise<Show> {
 }
 
 export async function getCast(showId: number): Promise<CastMember[]> {
-  return fetchJson<CastMember[]>(`http://api.tvmaze.com/shows/${showId}/cast`);
+  return fetchJson<CastMember[]>(`https://api.tvmaze.com/shows/${showId}/cast`);
 }
