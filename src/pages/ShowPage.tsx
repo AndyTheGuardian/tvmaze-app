@@ -162,7 +162,7 @@ export function ShowPage() {
             overflow-hidden
             transition-all
             duration-300
-            ${showCast ? "max-h-750 opacity-100 mb-3" : "max-h-0 opacity-0 mb-0"}
+            ${showCast ? "max-h-fit opacity-100 mb-3" : "max-h-0 opacity-0 mb-0"}
             `}
             >
               {isLoading && <div className="text-gray-50">Loading cast...</div>}
@@ -175,27 +175,34 @@ export function ShowPage() {
                     backdrop-blur-sm"
                   >
                     {member.person.image && (
-                      <>
-                        <img
-                          src={member.person.image.medium}
-                          alt={member.person.name}
-                          className="
+                      <img
+                        src={member.person.image.medium}
+                        alt={member.person.name}
+                        className="
                       mb-2 h-40 w-full 
                       rounded-t-lg object-cover"
-                          onClick={() => setShowBirthday(!showBirthday)}
-                        />
-                        <div
-                          className={`
+                        onClick={() => setShowBirthday(!showBirthday)}
+                      />
+                    )}
+                    {member.person.image === null && (
+                      <div className="h-40 w-full rounded-t-lg bg-gray-900/80">
+                        <p className="-rotate-45 translate-y-14 translate-x-3 text-gray-500">
+                          * no image available *
+                        </p>
+                      </div>
+                    )}
+                    {member.person.birthday && (
+                      <div
+                        className={`
                             absolute top-35 right-0 
-                            py-0.5 px-2 rounded-tl-lg 
-                            bg-gray-950/60 
+                            py-0.5 pl-2 pr-1.5 rounded-tl
+                            bg-gray-950/60 backdrop-blur-sm
                             transition-all duration-300 
                             ${showBirthday ? "opacity-100" : "opacity-0"} 
                               text-xs text-gray-50`}
-                        >
-                          {member.person.birthday}
-                        </div>
-                      </>
+                      >
+                        {member.person.birthday}
+                      </div>
                     )}
 
                     <div className="font-semibold text-gray-50 px-3">

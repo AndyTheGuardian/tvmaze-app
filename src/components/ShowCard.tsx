@@ -12,7 +12,7 @@ export function ShowCard({ show }: Props) {
         className="overflow-hidden rounded-lg 
         border-0 border-gray-200/80
        bg-gray-200/80 text-gray-950
-      shadow-sm 
+      shadow-sm backdrop-blur-sm
       hover:shadow-lg hover:scale-105 active:scale-95
       transition-transform duration-300"
       >
