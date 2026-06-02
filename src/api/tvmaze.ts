@@ -1,5 +1,5 @@
 import { fetchJson } from "./client";
-import type { Episode, Show } from "../types/tvmaze";
+import type { Episode, Show, CastMember } from "../types/tvmaze";
 
 const API = "https://api.tvmaze.com";
 
@@ -22,4 +22,8 @@ export async function getShowEpisodes(showId: number): Promise<Episode[]> {
 
 export async function getShow(showId: number): Promise<Show> {
   return fetchJson<Show>(`${API}/shows/${showId}`);
+}
+
+export async function getCast(showId: number): Promise<CastMember[]> {
+  return fetchJson<CastMember[]>(`http://api.tvmaze.com/shows/${showId}/cast`);
 }

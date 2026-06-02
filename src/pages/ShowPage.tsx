@@ -12,6 +12,7 @@ import { isFavorite, toggleFavorite } from "../utils/favorites";
 import { EpisodeDrawer } from "../components/EpisodeDrawer";
 import { getYear } from "../utils/getYear";
 import { getStation } from "../utils/getStation";
+import { useCast } from "../hooks/useCast";
 
 export function ShowPage() {
   const { id } = useParams();
@@ -23,6 +24,10 @@ export function ShowPage() {
   const { data: episodes = [] } = useEpisodes(showId);
 
   const [favorite, setFavorite] = useState(() => isFavorite(showId));
+
+  const [showCast, setShowCast] = useState(false);
+
+  const { data: cast = [], isLoading } = useCast(showId, showCast);
 
   const seasons = useMemo(() => groupEpisodesBySeason(episodes), [episodes]);
 
@@ -123,9 +128,52 @@ export function ShowPage() {
             <div className="text-sm font-semibold">{show?.status}</div>
           </div>
 
-          <p className="mb-4 text-gray-100">{htmlToText(show?.summary)}</p>
+          <p className="mb-1 text-gray-100">{htmlToText(show?.summary)}</p>
+          <p
+            className="flex justify-end mb-1 text-sm font-semibold cursor-pointer"
+            onClick={() => setShowCast((prev) => !prev)}
+          >
+            {showCast ? "Hide Cast" : "Show Cast"}
+          </p>
+          <div
+            className={`
+            overflow-hidden
+            transition-all
+            duration-300
+            ${showCast ? "max-h-750 opacity-100 mb-3" : "max-h-0 opacity-0 mb-0"}
+            `}
+          >
+            {isLoading && <div className="text-gray-50">Loading cast...</div>}
 
-          <div className="md:sticky md:top-0 z-50 mb-6 flex flex-wrap gap-2">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+              {cast.map((member) => (
+                <div
+                  key={member.person.id}
+                  className="rounded-lg bg-gray-950/40 
+                    backdrop-blur-sm"
+                >
+                  {member.person.image && (
+                    <img
+                      src={member.person.image.medium}
+                      alt={member.person.name}
+                      className="
+                      mb-2 h-40 w-full 
+                      rounded-t-lg object-cover"
+                    />
+                  )}
+
+                  <div className="font-semibold text-gray-50 px-3">
+                    {member.person.name}
+                  </div>
+
+                  <div className="text-sm text-gray-300 px-3 pb-3">
+                    as {member.character.name}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="md:sticky md:top-0 z-50 mb-4 flex flex-wrap gap-2">
             {seasonNumbers.map((season) => (
               <button
                 key={season}
