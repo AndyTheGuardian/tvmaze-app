@@ -50,6 +50,7 @@ export interface CastMember {
   person: {
     id: number;
     name: string;
+    birthday: string;
     image?: {
       medium: string;
       original: string;

@@ -27,6 +27,8 @@ export function ShowPage() {
 
   const [showCast, setShowCast] = useState(false);
 
+  const [showBirthday, setShowBirthday] = useState(false);
+
   const { data: cast = [], isLoading } = useCast(showId, showCast);
 
   const seasons = useMemo(() => groupEpisodesBySeason(episodes), [episodes]);
@@ -169,17 +171,31 @@ export function ShowPage() {
                 {cast.map((member) => (
                   <div
                     key={member.person.id}
-                    className="rounded-lg bg-gray-950/40 
+                    className="rounded-lg bg-gray-800/40 
                     backdrop-blur-sm"
                   >
                     {member.person.image && (
-                      <img
-                        src={member.person.image.medium}
-                        alt={member.person.name}
-                        className="
+                      <>
+                        <img
+                          src={member.person.image.medium}
+                          alt={member.person.name}
+                          className="
                       mb-2 h-40 w-full 
                       rounded-t-lg object-cover"
-                      />
+                          onClick={() => setShowBirthday(!showBirthday)}
+                        />
+                        <div
+                          className={`
+                            absolute top-35 right-0 
+                            py-0.5 px-2 rounded-tl-lg 
+                            bg-gray-950/60 
+                            transition-all duration-300 
+                            ${showBirthday ? "opacity-100" : "opacity-0"} 
+                              text-xs text-gray-50`}
+                        >
+                          {member.person.birthday}
+                        </div>
+                      </>
                     )}
 
                     <div className="font-semibold text-gray-50 px-3">
