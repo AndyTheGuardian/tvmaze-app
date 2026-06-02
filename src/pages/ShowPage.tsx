@@ -115,12 +115,24 @@ export function ShowPage() {
             <div className="flex-none text-sm font-semibold">
               {getStation(show?.network?.name, show?.webChannel?.name)}
             </div>
-            <div className="flex-1 flex gap-2">
-              {show?.schedule.days.map((day) => (
-                <span key={day} className="text-gray-300 mt-0.75 text-xs">
-                  {day}s
+            <div className="flex-1 flex gap-2 overflow-hiodden">
+              {show?.schedule.days && show?.schedule.days.length > 6 ? (
+                <span className="text-gray-300 mt-1 text-xs">All week</span>
+              ) : show?.schedule.days && show?.schedule.days.length > 3 ? (
+                <span className="text-gray-300 mt-1 text-xs">
+                  {show?.schedule.days[0]}s to{" "}
+                  {show?.schedule.days[show?.schedule.days.length - 1]}s
                 </span>
-              ))}
+              ) : (
+                show?.schedule.days.map((day) => (
+                  <span
+                    key={day}
+                    className="text-gray-300 mt-0.75 text-xs text-ellipsis"
+                  >
+                    {day}s
+                  </span>
+                ))
+              )}
             </div>
             <div className="text-sm font-semibold">
               {getYear(show?.premiered)}-{getYear(show?.ended)}
