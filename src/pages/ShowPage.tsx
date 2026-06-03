@@ -109,7 +109,7 @@ export function ShowPage() {
               {show?.genres.map((genre) => (
                 <span
                   key={genre}
-                  className="rounded-full bg-gray-200/70 text-gray-950 px-3 py-1 text-sm"
+                  className="rounded-full flex bg-gray-200/70 text-gray-950 px-3 py-1 text-sm items-center text-center"
                 >
                   {genre}
                 </span>
