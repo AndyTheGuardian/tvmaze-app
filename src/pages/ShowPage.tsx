@@ -239,15 +239,14 @@ export function ShowPage() {
               ))}
             {showSearch && (
               <>
-                <div className="mb-3 text-gray-100 text-sm font-semibold">
+                <div className="flex mb-3 text-gray-100 text-sm font-semibold gap-1">
                   <span>
                     {filteredEpisodes.length}{" "}
                     {filteredEpisodes.length === 1
-                      ? `episode ${!!episodeSearch ? "contains " : ""}`
-                      : `episodes ${!!episodeSearch ? "containing " : ""}`}{" "}
+                      ? `episode ${!!episodeSearch ? "contains" : ""}`
+                      : `episodes ${!!episodeSearch ? "containing" : ""}`}
                   </span>
                   <span className="italic text-white/80 font-semibold">
-                    {" "}
                     {episodeSearch}
                   </span>
                 </div>
