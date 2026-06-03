@@ -106,12 +106,12 @@ export function ShowPage() {
           </div>
           <div className="flex gap-1">
             <div className="flex-1 mb-4 flex gap-2">
-              {show?.genres.map((genre) => (
+              {show?.genres.map((genre, index, array) => (
                 <span
                   key={genre}
                   className="rounded-full flex bg-gray-200/70 text-gray-950 px-3 py-1 text-sm items-center text-center"
                 >
-                  {genre === "Science-Fiction" && innerWidth < 640
+                  {genre === "Science-Fiction" && array.length > 2
                     ? "Sci-Fi"
                     : genre}
                 </span>
