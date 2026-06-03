@@ -3,9 +3,11 @@ import { useEffect, useRef } from "react";
 interface Props {
   value: string;
   onChange: (value: string) => void;
+  placeholder: string;
+  active: boolean;
 }
 
-export function SearchBar({ value, onChange }: Props) {
+export function SearchBar({ value, onChange, placeholder, active }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -14,16 +16,27 @@ export function SearchBar({ value, onChange }: Props) {
   }, []);
 
   return (
-    <input
-      value={value}
-      ref={inputRef}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder="Search TV shows..."
-      className="w-full rounded-lg border border-gray-400 
-      bg-gray-200/80 p-2 
+    <div
+      className={`
+        transition-all duration-300
+        grid ${active ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}
+      `}
+    >
+      <input
+        value={value}
+        ref={inputRef}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className={`
+        w-full rounded-lg border border-gray-400 
+      bg-gray-200/70 p-2
       text-gray-950
       selection:bg-gray-700/60 selection:text-gray-200
-      focus:outline-none focus:border-gray-600 "
-    />
+        focus:outline-none focus:border-gray-600
+        overflow-hidden transition-all duration-300
+        ${active ? "block opacity-100 mb-3" : "hidden opacity-0 mb-0"}
+      `}
+      />
+    </div>
   );
 }

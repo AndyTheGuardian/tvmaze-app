@@ -5,14 +5,17 @@ import { useShow } from "../hooks/useShow";
 import { useEpisodes } from "../hooks/useEpisodes";
 import { htmlToText } from "../utils/htmlToText";
 import { groupEpisodesBySeason } from "../utils/groupEpisodesBySeason";
-import { formatEpisode } from "../utils/formatEpisode";
 import type { Episode } from "../types/tvmaze";
-import { Heart, ExternalLink, VenetianMask } from "lucide-react";
+import { Heart, ExternalLink } from "lucide-react";
 import { isFavorite, toggleFavorite } from "../utils/favorites";
 import { EpisodeDrawer } from "../components/EpisodeDrawer";
 import { getYear } from "../utils/getYear";
 import { getStation } from "../utils/getStation";
 import { useCast } from "../hooks/useCast";
+import { findEpisodes } from "../utils/findEpisodes";
+import { SearchBar } from "../components/SearchBar";
+import { EpisodeCard } from "../components/EpisodeCard";
+import { CastCard } from "../components/CastCard";
 
 export function ShowPage() {
   const { id } = useParams();
@@ -31,6 +34,8 @@ export function ShowPage() {
 
   const { data: cast = [], isLoading } = useCast(showId, showCast);
 
+  const [showSearch, setShowSeach] = useState(false);
+
   const seasons = useMemo(() => groupEpisodesBySeason(episodes), [episodes]);
 
   const seasonNumbers = Object.keys(seasons)
@@ -40,6 +45,13 @@ export function ShowPage() {
   const [selectedSeason, setSelectedSeason] = useState<number>();
 
   const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(null);
+
+  const [episodeSearch, setEpisodeSearch] = useState("");
+
+  const filteredEpisodes = useMemo(
+    () => findEpisodes(episodes, episodeSearch),
+    [episodes, episodeSearch],
+  );
 
   useEffect(() => {
     if (seasonNumbers.length > 0 && selectedSeason === undefined) {
@@ -141,29 +153,33 @@ export function ShowPage() {
             </div>
             <div className="text-sm font-semibold">{show?.status}</div>
           </div>
-
           <p className="mb-1 text-gray-100">{htmlToText(show?.summary)}</p>
-          <p
-            className="flex justify-end mb-2 text-sm font-semibold cursor-pointer"
-            onClick={() => setShowCast((prev) => !prev)}
-          >
-            {showCast ? "Hide Cast" : "Show Cast"}
-          </p>
+          <div className="flex justify-end gap-3 text-sm font-semibold mb-3">
+            <p
+              className="justify-end text-sm font-semibold text-left cursor-pointer"
+              onClick={() => setShowSeach(!showSearch)}
+            >
+              {showSearch ? "Hide Search" : "Search in Episodes"}
+            </p>
+            <p className="text-gray-500">|</p>
+            <p
+              className="justify-end text-sm font-semibold cursor-pointer"
+              onClick={() => setShowCast((prev) => !prev)}
+            >
+              {showCast ? "Hide Cast" : "Show Cast"}
+            </p>
+          </div>
           <div
             className={`
-              grid
-              transition-all
-              duration-300
-              ${showCast ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}
+              transition-all duration-300
+              grid ${showCast ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}
               `}
           >
             <div
               className={`
-            overflow-hidden
-            transition-all
-            duration-300
-            ${showCast ? "max-h-fit opacity-100 mb-3" : "max-h-0 opacity-0 mb-0"}
-            `}
+                overflow-hidden transition-all duration-300
+                ${showCast ? "max-h-fit opacity-100 mb-3" : "max-h-0 opacity-0 mb-0"}
+              `}
             >
               {isLoading && <div className="text-gray-50">Loading cast...</div>}
               {cast.length === 0 ? (
@@ -175,108 +191,77 @@ export function ShowPage() {
               ) : (
                 <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                   {cast.map((member) => (
-                    <div
+                    <CastCard
                       key={member.person.id}
-                      className="rounded-lg bg-gray-600/40 
-                    backdrop-blur-sm"
-                    >
-                      <div id="imageContainer" className="relative">
-                        {member.person.image && (
-                          <img
-                            src={member.person.image.medium}
-                            alt={member.person.name}
-                            className="
-                              mb-2 h-50 w-full 
-                              rounded-t-lg object-cover"
-                            onClick={() => setShowBirthday(!showBirthday)}
-                          />
-                        )}
-                        {member.person.image === null && (
-                          <div
-                            className="
-                            h-50 w-full rounded-t-lg bg-none 
-                            flex flex-col items-center justify-center 
-                            text-gray-500/60"
-                          >
-                            <VenetianMask size={64} />
-                            <p>* no image available *</p>
-                          </div>
-                        )}
-                        {member.person.birthday && (
-                          <div
-                            className={`
-                            absolute bottom-0 right-0 
-                            py-0.5 pl-2 pr-1.5 rounded-tl
-                            bg-gray-950/60 backdrop-blur-sm
-                            transition-all duration-300 
-                            ${showBirthday ? "opacity-100" : "opacity-0"} 
-                              text-xs text-gray-50`}
-                          >
-                            {member.person.birthday}
-                          </div>
-                        )}
-                      </div>
-                      <div className="font-semibold text-gray-50 px-3">
-                        {member.person.name}
-                      </div>
-
-                      <div className="text-sm text-gray-300 px-3 pb-3">
-                        as {member.character.name}
-                      </div>
-                    </div>
+                      member={member}
+                      showBirthday={showBirthday}
+                      setShowBirthday={setShowBirthday}
+                    />
                   ))}
                 </div>
               )}
             </div>
           </div>
-          <div className="md:sticky md:top-0 z-50 mb-4 flex flex-wrap gap-2">
-            {seasonNumbers.map((season) => (
-              <button
-                key={season}
-                onClick={() => setSelectedSeason(season)}
-                className={`rounded px-4 py-2 ${
-                  activeSeason === season
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200/80 text-gray-950"
-                }`}
-              >
-                Season {season}
-              </button>
-            ))}
+          <div className="flow flow-cols">
+            <SearchBar
+              value={episodeSearch}
+              onChange={setEpisodeSearch}
+              placeholder="Search in episodes..."
+              active={showSearch}
+            />
+            {!showSearch && (
+              <div className="md:sticky md:top-0 z-50 mb-3 flex flex-wrap gap-2">
+                {seasonNumbers.map((season) => (
+                  <button
+                    key={season}
+                    onClick={() => setSelectedSeason(season)}
+                    className={`rounded px-4 py-2 ${
+                      activeSeason === season
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-200/80 text-gray-950"
+                    }`}
+                  >
+                    Season {season}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="space-y-3">
-            {seasons[activeSeason!]?.map((episode: Episode) => (
-              <div
-                key={episode.id}
-                onClick={() => setSelectedEpisode(episode)}
-                className="flex items-start gap-2 rounded-lg shadow 
-                bg-gray-200/70 p-3 text-gray-950 backdrop-blur-xs"
-              >
-                <div className="flex-none w-1/4 md:w-44">
-                  <div className="font-semibold">
-                    {formatEpisode(episode.season, episode.number)}
-                  </div>
-                  <div>{episode.name}</div>
-
-                  <div className="text-sm text-gray-800">{episode.airdate}</div>
+            {!showSearch &&
+              seasons[activeSeason!]?.map((episode: Episode) => (
+                <EpisodeCard
+                  key={episode.id}
+                  episode={episode}
+                  setSelectedEpisode={setSelectedEpisode}
+                />
+              ))}
+            {showSearch && (
+              <>
+                <div className="mb-3 text-gray-100 text-sm font-semibold">
+                  <span>
+                    {filteredEpisodes.length}{" "}
+                    {filteredEpisodes.length === 1
+                      ? "episode contains"
+                      : "episodes containing"}{" "}
+                  </span>
+                  <span className="italic text-white/80 font-semibold">
+                    {episodeSearch}
+                  </span>
                 </div>
-                <div
-                  className={`flex-1 min-w-0 text-wrap ${
-                    episode.summary === ""
-                      ? "italic text-gray-900/80 flex items-center justify-center"
-                      : ""
-                  }`}
-                >
-                  {episode.summary === ""
-                    ? "Summary not available"
-                    : htmlToText(episode.summary)}
-                </div>
-              </div>
-            ))}
+                {filteredEpisodes.map((episode) => (
+                  <EpisodeCard
+                    key={episode.id}
+                    episode={episode}
+                    setSelectedEpisode={setSelectedEpisode}
+                  />
+                ))}
+              </>
+            )}
             <EpisodeDrawer
               episode={selectedEpisode}
-              open={selectedEpisode !== null}
+              open={!!selectedEpisode}
               onOpenChange={(open) => {
                 if (!open) {
                   setSelectedEpisode(null);

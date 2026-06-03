@@ -31,11 +31,16 @@ export function HomePage() {
         <div className="mx-auto max-w-5xl p-3 md:p-6 bg-black/50 rounded-lg">
           <h1 className="mb-6 text-2xl font-bold">Episode Guide</h1>
 
-          <SearchBar value={search} onChange={handleSearchChange} />
+          <SearchBar
+            value={search}
+            onChange={handleSearchChange}
+            placeholder="Search TV shows..."
+            active={true}
+          />
 
           {isLoading && <p className="mt-4">Loading...</p>}
 
-          <div className="mt-6 grid gap-4 grid-cols-2 md:grid-cols-4">
+          <div className="mt-3 grid gap-4 grid-cols-2 md:grid-cols-4">
             {data.map((show) => (
               <ShowCard key={show.id} show={show} />
             ))}

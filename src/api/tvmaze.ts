@@ -17,7 +17,7 @@ export async function searchShows(query: string): Promise<Show[]> {
 }
 
 export async function getShowEpisodes(showId: number): Promise<Episode[]> {
-  return fetchJson<Episode[]>(`${API}/shows/${showId}/episodes`);
+  return fetchJson<Episode[]>(`${API}/shows/${showId}/episodes?specials=1`);
 }
 
 export async function getShow(showId: number): Promise<Show> {
