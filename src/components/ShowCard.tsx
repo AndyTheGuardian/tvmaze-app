@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { Show } from "../types/tvmaze";
+import { ImageOff } from "lucide-react";
 
 interface Props {
   show: Show;
@@ -10,10 +11,9 @@ export function ShowCard({ show }: Props) {
     <Link to={`/show/${show.id}`}>
       <div
         className="overflow-hidden rounded-lg 
-        border-0 border-gray-200/80
-       bg-gray-200/80 text-gray-950
+       bg-white/60 text-gray-950
       shadow-sm backdrop-blur-sm
-      hover:shadow-lg hover:scale-105 active:scale-95
+      hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]
       transition-transform duration-300"
       >
         {show.image && (
@@ -24,10 +24,12 @@ export function ShowCard({ show }: Props) {
           />
         )}
         {show.image === null && (
-          <div className="h-72 w-full bg-gray-900/80">
-            <p className="-rotate-45 translate-y-30 translate-x-3 text-gray-500">
-              * no image available *
-            </p>
+          <div
+            className="h-72 w-full flex flex-col items-center justify-center 
+            bg-none text-gray-800"
+          >
+            <ImageOff size={64} />
+            <p className="">* no image available *</p>
           </div>
         )}
 

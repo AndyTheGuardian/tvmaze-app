@@ -28,7 +28,7 @@ export function HomePage() {
       <div className="fixed inset-0 z-10 bg-black/60 pointer-events-none" />
 
       <main className="relative z-10 mx-auto max-w-5xl p-3 md:p-6">
-        <div className="mx-auto max-w-5xl p-3 md:p-6 bg-black/70 rounded-lg">
+        <div className="mx-auto max-w-5xl p-3 md:p-6 bg-black/50 rounded-lg">
           <h1 className="mb-6 text-2xl font-bold">Episode Guide</h1>
 
           <SearchBar value={search} onChange={handleSearchChange} />

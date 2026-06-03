@@ -7,7 +7,7 @@ import { htmlToText } from "../utils/htmlToText";
 import { groupEpisodesBySeason } from "../utils/groupEpisodesBySeason";
 import { formatEpisode } from "../utils/formatEpisode";
 import type { Episode } from "../types/tvmaze";
-import { Heart, ExternalLink } from "lucide-react";
+import { Heart, ExternalLink, VenetianMask } from "lucide-react";
 import { isFavorite, toggleFavorite } from "../utils/favorites";
 import { EpisodeDrawer } from "../components/EpisodeDrawer";
 import { getYear } from "../utils/getYear";
@@ -166,55 +166,67 @@ export function ShowPage() {
             `}
             >
               {isLoading && <div className="text-gray-50">Loading cast...</div>}
-
-              <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-                {cast.map((member) => (
-                  <div
-                    key={member.person.id}
-                    className="rounded-lg bg-gray-800/40 
+              {cast.length === 0 ? (
+                <div className="rounded-lg p-3 bg-black/60 backdrop-blur-sm">
+                  <p className="text-sm text-gray-50">
+                    No cast info available.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+                  {cast.map((member) => (
+                    <div
+                      key={member.person.id}
+                      className="rounded-lg bg-gray-600/40 
                     backdrop-blur-sm"
-                  >
-                    {member.person.image && (
-                      <img
-                        src={member.person.image.medium}
-                        alt={member.person.name}
-                        className="
-                      mb-2 h-40 w-full 
-                      rounded-t-lg object-cover"
-                        onClick={() => setShowBirthday(!showBirthday)}
-                      />
-                    )}
-                    {member.person.image === null && (
-                      <div className="h-40 w-full rounded-t-lg bg-gray-900/80">
-                        <p className="-rotate-45 translate-y-14 translate-x-3 text-gray-500">
-                          * no image available *
-                        </p>
-                      </div>
-                    )}
-                    {member.person.birthday && (
-                      <div
-                        className={`
-                            absolute top-35 right-0 
+                    >
+                      <div id="imageContainer" className="relative">
+                        {member.person.image && (
+                          <img
+                            src={member.person.image.medium}
+                            alt={member.person.name}
+                            className="
+                              mb-2 h-50 w-full 
+                              rounded-t-lg object-cover"
+                            onClick={() => setShowBirthday(!showBirthday)}
+                          />
+                        )}
+                        {member.person.image === null && (
+                          <div
+                            className="
+                            h-50 w-full rounded-t-lg bg-none 
+                            flex flex-col items-center justify-center 
+                            text-gray-500/60"
+                          >
+                            <VenetianMask size={64} />
+                            <p>* no image available *</p>
+                          </div>
+                        )}
+                        {member.person.birthday && (
+                          <div
+                            className={`
+                            absolute bottom-0 right-0 
                             py-0.5 pl-2 pr-1.5 rounded-tl
                             bg-gray-950/60 backdrop-blur-sm
                             transition-all duration-300 
                             ${showBirthday ? "opacity-100" : "opacity-0"} 
                               text-xs text-gray-50`}
-                      >
-                        {member.person.birthday}
+                          >
+                            {member.person.birthday}
+                          </div>
+                        )}
                       </div>
-                    )}
+                      <div className="font-semibold text-gray-50 px-3">
+                        {member.person.name}
+                      </div>
 
-                    <div className="font-semibold text-gray-50 px-3">
-                      {member.person.name}
+                      <div className="text-sm text-gray-300 px-3 pb-3">
+                        as {member.character.name}
+                      </div>
                     </div>
-
-                    <div className="text-sm text-gray-300 px-3 pb-3">
-                      as {member.character.name}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className="md:sticky md:top-0 z-50 mb-4 flex flex-wrap gap-2">
@@ -239,7 +251,7 @@ export function ShowPage() {
                 key={episode.id}
                 onClick={() => setSelectedEpisode(episode)}
                 className="flex items-start gap-2 rounded-lg shadow 
-                bg-gray-200/70 p-3 text-gray-950"
+                bg-gray-200/70 p-3 text-gray-950 backdrop-blur-xs"
               >
                 <div className="flex-none w-1/4 md:w-44">
                   <div className="font-semibold">
