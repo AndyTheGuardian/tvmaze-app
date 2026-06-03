@@ -111,7 +111,9 @@ export function ShowPage() {
                   key={genre}
                   className="rounded-full flex bg-gray-200/70 text-gray-950 px-3 py-1 text-sm items-center text-center"
                 >
-                  {genre}
+                  {genre === "Science-Fiction" && innerWidth < 640
+                    ? "Sci-Fi"
+                    : genre}
                 </span>
               ))}
             </div>
