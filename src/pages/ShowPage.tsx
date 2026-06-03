@@ -243,10 +243,11 @@ export function ShowPage() {
                   <span>
                     {filteredEpisodes.length}{" "}
                     {filteredEpisodes.length === 1
-                      ? `episode ${!!episodeSearch ? "contains" : ""}`
-                      : `episodes ${!!episodeSearch ? "containing" : ""}`}{" "}
+                      ? `episode ${!!episodeSearch ? "contains " : ""}`
+                      : `episodes ${!!episodeSearch ? "containing " : ""}`}{" "}
                   </span>
                   <span className="italic text-white/80 font-semibold">
+                    {" "}
                     {episodeSearch}
                   </span>
                 </div>
