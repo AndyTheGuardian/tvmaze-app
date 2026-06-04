@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { SquareArrowRightExit, SquareArrowRightEnter } from "lucide-react";
 
 import type { FavoriteShow } from "../types/favoriteShow";
 import { getFavorites } from "../utils/favorites";
@@ -11,14 +12,42 @@ export function FavoritesPage() {
     setFavorites(getFavorites());
   }, []);
 
-  favorites.sort((a, b) => a.name.localeCompare(b.name));
+  const sortedFavorites = [...favorites].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
 
   return (
     <div className="min-h-screen bg-gray-900">
       <div className="mx-auto max-w-5xl p-6">
-        <h1 className="mb-6 text-2xl font-bold">Favorite Shows</h1>
+        <div className="flex gap-4">
+          <h1 className="mb-6 text-2xl font-bold flex-1">Favorite Shows</h1>
+          <button
+            onClick={async () => {
+              const data = localStorage.getItem("favorite-shows");
+              navigator.clipboard.writeText(data ?? "");
+
+              alert("Favorites copied!");
+            }}
+            className="-mt-6"
+          >
+            <SquareArrowRightExit size={18} />
+          </button>
+          <p className="text-sm text-gray-500/80 mt-1.25">|</p>
+          <button
+            onClick={async () => {
+              const data = await navigator.clipboard.readText();
+
+              localStorage.setItem("favorite-shows", data);
+
+              location.reload();
+            }}
+            className="-mt-6"
+          >
+            <SquareArrowRightEnter size={18} />
+          </button>
+        </div>
         <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
-          {favorites.map((show) => (
+          {sortedFavorites.map((show) => (
             <Link key={show.id} to={`/show/${show.id}`}>
               <div className="overflow-hidden rounded-lg shadow bg-gray-200/70">
                 {show.image && (
