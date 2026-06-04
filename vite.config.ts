@@ -25,41 +25,49 @@ export default defineConfig({
 
         icons: [
           {
+            purpose: "maskable",
             src: "TVIcon-48.png",
             sizes: "48x48",
             type: "image/png",
           },
           {
+            purpose: "maskable",
             src: "TVIcon-72.png",
             sizes: "72x72",
             type: "image/png",
           },
           {
+            purpose: "maskable",
             src: "TVIcon-96.png",
             sizes: "96x96",
             type: "image/png",
           },
           {
+            purpose: "maskable",
             src: "TVIcon-128.png",
             sizes: "128x128",
             type: "image/png",
           },
           {
+            purpose: "maskable",
             src: "TVIcon-192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
+            purpose: "maskable",
             src: "TVIcon-384.png",
             sizes: "384x384",
             type: "image/png",
           },
           {
+            purpose: "maskable",
             src: "TVIcon-512.png",
             sizes: "512x512",
             type: "image/png",
           },
           {
+            purpose: "maskable",
             src: "TVIcon-1024.png",
             sizes: "1024x1024",
             type: "image/png",
