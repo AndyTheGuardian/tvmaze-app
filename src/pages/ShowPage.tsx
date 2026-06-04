@@ -161,14 +161,19 @@ export function ShowPage() {
           <div className="flex justify-end gap-3 text-sm font-semibold mb-3">
             <p
               className="justify-end text-sm font-semibold text-left cursor-pointer"
-              onClick={() => setShowSeach(!showSearch)}
+              onClick={() => {
+                if (showCast) setShowCast(false);
+                setShowSeach(!showSearch);
+              }}
             >
               {showSearch ? "Hide Search" : "Search in Episodes"}
             </p>
             <p className="text-gray-500">|</p>
             <p
-              className="justify-end text-sm font-semibold cursor-pointer"
-              onClick={() => setShowCast((prev) => !prev)}
+              className={`justify-end text-sm font-semibold cursor-pointer ${showSearch ? "opacity-50 cursor-text" : ""}`}
+              onClick={() => {
+                if (!showSearch) setShowCast((prev) => !prev);
+              }}
             >
               {showCast ? "Hide Cast" : "Show Cast"}
             </p>
