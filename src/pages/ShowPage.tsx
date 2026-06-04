@@ -61,6 +61,8 @@ export function ShowPage() {
 
   const activeSeason = selectedSeason;
 
+  const genreCount = show?.genres.length ?? 0;
+
   if (seasonNumbers.length === 0) {
     return <div>No episodes found.</div>;
   }
@@ -106,12 +108,12 @@ export function ShowPage() {
           </div>
           <div className="flex gap-1">
             <div className="flex-1 mb-4 flex gap-2">
-              {show?.genres.map((genre, index, array) => (
+              {show?.genres.map((genre) => (
                 <span
                   key={genre}
                   className="rounded-full flex bg-gray-200/70 text-gray-950 px-3 py-1 text-sm items-center text-center"
                 >
-                  {genre === "Science-Fiction" && array.length > 2
+                  {genre === "Science-Fiction" && genreCount > 2
                     ? "Sci-Fi"
                     : genre}
                 </span>
