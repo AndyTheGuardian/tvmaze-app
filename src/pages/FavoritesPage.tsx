@@ -31,7 +31,7 @@ export function FavoritesPage() {
 
       <main className="relative z-10 mx-auto max-w-5xl p-3 md:p-6">
         {/* <div className="min-h-screen bg-gray-900"> */}
-        <div className="mx-auto max-w-5xl p-3 md:p-6 bg-black/50 rounded-lg">
+        <div className="mx-auto max-w-5xl p-6 bg-black/50 rounded-lg">
           <div className="flex gap-4">
             <h1 className="mb-6 text-2xl font-bold flex-1">Favorite Shows</h1>
             <button

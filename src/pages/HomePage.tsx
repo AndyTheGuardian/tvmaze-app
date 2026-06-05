@@ -46,11 +46,11 @@ export function HomePage() {
       <div className="fixed inset-0 z-10 bg-black/60 pointer-events-none" />
 
       <main className="relative z-10 mx-auto max-w-5xl p-3 md:p-6">
-        <div className="mx-auto max-w-5xl p-3 md:p-6 bg-black/50 rounded-lg">
+        <div className="mx-auto max-w-5xl p-6 bg-black/50 rounded-lg">
           <div className="flex">
             <h1 className="mb-6 flex-1 text-2xl font-bold">Episode Guide</h1>
             <button
-              className="mt-1 flex gap-2 text-sm opacity-50 cursor-pointer"
+              className="mt-2 flex gap-2 text-sm opacity-50 cursor-pointer"
               onClick={handleSurpriseMe}
               disabled={loading}
             >
