@@ -85,7 +85,7 @@ export function PersonPage() {
                   show={{
                     id: credit.id,
                     name: credit.name,
-                    image: credit.image,
+                    image: credit.image?.medium,
                   }}
                 />
               );

@@ -29,7 +29,7 @@ export function SearchBar({ value, onChange, placeholder, active }: Props) {
         placeholder={placeholder}
         className={`
         w-full rounded-lg border border-gray-400 
-      bg-gray-200/70 p-2
+      bg-gray-200/60 backdrop-blur-sm p-2 
       text-gray-950
       selection:bg-gray-700/60 selection:text-gray-200
         focus:outline-none focus:border-gray-600

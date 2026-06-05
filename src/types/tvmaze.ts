@@ -83,4 +83,10 @@ export interface CastCredit {
   };
 }
 
-export type ShowCardData = Pick<Show, "id" | "name" | "image">;
+//export type ShowCardData = Pick<Show, "id" | "name" | "image">;
+
+export interface ShowCardData {
+  id: number;
+  name: string;
+  image?: string;
+}

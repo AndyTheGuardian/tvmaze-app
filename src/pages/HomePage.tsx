@@ -69,7 +69,14 @@ export function HomePage() {
 
           <div className="mt-3 grid gap-4 grid-cols-2 md:grid-cols-4">
             {data.map((show) => (
-              <ShowCard key={show.id} show={show} />
+              <ShowCard
+                key={show.id}
+                show={{
+                  id: show.id,
+                  name: show.name,
+                  image: show.image?.medium,
+                }}
+              />
             ))}
           </div>
         </div>

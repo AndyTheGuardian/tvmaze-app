@@ -20,7 +20,7 @@ export function EpisodeDrawer({
         <Drawer.Overlay className="fixed inset-0 z-100 bg-black/50" />
 
         <Drawer.Content
-          className="fixed bottom-0 left-0 right-0 max-h-[85vh]
+          className="fixed bottom-0 left-0 right-0 max-h-[90vh]
                        z-101 overflow-y-auto 
                        rounded-t-xl bg-gray-200/60 
                        backdrop-blur-sm p-6"
@@ -41,7 +41,7 @@ export function EpisodeDrawer({
                 <img
                   src={episode.image.original}
                   alt={episode.name}
-                  className="mb-2 rounded-xl shadow"
+                  className="mb-2 w-full rounded-xl shadow"
                 />
               )}
               <div className="flex gap-2 mb-3 opacity-60">

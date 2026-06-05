@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { SquareArrowRightExit, SquareArrowRightEnter } from "lucide-react";
 
-import type { FavoriteShow } from "../types/favoriteShow";
 import { getFavorites } from "../utils/favorites";
+import { ShowCard } from "../components/ShowCard";
+import type { ShowCardData } from "../types/tvmaze";
 
 export function FavoritesPage() {
-  const [favorites, setFavorites] = useState<FavoriteShow[]>([]);
+  const [favorites, setFavorites] = useState<ShowCardData[]>([]);
 
   useEffect(() => {
     setFavorites(getFavorites());
@@ -62,7 +63,8 @@ export function FavoritesPage() {
           <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
             {sortedFavorites.map((show) => (
               <Link key={show.id} to={`/show/${show.id}`}>
-                <div className="overflow-hidden rounded-lg shadow bg-gray-200/70">
+                <ShowCard show={show} />
+                {/* <div className="overflow-hidden rounded-lg shadow bg-gray-200/70">
                   {show.image && (
                     <img
                       src={show.image}
@@ -74,7 +76,7 @@ export function FavoritesPage() {
                   <div className="p-4">
                     <h2 className="font-semibold text-gray-950">{show.name}</h2>
                   </div>
-                </div>
+                </div> */}
               </Link>
             ))}
           </div>

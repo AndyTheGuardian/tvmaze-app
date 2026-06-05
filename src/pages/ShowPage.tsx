@@ -118,7 +118,7 @@ export function ShowPage() {
               {show?.genres.map((genre) => (
                 <span
                   key={genre}
-                  className="rounded-full flex bg-gray-200/70 text-gray-950 px-3 py-1 text-sm items-center text-center"
+                  className="rounded-full flex bg-gray-200/60 text-gray-950 px-3 py-1 text-sm items-center text-center"
                 >
                   {genre === "Science-Fiction" && genreCount > 2
                     ? "Sci-Fi"
@@ -177,9 +177,10 @@ export function ShowPage() {
             </p>
             <p className="text-gray-500">|</p>
             <p
-              className={`justify-end text-sm font-semibold cursor-pointer ${showSearch ? "opacity-50 cursor-text" : ""}`}
+              className="justify-end text-sm font-semibold cursor-pointer"
               onClick={() => {
-                if (!showSearch) setShowCast((prev) => !prev);
+                if (showSearch) setShowSeach(false);
+                setShowCast(!showCast);
               }}
             >
               {showCast ? "Hide Cast" : "Show Cast"}
@@ -199,7 +200,7 @@ export function ShowPage() {
             >
               {isLoading && <div className="text-gray-50">Loading cast...</div>}
               {cast.length === 0 ? (
-                <div className="rounded-lg p-3 bg-black/60 backdrop-blur-sm">
+                <div className="rounded-lg p-3 bg-black/50 backdrop-blur-sm">
                   <p className="text-sm text-gray-50">
                     No cast info available.
                   </p>
@@ -234,7 +235,7 @@ export function ShowPage() {
                     className={`rounded px-4 py-2 ${
                       activeSeason === season
                         ? "bg-blue-600 text-white"
-                        : "bg-gray-200/80 text-gray-950"
+                        : "bg-gray-200/60 text-gray-950"
                     }`}
                   >
                     Season {season}
