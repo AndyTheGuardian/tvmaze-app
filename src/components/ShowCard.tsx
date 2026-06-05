@@ -15,7 +15,6 @@ export function ShowCard({ show }: Props) {
         shadow-sm backdrop-blur-sm
         hover:shadow-lg 
         block
-        object-cover
         hover:scale-[1.02] 
         active:scale-[0.98]
         transform-gpu
@@ -27,14 +26,15 @@ export function ShowCard({ show }: Props) {
             src={show.image}
             alt={show.name}
             className="
-              h-72 w-full"
+              h-72 w-full
+              object-cover"
           />
         )}
         {!show.image && (
           <div
             className="h-72 w-full flex flex-col 
             items-center justify-center 
-            bg-none text-gray-800/90"
+            bg-gray-600/60 text-gray-400"
           >
             <ImageOff size={64} />
             <p className="">* no image available *</p>
