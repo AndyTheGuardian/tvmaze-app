@@ -1,5 +1,6 @@
 import { VenetianMask } from "lucide-react";
 import type { CastMember } from "../types/tvmaze";
+import { Link } from "react-router-dom";
 
 interface Props {
   member: CastMember;
@@ -51,13 +52,15 @@ export function CastCard({ member, showBirthday, setShowBirthday }: Props) {
           </div>
         )}
       </div>
-      <div className="font-semibold text-gray-50 px-3">
-        {member.person.name}
-      </div>
+      <Link to={`/person/${member.person.id}`}>
+        <div className="font-semibold text-gray-50 px-3">
+          {member.person.name}
+        </div>
 
-      <div className="text-sm text-gray-300 px-3 pb-3">
-        as {member.character.name}
-      </div>
+        <div className="text-sm text-gray-300 px-3 pb-3">
+          as {member.character.name}
+        </div>
+      </Link>
     </div>
   );
 }

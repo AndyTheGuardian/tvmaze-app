@@ -23,7 +23,7 @@ export interface Show {
   };
   image?: {
     medium: string;
-    original: string;
+    original?: string;
   };
 }
 
@@ -50,7 +50,12 @@ export interface CastMember {
   person: {
     id: number;
     name: string;
-    birthday: string;
+    birthday?: string;
+    deathday?: string;
+    gender?: string;
+    country?: {
+      name: string;
+    };
     image?: {
       medium: string;
       original: string;
@@ -61,3 +66,21 @@ export interface CastMember {
     name: string;
   };
 }
+
+export type Person = CastMember["person"];
+
+export interface CastCredit {
+  _embedded: {
+    show: {
+      id: number;
+      name: string;
+
+      image?: {
+        medium: string;
+        original?: string;
+      };
+    };
+  };
+}
+
+export type ShowCardData = Pick<Show, "id" | "name" | "image">;

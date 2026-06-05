@@ -64,7 +64,14 @@ export function ShowPage() {
   const genreCount = show?.genres.length ?? 0;
 
   if (seasonNumbers.length === 0) {
-    return <div>No episodes found.</div>;
+    return (
+      <div
+        className="m-6 p-6 text-xl font-semibold 
+        bg-black/50 rounded-2xl"
+      >
+        No episodes found.
+      </div>
+    );
   }
 
   return (
@@ -78,7 +85,7 @@ export function ShowPage() {
           backgroundImage: `url(${show?.image?.original})`,
         }}
       />
-      <div className="fixed inset-0 z-10 bg-black/60 pointer-events-none" />
+      <div className="fixed inset-0 z-10 bg-black/50 pointer-events-none" />
       <main className="relative z-20 mx-auto max-w-5xl p-3 md:p-6">
         <div className="rounded-2xl bg-black/50 p-6">
           <div className="flex gap-2">

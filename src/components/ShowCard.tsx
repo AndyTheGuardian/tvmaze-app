@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import type { Show } from "../types/tvmaze";
 import { ImageOff } from "lucide-react";
+import type { ShowCardData } from "../types/tvmaze";
 
 interface Props {
-  show: Show;
+  show: ShowCardData;
 }
 
 export function ShowCard({ show }: Props) {
@@ -20,7 +20,7 @@ export function ShowCard({ show }: Props) {
           <img
             src={show.image.medium}
             alt={show.name}
-            className="h-72 w-full object-cover"
+            className="h-72 w-full object-cover scale-[1.01]"
           />
         )}
         {show.image === null && (
