@@ -118,7 +118,16 @@ export function ShowPage() {
               {show?.genres.map((genre) => (
                 <span
                   key={genre}
-                  className="rounded-full flex bg-gray-200/60 text-gray-950 px-3 py-1 text-sm items-center text-center"
+                  className="
+                  rounded-full 
+                  flex 
+                  bg-gray-200/60 
+                  backdrop-blur-sm
+                  text-gray-950 
+                  px-3 py-1 
+                  text-sm 
+                  items-center 
+                  text-center"
                 >
                   {genre === "Science-Fiction" && genreCount > 2
                     ? "Sci-Fi"
@@ -235,7 +244,7 @@ export function ShowPage() {
                     className={`rounded px-4 py-2 ${
                       activeSeason === season
                         ? "bg-blue-600 text-white"
-                        : "bg-gray-200/60 text-gray-950"
+                        : "bg-gray-200/60 backdrop-blur-sm text-gray-950"
                     }`}
                   >
                     Season {season}
