@@ -36,7 +36,7 @@ export function PersonPage() {
       <div className="fixed inset-0 z-10 bg-black/50 pointer-events-none" />
       <main className="relative z-20 mx-auto max-w-5xl p-3 md:p-6">
         <div className="rounded-2xl bg-black/60 backdrop-blur-sm p-6">
-          <div className="mb-3 flex gap-3 rounded-lg bg-black/50">
+          <div className="mb-3 flex gap-3 rounded-lg bg-gray-200/50">
             {person?.image && (
               <img
                 src={person.image.medium}
@@ -53,7 +53,7 @@ export function PersonPage() {
                 <p className="">* no image available *</p>
               </div>
             )}
-            <div className="mt-2 flex-row text-sm  font-semibold">
+            <div className="mt-2 flex-row text-sm font-semibold text-gray-950">
               <h1 className="mb-2 text-2xl font-bold">{person?.name}</h1>
               {person?.birthday && (
                 <div className="flex mb-1">
@@ -78,7 +78,7 @@ export function PersonPage() {
             </div>
           </div>
           <div className="mb-2 font-bold text-xl">Known for</div>
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
             {uniqueShows?.map((credit) => {
               return (
                 <ShowCard

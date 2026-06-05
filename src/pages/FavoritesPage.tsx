@@ -41,9 +41,9 @@ export function FavoritesPage() {
 
                 alert("Favorites copied!");
               }}
-              className="-mt-6"
+              className="-mt-6 opacity-50"
             >
-              <SquareArrowRightExit size={18} />
+              <SquareArrowRightExit size={17} />
             </button>
             <p className="text-sm text-gray-500/80 mt-1.25">|</p>
             <button
@@ -54,7 +54,7 @@ export function FavoritesPage() {
 
                 location.reload();
               }}
-              className="-mt-6"
+              className="-mt-6 opacity-50"
             >
               <SquareArrowRightEnter size={18} />
             </button>

@@ -13,7 +13,7 @@ export function EpisodeCard({ episode, setSelectedEpisode }: Props) {
       key={episode.id}
       onClick={() => setSelectedEpisode(episode)}
       className="flex items-start gap-2 rounded-lg shadow 
-                        bg-gray-200/70 p-3 text-gray-950 backdrop-blur-xs"
+                        bg-gray-200/50 p-3 text-gray-950 backdrop-blur-xs"
     >
       <div className="flex-none w-1/4 md:w-44">
         <div className="font-semibold">

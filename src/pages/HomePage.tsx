@@ -1,7 +1,10 @@
 import { useShows } from "../hooks/useShows";
 import { SearchBar } from "../components/SearchBar";
 import { ShowCard } from "../components/ShowCard";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { getRandomShow } from "../utils/getRandomShow";
+import { Dices } from "lucide-react";
 
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,6 +16,21 @@ export function HomePage() {
   };
 
   const { data = [], isLoading } = useShows(search);
+
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleSurpriseMe = async () => {
+    setLoading(true);
+
+    try {
+      const show = await getRandomShow();
+
+      navigate(`/show/${show.id}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-gray-900 min-h-screen min-w-screen">
@@ -29,8 +47,17 @@ export function HomePage() {
 
       <main className="relative z-10 mx-auto max-w-5xl p-3 md:p-6">
         <div className="mx-auto max-w-5xl p-3 md:p-6 bg-black/50 rounded-lg">
-          <h1 className="mb-6 text-2xl font-bold">Episode Guide</h1>
-
+          <div className="flex">
+            <h1 className="mb-6 flex-1 text-2xl font-bold">Episode Guide</h1>
+            <button
+              className="mt-1 flex gap-2 text-sm opacity-50 cursor-pointer"
+              onClick={handleSurpriseMe}
+              disabled={loading}
+            >
+              {loading ? "Finding something good..." : "Surprise me!"}
+              <Dices size={18} />
+            </button>
+          </div>
           <SearchBar
             value={search}
             onChange={handleSearchChange}

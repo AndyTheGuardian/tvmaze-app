@@ -21,18 +21,20 @@ export function EpisodeDrawer({
 
         <Drawer.Content
           className="fixed bottom-0 left-0 right-0 max-h-[85vh]
-                       z-101 overflow-y-auto rounded-t-xl bg-blue-50/90 p-6"
+                       z-101 overflow-y-auto 
+                       rounded-t-xl bg-gray-200/60 
+                       backdrop-blur-sm p-6"
         >
           <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-gray-300" />
           {episode && (
             <>
-              <h2 className="text-2xl font-bold">{episode.name}</h2>
+              <h2 className="mb-2 text-2xl font-bold">{episode.name}</h2>
 
-              <div className="flex gap-2 mb-4">
-                <div className="flex-1 text-gray-500">
+              <div className="flex gap-2 mb-2 opacity-60">
+                <div className="flex-1">
                   {formatEpisode(episode.season, episode.number)}
                 </div>
-                <div className="text-gray-500">{episode.rating?.average}</div>
+                <div className="flex-none">{episode.rating?.average}</div>
               </div>
 
               {episode.image && (
@@ -42,10 +44,10 @@ export function EpisodeDrawer({
                   className="mb-2 rounded-xl shadow"
                 />
               )}
-              <div className="flex gap-2 mb-3 text-gray-600">
+              <div className="flex gap-2 mb-3 opacity-60">
                 <div className="flex-1">{episode.runtime} min</div>
 
-                <div className="mb-2">{episode.airdate}</div>
+                <div className="flex-none">{episode.airdate}</div>
               </div>
               <p>{htmlToText(episode.summary)}</p>
             </>
