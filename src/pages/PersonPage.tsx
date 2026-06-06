@@ -4,6 +4,7 @@ import { usePerson } from "../hooks/usePerson";
 import { ShowCard } from "../components/ShowCard";
 import { ImageOff } from "lucide-react";
 import type { CastCredit } from "../types/tvmaze";
+import { groupedCastCreditsByShow } from "../utils/groupedCastCreditsByShow";
 
 export function PersonPage() {
   const { id } = useParams();
@@ -23,41 +24,7 @@ export function PersonPage() {
     ).values(),
   );
 
-  const creditsByShow = credits?.reduce(
-    (acc, credit) => {
-      const show = credit._embedded.show;
-      const characterName = credit._links.character?.name;
-
-      if (!acc[show.id]) {
-        acc[show.id] = {
-          show,
-          characters: [],
-          self: false,
-          voice: false,
-        };
-      }
-
-      if (characterName) {
-        acc[show.id].characters.push(characterName);
-      }
-
-      acc[show.id].self ||= credit.self;
-      acc[show.id].voice ||= credit.voice;
-
-      return acc;
-    },
-    {} as Record<
-      number,
-      {
-        show: CastCredit["_embedded"]["show"];
-        characters: string[];
-        self: boolean;
-        voice: boolean;
-      }
-    >,
-  );
-
-  const groupedCredits = Object.values(creditsByShow);
+  const groupedCredits = groupedCastCreditsByShow(credits);
 
   return (
     <div className="relative min-h-screen bg-black">
