@@ -62,10 +62,10 @@ export function PersonPage() {
           >
             {person?.name}
           </h1>
-          <div className="mb-3 flex">
+          <div className="mb-3 flex-row md:flex">
             <div
               className="
-                flex gap-3 
+                flex-col md:flex gap-3 
                 rounded-l-lg"
             >
               <div
@@ -73,10 +73,10 @@ export function PersonPage() {
                 className="
                   min-w-auto
                   text-nowrap
-                  flex-col 
+                  flex md:flex-col 
                   bg-gray-600/40 
                   backdrop-blur-sm
-                  rounded-bl-lg"
+                  rounded-t-lg md:rounded-bl-lg"
               >
                 {person?.image && (
                   <img
@@ -84,7 +84,8 @@ export function PersonPage() {
                     alt={person.name}
                     className="
                       h-60 w-full 
-                      rounded-tl-lg rounded-br-lg 
+                      rounded-tl-lg 
+                      rounded-br-lg 
                       object-cover"
                   />
                 )}
@@ -134,7 +135,8 @@ export function PersonPage() {
               className="p-3 w-full
               text-gray-950 
               bg-gray-200/60
-              rounded-r-lg"
+              rounded-b-lg
+              md:rounded-r-lg"
             >
               <h2 className="mb-1 font-bold">Credits</h2>
               <div
