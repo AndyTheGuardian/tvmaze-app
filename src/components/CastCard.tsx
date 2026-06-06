@@ -5,10 +5,9 @@ import { Link } from "react-router-dom";
 interface Props {
   member: CastMember;
   showBirthday: boolean;
-  setShowBirthday: (v: boolean) => void;
 }
 
-export function CastCard({ member, showBirthday, setShowBirthday }: Props) {
+export function CastCard({ member, showBirthday }: Props) {
   return (
     <Link to={`/person/${member.person.id}`}>
       <div
@@ -47,7 +46,6 @@ export function CastCard({ member, showBirthday, setShowBirthday }: Props) {
                 transition-all duration-300 
                 ${showBirthday ? "opacity-100" : "opacity-0"} 
                     text-xs text-gray-50`}
-              onClick={() => setShowBirthday(!showBirthday)}
             >
               {member.person.birthday}
             </div>

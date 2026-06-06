@@ -175,6 +175,10 @@ export function ShowPage() {
           </div>
           <p className="mb-1 text-gray-100">{htmlToText(show?.summary)}</p>
           <div className="flex justify-end gap-3 text-sm font-semibold mb-3">
+            <div
+              className="flex-1"
+              onClick={() => setShowBirthday(!showBirthday)}
+            />
             <p
               className="justify-end text-sm font-semibold text-left cursor-pointer"
               onClick={() => {
@@ -221,7 +225,6 @@ export function ShowPage() {
                       key={member.person.id}
                       member={member}
                       showBirthday={showBirthday}
-                      setShowBirthday={setShowBirthday}
                     />
                   ))}
                 </div>
