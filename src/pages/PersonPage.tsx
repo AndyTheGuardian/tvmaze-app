@@ -121,7 +121,7 @@ export function PersonPage() {
                     )}
                     <p className="opacity-60 font-semibold w-15">Gender</p>
                     <p className="">{person?.gender}</p>
-                    {person?.deathday && (
+                    {person?.country?.name && (
                       <>
                         <div className="opacity-60 font-semibold w-15">
                           Country
@@ -154,16 +154,16 @@ export function PersonPage() {
                 {groupedCredits?.map(({ show, characters, self, voice }) => (
                   <Link to={`/show/${show.id}`}>
                     <div id={show.id.toString()} className="mb-1 gap-2 text-sm">
-                      <p className="opacity-70 font-semibold">{show.name}</p>
-                      <div className="ml-3 flex gap-1">
-                        <p className="opacity-100 whitespace-pre-line">
-                          {characters.join(`\n`)}
-                        </p>
-                        {self && <p className="italic opacity-70">Self</p>}
+                      <div className="flex">
+                        <p className="opacity-70 font-semibold">{show.name}</p>
+                        {self && <p className="ml-1 italic opacity-70">Self</p>}
                         {voice && (
                           <p className="ml-1 italic opacity-70">Voice</p>
                         )}
                       </div>
+                      <p className="ml-3 opacity-100 whitespace-pre-line">
+                        {characters.join(`\n`)}
+                      </p>
                     </div>
                   </Link>
                 ))}
