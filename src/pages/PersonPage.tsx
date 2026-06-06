@@ -183,7 +183,7 @@ export function PersonPage() {
                       className="mb-1 gap-2  text-sm"
                     >
                       <p className="opacity-70 font-semibold">{show.name}</p>
-                      <div className="ml-6 flex gap-1">
+                      <div className="ml-3 flex gap-1">
                         <p className="opacity-100 whitespace-pre-line">
                           {characters.join(`\n`)}
                         </p>
