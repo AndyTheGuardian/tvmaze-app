@@ -87,7 +87,7 @@ export function ShowPage() {
       />
       <div className="fixed inset-0 z-10 bg-black/50 pointer-events-none" />
       <main className="relative z-20 mx-auto max-w-5xl p-3 md:p-6">
-        <div className="rounded-2xl bg-black/50 p-6">
+        <div className="rounded-2xl bg-black/50 p-3 md:p-6">
           <div className="flex gap-2">
             <h1 className="flex-1 mb-3 text-gray-100 text-2xl font-bold">
               {show?.name}
@@ -209,7 +209,7 @@ export function ShowPage() {
             >
               {isLoading && <div className="text-gray-50">Loading cast...</div>}
               {cast.length === 0 ? (
-                <div className="rounded-lg p-3 bg-black/50 backdrop-blur-sm">
+                <div className="rounded-lg p-3 bg-gray-200/30 backdrop-blur-sm">
                   <p className="text-sm text-gray-50">
                     No cast info available.
                   </p>

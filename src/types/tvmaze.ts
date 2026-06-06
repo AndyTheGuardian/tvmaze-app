@@ -70,6 +70,16 @@ export interface CastMember {
 export type Person = CastMember["person"];
 
 export interface CastCredit {
+  self: boolean;
+  voice: boolean;
+  character: {
+    name: string;
+  };
+  _links: {
+    character: {
+      name: string;
+    };
+  };
   _embedded: {
     show: {
       id: number;

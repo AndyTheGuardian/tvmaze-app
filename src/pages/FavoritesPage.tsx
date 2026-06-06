@@ -28,13 +28,32 @@ export function FavoritesPage() {
           backgroundImage: `url(https://www.posterized.in/cdn/shop/files/50setseriesw.jpg)`,
         }}
       />
-      <div className="fixed inset-0 z-10 bg-black/60 pointer-events-none" />
+      <div
+        className="fixed inset-0 z-10 
+      bg-black/60 pointer-events-none"
+      />
 
-      <main className="relative z-10 mx-auto max-w-5xl p-3 md:p-6">
+      <main
+        className="
+        relative z-10 
+        mx-auto max-w-5xl 
+        p-3 md:p-6"
+      >
         {/* <div className="min-h-screen bg-gray-900"> */}
-        <div className="mx-auto max-w-5xl p-6 bg-black/50 rounded-lg">
+        <div
+          className="
+          mx-auto max-w-5xl 
+          p-3 md:p-6 
+          bg-black/50 rounded-lg"
+        >
           <div className="flex gap-4">
-            <h1 className="mb-6 text-2xl font-bold flex-1">Favorite Shows</h1>
+            <h1
+              className="
+              mb-3 md:mb-6 flex-1
+              text-2xl font-bold"
+            >
+              Favorite Shows
+            </h1>
             <button
               onClick={async () => {
                 const data = localStorage.getItem("favorite-shows");
@@ -42,7 +61,7 @@ export function FavoritesPage() {
 
                 alert("Favorites copied!");
               }}
-              className="-mt-6 opacity-50"
+              className="-mt-3.5 md:-mt-6 opacity-50"
             >
               <SquareArrowRightExit size={17} />
             </button>
@@ -50,12 +69,10 @@ export function FavoritesPage() {
             <button
               onClick={async () => {
                 const data = await navigator.clipboard.readText();
-
                 localStorage.setItem("favorite-shows", data);
-
                 location.reload();
               }}
-              className="-mt-6 opacity-50"
+              className="-mt-3.25 md:-mt-6 opacity-50"
             >
               <SquareArrowRightEnter size={18} />
             </button>

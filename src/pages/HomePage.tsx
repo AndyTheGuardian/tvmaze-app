@@ -43,12 +43,31 @@ export function HomePage() {
           backgroundImage: `url(https://www.posterized.in/cdn/shop/files/50setseriesw.jpg)`,
         }}
       />
-      <div className="fixed inset-0 z-10 bg-black/60 pointer-events-none" />
+      <div
+        className="fixed inset-0 z-10 
+        bg-black/60 pointer-events-none"
+      />
 
-      <main className="relative z-10 mx-auto max-w-5xl p-3 md:p-6">
-        <div className="mx-auto max-w-5xl p-6 bg-black/50 rounded-lg">
-          <div className="flex">
-            <h1 className="mb-6 flex-1 text-2xl font-bold">Episode Guide</h1>
+      <main
+        className="
+        relative z-10 
+        mx-auto max-w-5xl 
+        p-3 md:p-6"
+      >
+        <div
+          className="
+          mx-auto max-w-5xl 
+          p-3 md:p-6 
+          bg-black/50 rounded-lg"
+        >
+          <div className="mb-3 md:mb-6  flex">
+            <h1
+              className="
+              flex-1 
+              text-2xl font-bold"
+            >
+              Episode Guide
+            </h1>
             <button
               className="mt-2 flex gap-2 text-sm opacity-50 cursor-pointer"
               onClick={handleSurpriseMe}
@@ -67,7 +86,10 @@ export function HomePage() {
 
           {isLoading && <p className="mt-4">Loading...</p>}
 
-          <div className="mt-3 grid gap-4 grid-cols-2 md:grid-cols-4">
+          <div
+            className="
+            md:mt-3 grid gap-4 grid-cols-2 md:grid-cols-4"
+          >
             {data.map((show) => (
               <ShowCard
                 key={show.id}
