@@ -2,8 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { useCastCredits } from "../hooks/useCastCredits";
 import { usePerson } from "../hooks/usePerson";
 import { ShowCard } from "../components/ShowCard";
-import { ImageOff } from "lucide-react";
-import type { CastCredit } from "../types/tvmaze";
+import { VenetianMask } from "lucide-react";
 import { groupedCastCreditsByShow } from "../utils/groupedCastCreditsByShow";
 
 export function PersonPage() {
@@ -73,7 +72,7 @@ export function PersonPage() {
                 className="
                   min-w-auto
                   text-nowrap
-                  flex md:flex-col 
+                  flex md:flex-col
                   bg-gray-600/40 
                   backdrop-blur-sm
                   rounded-t-lg md:rounded-bl-lg"
@@ -83,50 +82,56 @@ export function PersonPage() {
                     src={person.image.medium}
                     alt={person.name}
                     className="
-                      h-60 w-full 
+                      h-72 
                       rounded-tl-lg 
-                      rounded-br-lg 
                       object-cover"
                   />
                 )}
-                {person?.image === null && (
+                {!person?.image && (
                   <div
                     className="
-                      h-72 w-full 
+                      h-60 p-3 
                       flex flex-col 
                       items-center justify-center 
-                      bg-none text-gray-800"
+                      bg-none text-gray-500/60 font-medium"
                   >
-                    <ImageOff size={64} />
-                    <p className="">* no image available *</p>
+                    <VenetianMask size={64} />
+                    <p>* no image available *</p>
                   </div>
                 )}
                 <div
                   id="bio"
                   className="
                     m-3 flex-row 
-                    text-sm  
+                    text-sm 
                     text-gray-50"
                 >
-                  {person?.birthday && (
-                    <div className="flex mb-1">
-                      <p className="opacity-60 font-semibold w-16">Born</p>
-                      <p className="">{person?.birthday}</p>
-                    </div>
-                  )}
-                  {person?.deathday && (
-                    <div className="flex mb-1">
-                      <p className="opacity-60 font-semibold w-16">Died</p>
-                      <p className="">{person?.deathday}</p>
-                    </div>
-                  )}
-                  <div className="flex mb-1">
-                    <p className="opacity-60 font-semibold w-16">Gender</p>
+                  <div className="grid grid-cols-[52px_1fr] gap-x-2 gap-y-1">
+                    {person?.birthday && (
+                      <>
+                        <p className="opacity-60 font-semibold w-15">Born</p>
+                        <p className="">{person?.birthday}</p>
+                      </>
+                    )}
+                    {person?.deathday && (
+                      <>
+                        <p className="opacity-60 font-semibold w-15">Died</p>
+                        <p className="">{person?.deathday}</p>
+                      </>
+                    )}
+                    <p className="opacity-60 font-semibold w-15">Gender</p>
                     <p className="">{person?.gender}</p>
-                  </div>
-                  <div className="flex mb-1">
-                    <p className="opacity-60 font-semibold w-16">Country</p>
-                    <p className="">{person?.country?.name}</p>
+                    {person?.deathday && (
+                      <>
+                        <div className="opacity-60 font-semibold w-15">
+                          Country
+                        </div>
+                        <div className="text-wrap">{person?.country?.name}</div>
+                      </>
+                    )}
+                    {/* <sp className="whitespace-pre-line">
+                      {person?.country?.name.split(" ").join("\n")}
+                    </p> */}
                   </div>
                 </div>
               </div>
@@ -136,6 +141,7 @@ export function PersonPage() {
               text-gray-950 
               bg-gray-200/60
               rounded-b-lg
+              md:rounded-bl-none
               md:rounded-r-lg"
             >
               <h2 className="mb-1 font-bold">Credits</h2>
@@ -147,10 +153,7 @@ export function PersonPage() {
               >
                 {groupedCredits?.map(({ show, characters, self, voice }) => (
                   <Link to={`/show/${show.id}`}>
-                    <div
-                      id={show.id.toString()}
-                      className="mb-1 gap-2  text-sm"
-                    >
+                    <div id={show.id.toString()} className="mb-1 gap-2 text-sm">
                       <p className="opacity-70 font-semibold">{show.name}</p>
                       <div className="ml-3 flex gap-1">
                         <p className="opacity-100 whitespace-pre-line">

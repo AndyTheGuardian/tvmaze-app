@@ -34,10 +34,10 @@ export function ShowCard({ show }: Props) {
           <div
             className="h-72 w-full flex flex-col 
             items-center justify-center 
-            bg-gray-600/60 text-gray-400"
+            bg-gray-600/40 text-gray-500 font-medium"
           >
             <ImageOff size={64} />
-            <p className="">* no image available *</p>
+            <p className="font-">* no image available *</p>
           </div>
         )}
 

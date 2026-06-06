@@ -26,12 +26,12 @@ export function CastCard({ member, showBirthday }: Props) {
                 rounded-t-lg object-cover"
             />
           )}
-          {member.person.image === null && (
+          {!member.person.image && (
             <div
               className="
                 h-50 w-full rounded-t-lg bg-none 
                 flex flex-col items-center justify-center 
-                text-gray-500/60"
+                text-gray-500/60 font-medium"
             >
               <VenetianMask size={64} />
               <p>* no image available *</p>
