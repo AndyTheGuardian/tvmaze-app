@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useCastCredits } from "../hooks/useCastCredits";
 import { usePerson } from "../hooks/usePerson";
 import { ShowCard } from "../components/ShowCard";
@@ -177,7 +177,7 @@ export function PersonPage() {
                 gap-x-2 gap-y-1"
               >
                 {groupedCredits?.map(({ show, characters, self, voice }) => (
-                  <>
+                  <Link to={`/show/${show.id}`}>
                     <div
                       id={show.id.toString()}
                       className="mb-1 gap-2  text-sm"
@@ -193,7 +193,7 @@ export function PersonPage() {
                         )}
                       </div>
                     </div>
-                  </>
+                  </Link>
                 ))}
               </div>
             </div>
