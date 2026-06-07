@@ -71,7 +71,7 @@ export function PersonPage() {
                 id="imageCol"
                 className="
                   min-w-auto
-                  h-auto
+                  h-full
                   text-nowrap
                   flex md:flex-col
                   bg-gray-600/40 
@@ -146,24 +146,25 @@ export function PersonPage() {
               md:rounded-r-lg"
             >
               <h2 className="mb-1 font-bold">Credits</h2>
-              <div
-                className="
-                grid 
-                grid-cols-[repeat(auto-fit,minmax(150px,1fr))] 
-                gap-x-2 gap-y-1"
-              >
+              {/* // grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-x-2 gap-y-1
+                // [column-width:150px] gap-4     */}
+              <div className="columns-2 sm:columns-3 md:columns-4 gap-4 [column-fill:balance]">
                 {groupedCredits?.map(({ show, characters, self, voice }) => (
-                  <Link key={show.id} to={`/show/${show.id}`}>
-                    <div id={show.id.toString()} className="mb-1 gap-2 text-sm">
+                  <Link
+                    key={show.id}
+                    to={`/show/${show.id}`}
+                    className="mb-2 block break-inside-avoid"
+                  >
+                    <div id={show.id.toString()} className="gap-2 text-sm">
                       <div className="opacity-70 font-semibold">
                         {show.name}
                         {self && (
-                          <span className="ml-1 text-gray-950/60 text-xs italic font-medium">
+                          <span className="ml-1 text-gray-950/70 text-xs italic font-medium">
                             Self
                           </span>
                         )}
                         {voice && (
-                          <span className="ml-1 text-gray-950/60 text-xs italic font-medium">
+                          <span className="ml-1 text-gray-950/70 text-xs italic font-medium">
                             Voice
                           </span>
                         )}
