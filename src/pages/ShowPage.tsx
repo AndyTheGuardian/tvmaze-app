@@ -59,8 +59,10 @@ export function ShowPage() {
     [episodes, episodeSearch],
   );
 
+  const hasEpisodes = seasonNumbers.length > 0;
+
   useEffect(() => {
-    if (seasonNumbers.length > 0 && selectedSeason === undefined) {
+    if (hasEpisodes && selectedSeason === undefined) {
       setSelectedSeason(seasonNumbers[0]);
     }
   }, [seasonNumbers, selectedSeason]);
@@ -68,17 +70,6 @@ export function ShowPage() {
   const activeSeason = selectedSeason;
 
   const genreCount = show?.genres.length ?? 0;
-
-  if (seasonNumbers.length === 0) {
-    return (
-      <div
-        className="m-6 p-6 text-xl font-semibold 
-        bg-black/50 rounded-2xl"
-      >
-        `No episodes found for ${show?.name}.`
-      </div>
-    );
-  }
 
   return (
     <div className="relative min-h-screen bg-black">
@@ -105,7 +96,7 @@ export function ShowPage() {
               size={20}
               fill={favorite ? "white" : "none"}
               stroke="white"
-              className="mt-1.5"
+              className="mt-1.5 cursor-pointer"
               onClick={() => {
                 if (!show) return;
 
@@ -141,15 +132,17 @@ export function ShowPage() {
                 </span>
               ))}
             </div>
-            <Link
-              className="text-sm font-semibold"
-              to={`https://www.imdb.com/title/${show?.externals.imdb}`}
-            >
-              <div className="flex mt-1 text-gray-300/70">
-                IMDB
-                <ExternalLink size={14} className="ml-0.5 mt-0.5" />
-              </div>
-            </Link>
+            {show?.externals.imdb && (
+              <Link
+                className="text-sm font-semibold"
+                to={`https://www.imdb.com/title/${show?.externals.imdb}`}
+              >
+                <div className="flex mt-1 text-gray-300/70">
+                  IMDB
+                  <ExternalLink size={14} className="ml-0.5 mt-0.5" />
+                </div>
+              </Link>
+            )}
           </div>
           <div className="mb-4 flex gap-2">
             <div className="flex-none text-sm font-semibold">
@@ -174,9 +167,11 @@ export function ShowPage() {
                 ))
               )}
             </div>
-            <div className="text-sm font-semibold">
-              {getYear(show?.premiered)}-{getYear(show?.ended)}
-            </div>
+            {show?.premiered && (
+              <div className="text-sm font-semibold">
+                {getYear(show?.premiered)}-{getYear(show?.ended)}
+              </div>
+            )}
             <div className="text-sm font-semibold">{show?.status}</div>
           </div>
           <p className="mb-1 text-gray-100">{htmlToText(show?.summary)}</p>
@@ -185,17 +180,22 @@ export function ShowPage() {
               className="flex-1"
               onClick={() => setShowBirthday(!showBirthday)}
             />
-            <p
-              className="justify-end text-sm font-semibold text-left cursor-pointer"
+            <button
+              className="
+                justify-end text-sm 
+                font-semibold text-left 
+                cursor-pointer disabled:cursor-default disabled:opacity-60"
               onClick={() => {
+                if (!hasEpisodes) return;
                 if (showCast) setShowCast(false);
                 setShowSeach(!showSearch);
               }}
+              disabled={!hasEpisodes}
             >
               {showSearch ? "Hide Search" : "Search in Episodes"}
-            </p>
+            </button>
             <p className="text-gray-500">|</p>
-            <p
+            <button
               className="justify-end text-sm font-semibold cursor-pointer"
               onClick={() => {
                 if (showSearch) setShowSeach(false);
@@ -203,7 +203,7 @@ export function ShowPage() {
               }}
             >
               {showCast ? "Hide Cast" : "Show Cast"}
-            </p>
+            </button>
           </div>
           <div
             className={`
@@ -244,6 +244,17 @@ export function ShowPage() {
               placeholder="Search in episodes..."
               active={showSearch}
             />
+            {!hasEpisodes && (
+              <div
+                className="
+                  flex rounded-lg shadow 
+                  justify-center
+                  bg-gray-200/60 p-3 text-gray-950/60 
+                  backdrop-blur-sm italic"
+              >
+                * No episode info available *
+              </div>
+            )}
             {!showSearch && (
               <div className="md:sticky md:top-0 z-50 mb-3 flex flex-wrap gap-2">
                 {seasonNumbers.map((season) => (
