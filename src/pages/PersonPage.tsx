@@ -153,6 +153,9 @@ export function PersonPage() {
                 onClick={() => setInlineBreaks(!inlineBreaks)}
               >
                 Credits
+                <span className="ml-2 text-sm font-medium italic opacity-50">
+                  Shows: {groupedCredits.length}, Total: {credits.length}
+                </span>
               </h2>
               {/* // grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-x-2 gap-y-1
                 // [column-width:150px] gap-4     */}
