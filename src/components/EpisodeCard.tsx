@@ -12,7 +12,7 @@ export function EpisodeCard({ episode, setSelectedEpisode }: Props) {
     <div
       key={episode.id}
       onClick={() => setSelectedEpisode(episode)}
-      className="flex items-start gap-2 rounded-lg shadow 
+      className="flex gap-2 rounded-lg shadow 
                         bg-gray-200/60 p-3 text-gray-950 backdrop-blur-sm"
     >
       <div className="flex-none w-1/4 md:w-44">
@@ -25,13 +25,13 @@ export function EpisodeCard({ episode, setSelectedEpisode }: Props) {
       </div>
       <div
         className={`flex-1 min-w-0 text-wrap ${
-          episode.summary === ""
+          !episode.summary || episode.summary === ""
             ? "italic text-gray-900/80 flex items-center justify-center"
             : ""
         }`}
       >
-        {episode.summary === ""
-          ? "Summary not available"
+        {!episode.summary || episode.summary === ""
+          ? "* Summary not available *"
           : htmlToText(episode.summary)}
       </div>
     </div>

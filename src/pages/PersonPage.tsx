@@ -82,7 +82,7 @@ export function PersonPage() {
                     src={person.image.medium}
                     alt={person.name}
                     className="
-                      h-72 
+                      h-60 w-auto
                       rounded-tl-lg 
                       object-cover"
                   />

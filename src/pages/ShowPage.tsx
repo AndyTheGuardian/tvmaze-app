@@ -28,7 +28,13 @@ export function ShowPage() {
 
   const [favorite, setFavorite] = useState(() => isFavorite(showId));
 
-  const [showCast, setShowCast] = useState(false);
+  const [showCast, setShowCast] = useState(() => {
+    return sessionStorage.getItem(`show-${showId}-cast-open`) === "true";
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem(`show-${showId}-cast-open`, String(showCast));
+  }, [showId, showCast]);
 
   const [showBirthday, setShowBirthday] = useState(false);
 
@@ -69,7 +75,7 @@ export function ShowPage() {
         className="m-6 p-6 text-xl font-semibold 
         bg-black/50 rounded-2xl"
       >
-        No episodes found.
+        `No episodes found for ${show?.name}.`
       </div>
     );
   }
