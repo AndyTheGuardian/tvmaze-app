@@ -8,7 +8,7 @@ interface Props {
 
 export function ShowCard({ show }: Props) {
   return (
-    <Link to={`/show/${show.id}`}>
+    <Link key={show.id} to={`/show/${show.id}`}>
       <div
         className="overflow-hidden rounded-lg 
         text-gray-950

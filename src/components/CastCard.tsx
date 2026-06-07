@@ -9,7 +9,7 @@ interface Props {
 
 export function CastCard({ member, showBirthday }: Props) {
   return (
-    <Link to={`/person/${member.person.id}`}>
+    <Link key={member.person.id} to={`/person/${member.person.id}`}>
       <div
         key={member.person.id}
         className="

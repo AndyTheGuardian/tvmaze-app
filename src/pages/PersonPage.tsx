@@ -71,6 +71,7 @@ export function PersonPage() {
                 id="imageCol"
                 className="
                   min-w-auto
+                  h-auto
                   text-nowrap
                   flex md:flex-col
                   bg-gray-600/40 
@@ -152,13 +153,19 @@ export function PersonPage() {
                 gap-x-2 gap-y-1"
               >
                 {groupedCredits?.map(({ show, characters, self, voice }) => (
-                  <Link to={`/show/${show.id}`}>
+                  <Link key={show.id} to={`/show/${show.id}`}>
                     <div id={show.id.toString()} className="mb-1 gap-2 text-sm">
-                      <div className="flex">
-                        <p className="opacity-70 font-semibold">{show.name}</p>
-                        {self && <p className="ml-1 italic opacity-70">Self</p>}
+                      <div className="opacity-70 font-semibold">
+                        {show.name}
+                        {self && (
+                          <span className="ml-1 text-gray-950/60 text-xs italic font-medium">
+                            Self
+                          </span>
+                        )}
                         {voice && (
-                          <p className="ml-1 italic opacity-70">Voice</p>
+                          <span className="ml-1 text-gray-950/60 text-xs italic font-medium">
+                            Voice
+                          </span>
                         )}
                       </div>
                       <p className="ml-3 opacity-100 whitespace-pre-line">

@@ -81,19 +81,6 @@ export function FavoritesPage() {
             {sortedFavorites.map((show) => (
               <Link key={show.id} to={`/show/${show.id}`}>
                 <ShowCard show={show} />
-                {/* <div className="overflow-hidden rounded-lg shadow bg-gray-200/70">
-                  {show.image && (
-                    <img
-                      src={show.image}
-                      alt={show.name}
-                      className="h-72 w-full object-cover"
-                    />
-                  )}
-
-                  <div className="p-4">
-                    <h2 className="font-semibold text-gray-950">{show.name}</h2>
-                  </div>
-                </div> */}
               </Link>
             ))}
           </div>
