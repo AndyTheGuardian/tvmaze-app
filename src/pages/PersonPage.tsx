@@ -159,12 +159,12 @@ export function PersonPage() {
                       <div className="opacity-70 font-semibold">
                         {show.name}
                         {self && (
-                          <span className="ml-1 text-gray-950/70 text-xs italic font-medium">
+                          <span className="ml-1 text-gray-950/70 italic font-medium">
                             Self
                           </span>
                         )}
                         {voice && (
-                          <span className="ml-1 text-gray-950/70 text-xs italic font-medium">
+                          <span className="ml-1 text-gray-950/70 italic font-medium">
                             Voice
                           </span>
                         )}
