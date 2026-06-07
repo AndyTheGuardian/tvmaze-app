@@ -156,7 +156,7 @@ export function PersonPage() {
               </h2>
               {/* // grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-x-2 gap-y-1
                 // [column-width:150px] gap-4     */}
-              <div className="columns-2 sm:columns-3 md:columns-4 gap-4 [column-fill:balance]">
+              <div className="columns-2 sm:columns-3 lg:columns-4 gap-4 [column-fill:balance]">
                 {groupedCredits?.map(({ show, characters, self, voice }) => (
                   <Link key={show.id} to={`/show/${show.id}`} className="">
                     <div
