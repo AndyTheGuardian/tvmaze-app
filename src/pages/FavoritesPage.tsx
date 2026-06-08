@@ -24,7 +24,7 @@ export function FavoritesPage() {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const activeTab = searchParams.get("tab");
+  const activeTab = searchParams.get("tab") ?? "shows";
 
   const favorites =
     activeTab === "shows" ? sortedFavoriteShows : sortedFavoritePersons;
