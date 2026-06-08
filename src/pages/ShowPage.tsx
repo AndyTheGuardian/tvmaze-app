@@ -354,7 +354,7 @@ export function ShowPage() {
             exit={{ opacity: 0 }}
           >
             <motion.img
-              layoutId={`person-${show.id}`}
+              layoutId={`show-${show?.id}`}
               src={show.image.original ?? show.image.medium}
               alt={show.name}
               className="
