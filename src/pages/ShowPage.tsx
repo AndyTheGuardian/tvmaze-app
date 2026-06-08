@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 
 import { useShow } from "../hooks/useShow";
 import { useEpisodes } from "../hooks/useEpisodes";
@@ -26,19 +26,22 @@ export function ShowPage() {
 
   const { data: episodes = [] } = useEpisodes(showId);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [favorite, setFavorite] = useState(() => isFavoriteShow(showId));
 
-  const [showCast, setShowCast] = useState(() => {
-    return sessionStorage.getItem(`show-${showId}-cast-open`) === "true";
-  });
+  const castOpen = searchParams.get("cast") === "open";
+  // const [showCast, setShowCast] = useState(() => {
+  //   return sessionStorage.getItem(`show-${showId}-cast-open`) === "true";
+  // });
 
-  useEffect(() => {
-    sessionStorage.setItem(`show-${showId}-cast-open`, String(showCast));
-  }, [showId, showCast]);
+  // useEffect(() => {
+  //   sessionStorage.setItem(`show-${showId}-cast-open`, String(showCast));
+  // }, [showId, showCast]);
 
   const [showBirthday, setShowBirthday] = useState(false);
 
-  const { data: cast = [], isLoading } = useCast(showId, showCast);
+  const { data: cast = [], isLoading } = useCast(showId, castOpen);
 
   const [showSearch, setShowSeach] = useState(false);
 
@@ -47,8 +50,6 @@ export function ShowPage() {
   const seasonNumbers = Object.keys(seasons)
     .map(Number)
     .sort((a, b) => a - b);
-
-  const [selectedSeason, setSelectedSeason] = useState<number>();
 
   const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(null);
 
@@ -61,15 +62,17 @@ export function ShowPage() {
 
   const hasEpisodes = seasonNumbers.length > 0;
 
-  useEffect(() => {
-    if (hasEpisodes && selectedSeason === undefined) {
-      setSelectedSeason(seasonNumbers[0]);
-    }
-  }, [seasonNumbers, selectedSeason]);
-
-  const activeSeason = selectedSeason;
+  const activeSeason = Number(searchParams.get("season")) || seasonNumbers[0];
 
   const genreCount = show?.genres.length ?? 0;
+
+  function updateSearchParam(key: string, value: string) {
+    setSearchParams((params) => {
+      const next = new URLSearchParams(params);
+      next.set(key, value);
+      return next;
+    });
+  }
 
   return (
     <div className="relative min-h-screen bg-black">
@@ -187,8 +190,7 @@ export function ShowPage() {
                 cursor-pointer disabled:cursor-default disabled:opacity-60"
               onClick={() => {
                 if (!hasEpisodes) return;
-                if (showCast) setShowCast(false);
-                setShowSeach(!showSearch);
+                updateSearchParam("cast", castOpen ? "closed" : "open");
               }}
               disabled={!hasEpisodes}
             >
@@ -199,22 +201,22 @@ export function ShowPage() {
               className="justify-end text-sm font-semibold cursor-pointer"
               onClick={() => {
                 if (showSearch) setShowSeach(false);
-                setShowCast(!showCast);
+                updateSearchParam("cast", castOpen ? "closed" : "open");
               }}
             >
-              {showCast ? "Hide Cast" : "Show Cast"}
+              {castOpen ? "Hide Cast" : "Show Cast"}
             </button>
           </div>
           <div
             className={`
               transition-all duration-300
-              grid ${showCast ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}
+              grid ${castOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}
               `}
           >
             <div
               className={`
                 overflow-hidden transition-all duration-300
-                ${showCast ? "max-h-fit opacity-100 mb-3" : "max-h-0 opacity-0 mb-0"}
+                ${castOpen ? "max-h-fit opacity-100 mb-3" : "max-h-0 opacity-0 mb-0"}
               `}
             >
               {isLoading && <div className="text-gray-50">Loading cast...</div>}
@@ -260,7 +262,9 @@ export function ShowPage() {
                 {seasonNumbers.map((season) => (
                   <button
                     key={season}
-                    onClick={() => setSelectedSeason(season)}
+                    onClick={() =>
+                      updateSearchParam("season", season.toString())
+                    }
                     className={`rounded px-4 py-2 ${
                       activeSeason === season
                         ? "bg-blue-600 text-white"
