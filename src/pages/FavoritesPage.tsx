@@ -26,6 +26,8 @@ export function FavoritesPage() {
 
   const activeTab = searchParams.get("tab") ?? "shows";
 
+  const copyFavs = activeTab === "shows" ? "favoriteShows" : "favoritePersons";
+
   const favorites =
     activeTab === "shows" ? sortedFavoriteShows : sortedFavoritePersons;
 
@@ -68,10 +70,10 @@ export function FavoritesPage() {
             </h1>
             <button
               onClick={async () => {
-                const data = localStorage.getItem("favorite-shows");
+                const data = localStorage.getItem(copyFavs);
                 navigator.clipboard.writeText(data ?? "");
 
-                alert("Favorites copied!");
+                alert(`Favorite ${copyFavs.slice(8, copyFavs.length)} copied!`);
               }}
               className="-mt-3.5 md:-mt-6 opacity-50"
             >
@@ -81,7 +83,7 @@ export function FavoritesPage() {
             <button
               onClick={async () => {
                 const data = await navigator.clipboard.readText();
-                localStorage.setItem("favorite-shows", data);
+                localStorage.setItem(copyFavs, data);
                 location.reload();
               }}
               className="-mt-3.25 md:-mt-6 opacity-50"
@@ -89,7 +91,7 @@ export function FavoritesPage() {
               <SquareArrowRightEnter size={18} />
             </button>
           </div>
-          <div className="mb-4 flex gap-2 text-sm">
+          <div className="mb-4 flex gap-2 text-sm text-gray-950">
             <button
               onClick={() => setSearchParams({ tab: "shows" })}
               className={`flex-1 rounded px-2 py-1 ${
