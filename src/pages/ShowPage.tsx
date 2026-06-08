@@ -16,6 +16,7 @@ import { findEpisodes } from "../utils/findEpisodes";
 import { SearchBar } from "../components/SearchBar";
 import { EpisodeCard } from "../components/EpisodeCard";
 import { CastCard } from "../components/CastCard";
+import { AnimatePresence, motion } from "framer-motion";
 
 export function ShowPage() {
   const { id } = useParams();
@@ -55,6 +56,8 @@ export function ShowPage() {
 
   const [episodeSearch, setEpisodeSearch] = useState("");
 
+  const [zoomed, setZoomed] = useState(false);
+
   const filteredEpisodes = useMemo(
     () => findEpisodes(episodes, episodeSearch),
     [episodes, episodeSearch],
@@ -76,7 +79,7 @@ export function ShowPage() {
 
   return (
     <div className="relative min-h-screen bg-black">
-      <div
+      {/* <div
         className="fixed inset-0 
         scale-105 z-0 
         bg-cover bg-top 
@@ -84,12 +87,28 @@ export function ShowPage() {
         style={{
           backgroundImage: `url(${show?.image?.original})`,
         }}
+      /> */}
+      <motion.img
+        layoutId={`show-${show?.id}`}
+        src={show?.image?.original}
+        alt={show?.name}
+        className="fixed inset-0 
+        scale-105 z-0 
+        bg-cover bg-top 
+        pointer-events-none"
       />
       <div className="fixed inset-0 z-10 bg-black/50 pointer-events-none" />
       <main className="relative z-20 mx-auto max-w-5xl p-3 md:p-6">
         <div className="rounded-2xl bg-black/50 p-3 md:p-6">
           <div className="flex gap-2">
-            <h1 className="flex-1 mb-3 text-gray-100 text-2xl font-bold">
+            <h1
+              className="
+                flex-1 mb-3 
+                text-gray-100 text-2xl font-bold 
+                cursor-zoom-in"
+              title="View image"
+              onClick={() => setZoomed(true)}
+            >
               {show?.name}
             </h1>
             <div className="mt-2 mr-1 text-sm font-semibold">
@@ -321,6 +340,32 @@ export function ShowPage() {
           </div>
         </div>
       </main>
+      <AnimatePresence>
+        {zoomed && show?.image && (
+          <motion.div
+            className="
+              fixed inset-0 z-50
+              flex items-center justify-center
+              bg-black/80
+            "
+            onClick={() => setZoomed(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.img
+              layoutId={`person-${show.id}`}
+              src={show.image.original ?? show.image.medium}
+              alt={show.name}
+              className="
+                  max-w-[95vw]
+                  max-h-[95vh]
+                  rounded-lg
+                "
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

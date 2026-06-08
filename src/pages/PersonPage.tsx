@@ -6,6 +6,7 @@ import { Heart, VenetianMask } from "lucide-react";
 import { groupedCastCreditsByShow } from "../utils/groupedCastCreditsByShow";
 import { useState } from "react";
 import { isFavoritePerson, toggleFavoritePerson } from "../utils/favorites";
+import { AnimatePresence, motion } from "framer-motion";
 
 export function PersonPage() {
   const { id } = useParams();
@@ -19,6 +20,8 @@ export function PersonPage() {
   const [favorite, setFavorite] = useState(() => isFavoritePerson(personId));
 
   const [inlineBreaks, setInlineBreaks] = useState(false);
+
+  const [zoomed, setZoomed] = useState(false);
 
   const uniqueShows = Array.from(
     new Map(
@@ -104,14 +107,28 @@ export function PersonPage() {
                   rounded-t-lg md:rounded-bl-lg"
               >
                 {person?.image && (
-                  <img
+                  <motion.img
+                    layoutId={`person-${person.id}`}
                     src={person.image.medium}
                     alt={person.name}
                     className="
                       h-60 w-auto
-                      rounded-tl-lg 
-                      object-cover"
+                      rounded-tl-lg
+                      object-cover
+                      cursor-pointer
+                    "
+                    onClick={() => setZoomed(true)}
                   />
+                  // <img
+                  //   src={person.image.medium}
+                  //   alt={person.name}
+                  //   className="
+                  //     h-60 w-auto
+                  //     rounded-tl-lg
+                  //     object-cover
+                  //     cursor-pointer"
+                  //   onClick={() => setZoomed(true)}
+                  // />
                 )}
                 {!person?.image && (
                   <div
@@ -175,7 +192,7 @@ export function PersonPage() {
                 onClick={() => setInlineBreaks(!inlineBreaks)}
               >
                 Credits
-                <span className="ml-2 text-sm font-medium italic opacity-50">
+                <span className="ml-1 text-sm font-medium italic opacity-50">
                   {groupedCredits.length !== credits.length
                     ? `Shows: ${groupedCredits.length}, Total: ${credits.length}`
                     : `${credits.length}`}
@@ -228,6 +245,55 @@ export function PersonPage() {
           </div>
         </div>
       </main>
+      <AnimatePresence>
+        {zoomed && person?.image && (
+          <motion.div
+            className="
+              fixed inset-0 z-50
+              flex items-center justify-center
+              bg-black/80
+            "
+            onClick={() => setZoomed(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.img
+              layoutId={`person-${person.id}`}
+              src={person.image.original ?? person.image.medium}
+              alt={person.name}
+              className="
+                  max-w-[95vw]
+                  max-h-[95vh]
+                  rounded-lg
+                "
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* {zoomed && person?.image && (
+        <div
+          className="
+            fixed inset-0 z-50
+            flex items-center justify-center
+            bg-black/80 backdrop-blur-sm
+            p-4
+          "
+          onClick={() => setZoomed(false)}
+        >
+          <img
+            src={person.image.original ?? person.image.medium}
+            alt={person.name}
+            className="
+              max-w-[95vw]
+              max-h-[95vh]
+              rounded-lg
+              shadow-2xl
+              transition-all duration-300
+            "
+          />
+        </div>
+      )} */}
     </div>
   );
 }
