@@ -7,7 +7,7 @@ import { htmlToText } from "../utils/htmlToText";
 import { groupEpisodesBySeason } from "../utils/groupEpisodesBySeason";
 import type { Episode } from "../types/tvmaze";
 import { Heart, ExternalLink } from "lucide-react";
-import { isFavorite, toggleFavorite } from "../utils/favorites";
+import { isFavoriteShow, toggleFavoriteShow } from "../utils/favorites";
 import { EpisodeDrawer } from "../components/EpisodeDrawer";
 import { getYear } from "../utils/getYear";
 import { getStation } from "../utils/getStation";
@@ -26,7 +26,7 @@ export function ShowPage() {
 
   const { data: episodes = [] } = useEpisodes(showId);
 
-  const [favorite, setFavorite] = useState(() => isFavorite(showId));
+  const [favorite, setFavorite] = useState(() => isFavoriteShow(showId));
 
   const [showCast, setShowCast] = useState(() => {
     return sessionStorage.getItem(`show-${showId}-cast-open`) === "true";
@@ -100,7 +100,7 @@ export function ShowPage() {
               onClick={() => {
                 if (!show) return;
 
-                toggleFavorite({
+                toggleFavoriteShow({
                   id: show.id,
                   name: show.name,
                   image: show.image?.medium,

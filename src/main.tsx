@@ -7,12 +7,15 @@ import { registerSW } from "virtual:pwa-register";
 
 import "./index.css";
 import App from "./App.tsx";
+import { migrateFavorites } from "./utils/favorites.ts";
 
 const queryClient = new QueryClient();
 
 registerSW({
   immediate: true,
 });
+
+migrateFavorites();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>

@@ -2,9 +2,10 @@ import { Link, useParams } from "react-router-dom";
 import { useCastCredits } from "../hooks/useCastCredits";
 import { usePerson } from "../hooks/usePerson";
 import { ShowCard } from "../components/ShowCard";
-import { VenetianMask } from "lucide-react";
+import { Heart, VenetianMask } from "lucide-react";
 import { groupedCastCreditsByShow } from "../utils/groupedCastCreditsByShow";
 import { useState } from "react";
+import { isFavoritePerson, toggleFavoritePerson } from "../utils/favorites";
 
 export function PersonPage() {
   const { id } = useParams();
@@ -14,6 +15,8 @@ export function PersonPage() {
   const { data: person } = usePerson(personId);
 
   const { data: credits = [] } = useCastCredits(personId);
+
+  const [favorite, setFavorite] = useState(() => isFavoritePerson(personId));
 
   const [inlineBreaks, setInlineBreaks] = useState(false);
 
@@ -57,13 +60,32 @@ export function PersonPage() {
           bg-black/60 backdrop-blur-sm 
           p-3 md:p-6"
         >
-          <h1
-            className="
-                mb-2 text-wrap
+          <div className="flex">
+            <h1
+              className="
+                flex-1 mb-2 text-wrap
                 text-2xl font-bold"
-          >
-            {person?.name}
-          </h1>
+            >
+              {person?.name}
+            </h1>
+            <Heart
+              size={20}
+              fill={favorite ? "white" : "none"}
+              stroke="white"
+              className="mt-1.5 cursor-pointer"
+              onClick={() => {
+                if (!person) return;
+
+                toggleFavoritePerson({
+                  id: person.id,
+                  name: person.name,
+                  image: person.image?.medium,
+                });
+
+                setFavorite(!favorite);
+              }}
+            />
+          </div>
           <div className="mb-3 flex-row md:flex">
             <div
               className="

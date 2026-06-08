@@ -95,8 +95,14 @@ export interface CastCredit {
 
 //export type ShowCardData = Pick<Show, "id" | "name" | "image">;
 
-export interface ShowCardData {
+export interface CardData {
   id: number;
   name: string;
   image?: string;
 }
+
+export type Favorite = {
+  id: number;
+  name: string;
+  image?: string;
+};

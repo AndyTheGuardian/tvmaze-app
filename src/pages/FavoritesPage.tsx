@@ -1,21 +1,33 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { SquareArrowRightExit, SquareArrowRightEnter } from "lucide-react";
 
-import { getFavorites } from "../utils/favorites";
-import { ShowCard } from "../components/ShowCard";
-import type { ShowCardData } from "../types/tvmaze";
+import { getFavoriteShows, getFavoritePersons } from "../utils/favorites";
+import type { CardData } from "../types/tvmaze";
+import { MediaCard } from "../components/MediaCard";
+import { useSearchParams } from "react-router-dom";
 
 export function FavoritesPage() {
-  const [favorites, setFavorites] = useState<ShowCardData[]>([]);
+  const [favoriteShows, setFavoriteShows] = useState<CardData[]>([]);
+  const [favoritePersons, setFavoritePersons] = useState<CardData[]>([]);
 
   useEffect(() => {
-    setFavorites(getFavorites());
+    setFavoriteShows(getFavoriteShows);
+    setFavoritePersons(getFavoritePersons);
   }, []);
 
-  const sortedFavorites = [...favorites].sort((a, b) =>
+  const sortedFavoriteShows = [...favoriteShows].sort((a, b) =>
     a.name.localeCompare(b.name),
   );
+  const sortedFavoritePersons = [...favoritePersons].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const activeTab = searchParams.get("tab");
+
+  const favorites =
+    activeTab === "shows" ? sortedFavoriteShows : sortedFavoritePersons;
 
   return (
     <div className="bg-gray-900 min-h-screen min-w-screen">
@@ -52,7 +64,7 @@ export function FavoritesPage() {
               mb-3 md:mb-6 flex-1
               text-2xl font-bold"
             >
-              Favorite Shows
+              Favorites
             </h1>
             <button
               onClick={async () => {
@@ -77,16 +89,48 @@ export function FavoritesPage() {
               <SquareArrowRightEnter size={18} />
             </button>
           </div>
-          <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
-            {sortedFavorites.map((show) => (
-              <Link key={show.id} to={`/show/${show.id}`}>
-                <ShowCard show={show} />
-              </Link>
-            ))}
+          <div className="mb-4 flex gap-2 text-sm">
+            <button
+              onClick={() => setSearchParams({ tab: "shows" })}
+              className={`flex-1 rounded px-2 py-1 ${
+                activeTab === "shows"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200/70"
+              }`}
+            >
+              Shows
+            </button>
+            <button
+              onClick={() => setSearchParams({ tab: "persons" })}
+              className={`flex-1 rounded px-2 py-1 ${
+                activeTab === "persons"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200/70"
+              }`}
+            >
+              Cast
+            </button>
           </div>
-          {favorites.length === 0 && (
+
+          {favorites.length === 0 ? (
             <div className="rounded-lg bg-black/40 p-6 text-center">
               No favorites yet.
+            </div>
+          ) : (
+            <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+              {favorites.map((favorite) => (
+                <MediaCard
+                  item={favorite}
+                  to={
+                    activeTab === "shows"
+                      ? `/show/${favorite.id}`
+                      : `/person/${favorite.id}`
+                  }
+                />
+                // <Link key={show.id} to={`/show/${show.id}`}>
+                //   <ShowCard show={show} />
+                // </Link>
+              ))}
             </div>
           )}
         </div>

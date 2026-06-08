@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import { ImageOff } from "lucide-react";
 import type { CardData } from "../types/tvmaze";
 
-interface Props {
-  show: CardData;
+interface MediaCardProps {
+  item: CardData;
+  to: string;
 }
 
-export function ShowCard({ show }: Props) {
+export function MediaCard({ item, to }: MediaCardProps) {
   return (
-    <Link key={show.id} to={`/show/${show.id}`}>
+    <Link key={item.id} to={to}>
       <div
         className="overflow-hidden rounded-lg 
         text-gray-950
@@ -21,16 +22,16 @@ export function ShowCard({ show }: Props) {
         transition-transform 
         duration-300"
       >
-        {show.image && (
+        {item.image && (
           <img
-            src={show.image}
-            alt={show.name}
+            src={item.image}
+            alt={item.name}
             className="
               h-72 w-full
               object-cover"
           />
         )}
-        {!show.image && (
+        {!item.image && (
           <div
             className="h-72 w-full flex flex-col 
             items-center justify-center 
@@ -42,7 +43,7 @@ export function ShowCard({ show }: Props) {
         )}
 
         <div className="p-4 bg-gray-200/60">
-          <h2 className="font-bold">{show.name}</h2>
+          <h2 className="font-bold">{item.name}</h2>
         </div>
       </div>
     </Link>

@@ -1,9 +1,11 @@
-import type { ShowCardData } from "../types/tvmaze";
+import type { Favorite } from "../types/tvmaze";
 
 const STORAGE_KEY = "favorite-shows";
+const SHOWS_KEY = "favoriteShows";
+const PERSONS_KEY = "favoritePersons";
 
-export function getFavorites(): ShowCardData[] {
-  const raw = localStorage.getItem(STORAGE_KEY);
+function getFavorites(key: string): Favorite[] {
+  const raw = localStorage.getItem(key);
 
   if (!raw) {
     return [];
@@ -16,22 +18,47 @@ export function getFavorites(): ShowCardData[] {
   }
 }
 
-export function saveFavorites(favorites: ShowCardData[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+function saveFavorites(key: string, favorites: Favorite[]) {
+  localStorage.setItem(key, JSON.stringify(favorites));
 }
 
-export function isFavorite(showId: number) {
-  return getFavorites().some((show) => show.id === showId);
+function isFavorite(key: string, id: number) {
+  return getFavorites(key).some((f) => f.id === id);
 }
 
-export function toggleFavorite(favorite: ShowCardData) {
-  const favorites = getFavorites();
+function toggleFavorite(key: string, favorite: Favorite) {
+  const favorites = getFavorites(key);
 
-  const exists = favorites.some((show) => show.id === favorite.id);
+  const exists = favorites.some((f) => f.id === favorite.id);
 
   if (exists) {
-    saveFavorites(favorites.filter((show) => show.id !== favorite.id));
+    saveFavorites(
+      key,
+      favorites.filter((f) => f.id !== favorite.id),
+    );
   } else {
-    saveFavorites([...favorites, favorite]);
+    saveFavorites(key, [...favorites, favorite]);
+  }
+}
+
+export const getFavoriteShows = () => getFavorites(SHOWS_KEY);
+
+export const toggleFavoriteShow = (show: Favorite) =>
+  toggleFavorite(SHOWS_KEY, show);
+
+export const isFavoriteShow = (id: number) => isFavorite(SHOWS_KEY, id);
+
+export const getFavoritePersons = () => getFavorites(PERSONS_KEY);
+
+export const toggleFavoritePerson = (person: Favorite) =>
+  toggleFavorite(PERSONS_KEY, person);
+
+export const isFavoritePerson = (id: number) => isFavorite(PERSONS_KEY, id);
+
+export function migrateFavorites() {
+  const oldFavorites = localStorage.getItem(STORAGE_KEY);
+
+  if (oldFavorites && !localStorage.getItem(SHOWS_KEY)) {
+    localStorage.setItem(SHOWS_KEY, oldFavorites);
   }
 }
