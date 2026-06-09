@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ImageOff } from "lucide-react";
 import type { CardData } from "../types/tvmaze";
+import { motion } from "framer-motion";
 
 interface MediaCardProps {
   item: CardData;
@@ -23,7 +24,8 @@ export function MediaCard({ item, to }: MediaCardProps) {
         duration-300"
       >
         {item.image && (
-          <img
+          <motion.img
+            layoutId={`show-${item.id}`}
             src={item.image}
             alt={item.name}
             className="

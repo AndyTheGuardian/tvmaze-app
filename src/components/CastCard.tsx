@@ -1,6 +1,7 @@
 import { VenetianMask } from "lucide-react";
 import type { CastMember } from "../types/tvmaze";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 interface Props {
   member: CastMember;
@@ -18,7 +19,8 @@ export function CastCard({ member, showBirthday }: Props) {
       >
         <div id="imageContainer" className="relative">
           {member.person.image && (
-            <img
+            <motion.img
+              layoutId={`person-${member.person.id}`}
               src={member.person.image.medium}
               alt={member.person.name}
               className="

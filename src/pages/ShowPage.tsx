@@ -84,7 +84,7 @@ export function ShowPage() {
       <div className="fixed inset-0 z-10 bg-black/50 pointer-events-none" />
       {show?.image && (
         <motion.img
-          layoutId={`show-bg-${show?.id}`}
+          layoutId={`show-${show?.id}`}
           src={show?.image?.original}
           alt={show?.name}
           className="fixed inset-0 
@@ -349,7 +349,7 @@ export function ShowPage() {
             exit={{ opacity: 0 }}
           >
             <motion.img
-              layoutId={`show-bg-${show?.id}`}
+              layoutId={`show-${show?.id}`}
               src={show.image.original ?? show.image.medium}
               alt={show.name}
               className="

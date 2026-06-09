@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ImageOff } from "lucide-react";
 import type { CardData } from "../types/tvmaze";
+import { motion } from "framer-motion";
 
 interface Props {
   show: CardData;
@@ -16,17 +17,18 @@ export function ShowCard({ show }: Props) {
         hover:shadow-lg 
         block
         hover:scale-[1.02] 
-        active:scale-[0.98]
         transform-gpu
         transition-transform 
         duration-300"
       >
         {show.image && (
-          <img
+          <motion.img
+            layoutId={`show-${show.id}`}
             src={show.image}
             alt={show.name}
             className="
               h-72 w-full
+              block
               object-cover"
           />
         )}
