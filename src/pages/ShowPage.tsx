@@ -77,27 +77,21 @@ export function ShowPage() {
     });
   }
 
+  console.log("layoutId", `show-bg-${show?.id}`);
+
   return (
     <div className="relative min-h-screen bg-black">
-      {/* <div
-        className="fixed inset-0 
-        scale-105 z-0 
-        bg-cover bg-top 
-        pointer-events-none"
-        style={{
-          backgroundImage: `url(${show?.image?.original})`,
-        }}
-      /> */}
-      <motion.img
-        layoutId={`show-${show?.id}`}
-        src={show?.image?.original}
-        alt={show?.name}
-        className="fixed inset-0 
-        scale-105 z-0 
-        bg-cover bg-top 
-        pointer-events-none"
-      />
       <div className="fixed inset-0 z-10 bg-black/50 pointer-events-none" />
+      {show?.image && (
+        <motion.img
+          layoutId={`show-bg-${show?.id}`}
+          src={show?.image?.original}
+          alt={show?.name}
+          className="fixed inset-0 
+          scale-105 z-0 h-full w-full
+          object-cover object-top"
+        />
+      )}
       <main className="relative z-20 mx-auto max-w-5xl p-3 md:p-6">
         <div className="rounded-2xl bg-black/50 p-3 md:p-6">
           <div className="flex gap-2">
@@ -209,7 +203,8 @@ export function ShowPage() {
                 cursor-pointer disabled:cursor-default disabled:opacity-60"
               onClick={() => {
                 if (!hasEpisodes) return;
-                updateSearchParam("cast", castOpen ? "closed" : "open");
+                updateSearchParam("cast", "closed");
+                setShowSeach(!showSearch);
               }}
               disabled={!hasEpisodes}
             >
@@ -354,7 +349,7 @@ export function ShowPage() {
             exit={{ opacity: 0 }}
           >
             <motion.img
-              layoutId={`show-${show?.id}`}
+              layoutId={`show-bg-${show?.id}`}
               src={show.image.original ?? show.image.medium}
               alt={show.name}
               className="
