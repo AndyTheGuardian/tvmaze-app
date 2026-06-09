@@ -7,6 +7,7 @@ import { groupedCastCreditsByShow } from "../utils/groupedCastCreditsByShow";
 import { useEffect, useState } from "react";
 import { isFavoritePerson, toggleFavoritePerson } from "../utils/favorites";
 import { AnimatePresence, motion } from "framer-motion";
+import { getAge } from "../utils/getAge";
 
 export function PersonPage() {
   const { id } = useParams();
@@ -114,7 +115,8 @@ export function PersonPage() {
                   flex md:flex-col
                   bg-gray-600/40 
                   backdrop-blur-sm
-                  rounded-t-lg md:rounded-bl-lg"
+                  rounded-t-lg md:rounded-bl-lg
+                  md:items-end"
               >
                 {person?.image && (
                   <motion.img
@@ -126,27 +128,18 @@ export function PersonPage() {
                       rounded-tl-lg
                       object-cover
                       cursor-pointer
+                      z-999
                     "
                     onClick={() => setZoomed(true)}
                   />
-                  // <img
-                  //   src={person.image.medium}
-                  //   alt={person.name}
-                  //   className="
-                  //     h-60 w-auto
-                  //     rounded-tl-lg
-                  //     object-cover
-                  //     cursor-pointer"
-                  //   onClick={() => setZoomed(true)}
-                  // />
                 )}
                 {!person?.image && (
                   <div
                     className="
                       h-60 p-3 
-                      flex flex-col 
+                      flex flex-col bg-none
                       items-center justify-center 
-                      bg-none text-gray-500/60 font-medium"
+                      text-gray-500/60 font-medium"
                   >
                     <VenetianMask size={64} />
                     <p>* no image available *</p>
@@ -157,23 +150,35 @@ export function PersonPage() {
                   className="
                     m-3 flex-row 
                     text-sm 
-                    text-gray-50"
+                    text-gray-50
+                    items-end"
                 >
                   <div className="grid grid-cols-[52px_1fr] gap-x-2 gap-y-1">
                     {person?.birthday && (
                       <>
                         <p className="opacity-60 font-semibold w-15">Born</p>
-                        <p className="">{person?.birthday}</p>
+                        <p>{person?.birthday}</p>
                       </>
                     )}
                     {person?.deathday && (
                       <>
                         <p className="opacity-60 font-semibold w-15">Died</p>
-                        <p className="">{person?.deathday}</p>
+                        <p>{person?.deathday}</p>
+                      </>
+                    )}
+                    {person?.birthday && (
+                      <>
+                        <p className="opacity-60 font-semibold w-15">Age</p>
+                        <div className="flex gap-1">
+                          {person.deathday && <span>†</span>}
+                          <span>
+                            {getAge(person?.birthday, person?.deathday)}
+                          </span>
+                        </div>
                       </>
                     )}
                     <p className="opacity-60 font-semibold w-15">Gender</p>
-                    <p className="">{person?.gender}</p>
+                    <p>{person?.gender}</p>
                     {person?.country?.name && (
                       <>
                         <div className="opacity-60 font-semibold w-15">

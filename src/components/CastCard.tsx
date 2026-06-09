@@ -25,7 +25,9 @@ export function CastCard({ member, showBirthday }: Props) {
               alt={member.person.name}
               className="
                 mb-2 h-60 w-full 
-                rounded-t-lg object-cover"
+                rounded-t-lg
+                object-cover
+                z-999"
             />
           )}
           {!member.person.image && (

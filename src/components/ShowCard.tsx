@@ -30,7 +30,8 @@ export function ShowCard({ show, animate = false }: Props) {
             className="
               h-72 w-full
               block
-              object-cover"
+              object-cover
+              z-999"
           />
         ) : (
           <img
