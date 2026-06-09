@@ -115,8 +115,10 @@ export function PersonPage() {
                   flex md:flex-col
                   bg-gray-600/40 
                   backdrop-blur-sm
-                  rounded-t-lg md:rounded-bl-lg
-                  md:items-end"
+                  rounded-t-lg 
+                  md:rounded-bl-lg
+                  items-end
+                  md:items-start"
               >
                 {person?.image && (
                   <motion.img
@@ -151,7 +153,7 @@ export function PersonPage() {
                     m-3 flex-row 
                     text-sm 
                     text-gray-50
-                    items-end"
+                    "
                 >
                   <div className="grid grid-cols-[52px_1fr] gap-x-2 gap-y-1">
                     {person?.birthday && (
