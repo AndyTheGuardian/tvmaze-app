@@ -91,7 +91,7 @@ export function FavoritesPage() {
               <SquareArrowRightEnter size={18} />
             </button>
           </div>
-          <div className="mb-4 flex gap-2 text-sm text-gray-950">
+          <div className="mb-4 flex gap-4 text-sm text-gray-950">
             <button
               onClick={() => setSearchParams({ tab: "shows" })}
               className={`flex-1 rounded px-2 py-1 ${
@@ -128,10 +128,9 @@ export function FavoritesPage() {
                       ? `/show/${favorite.id}`
                       : `/person/${favorite.id}`
                   }
+                  type={activeTab === "shows" ? "show" : "person"}
+                  animate
                 />
-                // <Link key={show.id} to={`/show/${show.id}`}>
-                //   <ShowCard show={show} />
-                // </Link>
               ))}
             </div>
           )}

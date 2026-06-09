@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 
 import { useShow } from "../hooks/useShow";
@@ -69,6 +69,16 @@ export function ShowPage() {
 
   const genreCount = show?.genres.length ?? 0;
 
+  const [imageSrc, setImgageSrc] = useState(show?.image?.medium);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = show?.image?.original ?? show?.image?.medium!;
+    img.onload = () => {
+      setImgageSrc(show?.image?.original);
+    };
+  }, [show?.image?.original]);
+
   function updateSearchParam(key: string, value: string) {
     setSearchParams((params) => {
       const next = new URLSearchParams(params);
@@ -85,7 +95,7 @@ export function ShowPage() {
       {show?.image && (
         <motion.img
           layoutId={`show-${show?.id}`}
-          src={show?.image?.original}
+          src={imageSrc}
           alt={show?.name}
           className="fixed inset-0 
           scale-105 z-0 h-full w-full
@@ -350,7 +360,7 @@ export function ShowPage() {
           >
             <motion.img
               layoutId={`show-${show?.id}`}
-              src={show.image.original ?? show.image.medium}
+              src={imageSrc}
               alt={show.name}
               className="
                   max-w-[95vw]

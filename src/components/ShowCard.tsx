@@ -5,9 +5,10 @@ import { motion } from "framer-motion";
 
 interface Props {
   show: CardData;
+  animate?: boolean;
 }
 
-export function ShowCard({ show }: Props) {
+export function ShowCard({ show, animate = false }: Props) {
   return (
     <Link key={show.id} to={`/show/${show.id}`}>
       <div
@@ -21,9 +22,18 @@ export function ShowCard({ show }: Props) {
         transition-transform 
         duration-300"
       >
-        {show.image && (
+        {show.image && animate ? (
           <motion.img
             layoutId={`show-${show.id}`}
+            src={show.image}
+            alt={show.name}
+            className="
+              h-72 w-full
+              block
+              object-cover"
+          />
+        ) : (
+          <img
             src={show.image}
             alt={show.name}
             className="

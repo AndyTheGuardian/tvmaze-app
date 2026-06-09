@@ -93,6 +93,7 @@ export function HomePage() {
             {data.map((show) => (
               <ShowCard
                 key={show.id}
+                animate={true}
                 show={{
                   id: show.id,
                   name: show.name,

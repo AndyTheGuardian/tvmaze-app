@@ -4,7 +4,7 @@ import { usePerson } from "../hooks/usePerson";
 import { ShowCard } from "../components/ShowCard";
 import { Heart, VenetianMask } from "lucide-react";
 import { groupedCastCreditsByShow } from "../utils/groupedCastCreditsByShow";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isFavoritePerson, toggleFavoritePerson } from "../utils/favorites";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -34,6 +34,16 @@ export function PersonPage() {
 
   const groupedCredits = groupedCastCreditsByShow(credits);
 
+  const [imageSrc, setImgageSrc] = useState(person?.image?.medium);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = person?.image?.original ?? person?.image?.medium!;
+    img.onload = () => {
+      setImgageSrc(person?.image?.original);
+    };
+  }, [person?.image?.original]);
+
   return (
     <div className="relative min-h-screen bg-black">
       <div
@@ -42,7 +52,7 @@ export function PersonPage() {
         bg-cover bg-center 
         pointer-events-none"
         style={{
-          backgroundImage: `url(${person?.image?.original})`,
+          backgroundImage: `url(${imageSrc})`,
         }}
       />
       <div

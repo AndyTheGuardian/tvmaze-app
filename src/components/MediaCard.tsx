@@ -6,9 +6,16 @@ import { motion } from "framer-motion";
 interface MediaCardProps {
   item: CardData;
   to: string;
+  type?: "show" | "person";
+  animate?: boolean;
 }
 
-export function MediaCard({ item, to }: MediaCardProps) {
+export function MediaCard({
+  item,
+  to,
+  type = "show",
+  animate = false,
+}: MediaCardProps) {
   return (
     <Link key={item.id} to={to}>
       <div
@@ -23,9 +30,17 @@ export function MediaCard({ item, to }: MediaCardProps) {
         transition-transform 
         duration-300"
       >
-        {item.image && (
+        {item.image && animate ? (
           <motion.img
-            layoutId={`show-${item.id}`}
+            layoutId={`${type}-${item.id}`}
+            src={item.image}
+            alt={item.name}
+            className="
+              h-72 w-full
+              object-cover"
+          />
+        ) : (
+          <img
             src={item.image}
             alt={item.name}
             className="
