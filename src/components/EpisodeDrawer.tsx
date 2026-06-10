@@ -38,18 +38,7 @@ export function EpisodeDrawer({
           />
           {episode && (
             <>
-              <div className="relative flex">
-                <motion.img
-                  layoutId={`ep-${episode.id}`}
-                  src={episode?.image?.original}
-                  alt={episode.name}
-                  className="
-                    absolute 
-                    left-1/2 top-12 -translate-1/2
-                    h-24 rounded-lg shadow z-9999
-                  "
-                  onClick={() => setActiveImage(true)}
-                />
+              <div className="flex">
                 <div className="flex-1 flex">
                   <h2 className="flex-1 mb-2 text-2xl font-bold">
                     {episode.name}
@@ -66,7 +55,19 @@ export function EpisodeDrawer({
                   </span>
                 </div>
               </div>
-              <div className="flex gap-2 mb-2 opacity-60">
+              <div className="relative" />
+              <motion.img
+                layoutId={`ep-${episode.id}`}
+                src={episode?.image?.original}
+                alt={episode.name}
+                className="
+                  absolute
+                  left-1/2 top-28 -translate-1/2
+                  h-18 rounded-lg shadow z-9999
+                  "
+                onClick={() => setActiveImage(true)}
+              />
+              <div className="relative flex gap-2 mb-2 opacity-60">
                 <div className="flex-1">
                   {formatEpisode(episode.season, episode.number)}
                 </div>
