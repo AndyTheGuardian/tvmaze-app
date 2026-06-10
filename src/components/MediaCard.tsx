@@ -35,6 +35,7 @@ export function MediaCard({
             layoutId={`${type}-${item.id}`}
             src={item.image}
             alt={item.name}
+            style={{ zIndex: 9999 }}
             className="
               h-72 w-full
               object-cover"

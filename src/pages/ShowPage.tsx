@@ -77,7 +77,7 @@ export function ShowPage() {
     img.onload = () => {
       setImgageSrc(show?.image?.original);
     };
-  }, [show?.image?.original]);
+  }, [show?.image?.medium, show?.image?.original]);
 
   function updateSearchParam(key: string, value: string) {
     setSearchParams((params) => {
@@ -344,6 +344,15 @@ export function ShowPage() {
             />
           </div>
         </div>
+        <span
+          className="flex-1 mt-1.5 text-gray-50/10 w-full justify-end"
+          onClick={(e) => {
+            const text = (e.currentTarget as HTMLElement).textContent ?? "";
+            navigator.clipboard.writeText(text);
+          }}
+        >
+          {show?.id}
+        </span>
       </main>
       <AnimatePresence>
         {zoomed && show?.image && (

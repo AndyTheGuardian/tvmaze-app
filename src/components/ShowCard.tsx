@@ -27,11 +27,12 @@ export function ShowCard({ show, animate = false }: Props) {
             layoutId={`show-${show.id}`}
             src={show.image}
             alt={show.name}
+            style={{ zIndex: 9999 }}
             className="
               h-72 w-full
               block
               object-cover
-              z-999"
+              "
           />
         ) : (
           <img

@@ -23,11 +23,12 @@ export function CastCard({ member, showBirthday }: Props) {
               layoutId={`person-${member.person.id}`}
               src={member.person.image.medium}
               alt={member.person.name}
+              style={{ zIndex: 9999 }}
               className="
                 mb-2 h-60 w-full 
                 rounded-t-lg
                 object-cover
-                z-999"
+                "
             />
           )}
           {!member.person.image && (
