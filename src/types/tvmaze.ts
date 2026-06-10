@@ -93,6 +93,37 @@ export interface CastCredit {
   };
 }
 
+export type PersonCredit = {
+  self: boolean;
+  voice: boolean;
+  show: {
+    id: number;
+    name: string;
+    image?: {
+      medium: string;
+      original?: string;
+    };
+  };
+  character: string;
+  guest: boolean;
+};
+
+export interface GuestCastCredit {
+  self: boolean;
+  voice: boolean;
+  _links: {
+    episode: { href: string; name?: string };
+    character: { href: string; name?: string };
+  };
+  _embedded: {
+    episode: {
+      _links?: {
+        show?: { href: string };
+      } | null;
+    };
+  };
+}
+
 //export type ShowCardData = Pick<Show, "id" | "name" | "image">;
 
 export interface CardData {

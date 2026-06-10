@@ -4,10 +4,12 @@ import { usePerson } from "../hooks/usePerson";
 import { ShowCard } from "../components/ShowCard";
 import { Heart, VenetianMask } from "lucide-react";
 import { groupedCastCreditsByShow } from "../utils/groupedCastCreditsByShow";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { isFavoritePerson, toggleFavoritePerson } from "../utils/favorites";
 import { AnimatePresence, motion } from "framer-motion";
 import { getAge } from "../utils/getAge";
+import type { PersonCredit } from "../types/tvmaze";
+import { getGuestCastCredits } from "../utils/getGuestCastCredits";
 
 export function PersonPage() {
   const { id } = useParams();
@@ -18,6 +20,19 @@ export function PersonPage() {
 
   const { data: credits = [] } = useCastCredits(personId);
 
+  const guestCredits = getGuestCastCredits(personId);
+
+  const allCredits: PersonCredit[] = [
+    ...credits.map((credit) => ({
+      self: credit.self,
+      voice: credit.voice,
+      show: credit._embedded.show,
+      character: credit._links.character.name,
+      guest: false,
+    })),
+    ...guestCredits,
+  ];
+
   const [favorite, setFavorite] = useState(() => isFavoritePerson(personId));
 
   const [inlineBreaks, setInlineBreaks] = useState(false);
@@ -26,14 +41,14 @@ export function PersonPage() {
 
   const uniqueShows = Array.from(
     new Map(
-      credits?.map((credit) => [
-        credit._embedded.show.id,
-        credit._embedded.show,
-      ]),
+      allCredits?.map((credit) => [credit.show.id, credit.show]),
     ).values(),
   );
 
-  const groupedCredits = groupedCastCreditsByShow(credits);
+  const groupedCredits = useMemo(
+    () => groupedCastCreditsByShow(allCredits),
+    [allCredits],
+  );
 
   const [imageSrc, setImgageSrc] = useState(person?.image?.medium);
 
@@ -210,15 +225,54 @@ export function PersonPage() {
               >
                 Credits
                 <span className="ml-1 text-sm font-medium italic opacity-50">
-                  {groupedCredits.length !== credits.length
-                    ? `Shows: ${groupedCredits.length}, Total: ${credits.length}`
-                    : `${credits.length}`}
+                  {groupedCredits.length !== allCredits.length
+                    ? `Shows: ${groupedCredits.length}, Total: ${allCredits.length}`
+                    : `${allCredits.length}`}
                 </span>
               </h2>
               {/* // grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-x-2 gap-y-1
                 // [column-width:150px] gap-4     */}
               <div className="columns-2 sm:columns-3 lg:columns-4 gap-4 [column-fill:balance]">
-                {groupedCredits?.map(({ show, characters, self, voice }) => (
+                {groupedCredits?.map(({ self, voice, show, characters }) => (
+                  <Link key={show.id} to={`/show/${show.id}`} className="">
+                    <div
+                      key={show.id}
+                      className={`
+                          text-sm mb-2 block 
+                          ${inlineBreaks ? "" : "break-inside-avoid"}`}
+                    >
+                      <div className="opacity-70 font-semibold">
+                        {show.name}
+                        {self && (
+                          <span className="ml-1 text-gray-950/70 italic font-medium">
+                            Self
+                          </span>
+                        )}
+                        {voice && (
+                          <span className="ml-1 text-gray-950/70 italic font-medium">
+                            Voice
+                          </span>
+                        )}
+                      </div>
+                      {characters.map((character) => (
+                        <div
+                          key={`${show.id}-${character.name}-${character.guest ? `guest` : ``}`}
+                          className="ml-3 opacity-100"
+                        >
+                          {character.name}
+                          {character.guest && (
+                            <span className="ml-1 text-gray-950/50 italic font-medium">
+                              Guest
+                              {character.count > 1
+                                ? `(${character.count})`
+                                : ``}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </Link>
+                  /* {groupedCredits?.map(({ show, characters, self, voice }) => (
                   <Link key={show.id} to={`/show/${show.id}`} className="">
                     <div
                       key={show.id}
@@ -241,7 +295,7 @@ export function PersonPage() {
                         {characters.join(`\n`)}
                       </p>
                     </div>
-                  </Link>
+                  </Link> */
                 ))}
               </div>
             </div>
@@ -261,6 +315,15 @@ export function PersonPage() {
             })}
           </div>
         </div>
+        <span
+          className="flex-1 mt-1.5 text-gray-50/10 w-full justify-end"
+          onClick={(e) => {
+            const text = (e.currentTarget as HTMLElement).textContent ?? "";
+            navigator.clipboard.writeText(text);
+          }}
+        >
+          {person?.id}
+        </span>
       </main>
       <AnimatePresence>
         {zoomed && person?.image && (

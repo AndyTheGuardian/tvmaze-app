@@ -5,6 +5,7 @@ import type {
   CastMember,
   CastCredit,
   Person,
+  GuestCastCredit,
 } from "../types/tvmaze";
 
 const API = "https://api.tvmaze.com";
@@ -40,4 +41,14 @@ export async function getPerson(id: number): Promise<Person> {
 
 export async function getCastCredits(id: number): Promise<CastCredit[]> {
   return fetchJson(`${API}/people/${id}/castcredits?embed=show`);
+}
+
+export async function getGuestCastByEpisode(id: number): Promise<CastMember[]> {
+  return fetchJson(`${API}/episodes/${id}/guestcast`);
+}
+
+export async function getGuestCastByPerson(
+  id: number,
+): Promise<GuestCastCredit[]> {
+  return fetchJson(`${API}/people/${id}/guestcastcredits?embed=episode`);
 }
