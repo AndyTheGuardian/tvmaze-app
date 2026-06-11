@@ -17,7 +17,7 @@ export function MediaCard({
   animate = false,
 }: MediaCardProps) {
   return (
-    <Link key={item.id} to={to}>
+    <Link key={item.id} to={to} state={{ fromCard: true }}>
       <div
         className="overflow-hidden rounded-lg 
         text-gray-950
@@ -30,9 +30,9 @@ export function MediaCard({
         transition-transform 
         duration-300"
       >
-        {item.image && animate ? (
+        {item.image ? (
           <motion.img
-            layoutId={`${type}-${item.id}`}
+            layoutId={animate ? `${type}-${item.id}` : undefined}
             src={item.image}
             alt={item.name}
             style={{ zIndex: 9999 }}
@@ -41,15 +41,6 @@ export function MediaCard({
               object-cover"
           />
         ) : (
-          <img
-            src={item.image}
-            alt={item.name}
-            className="
-              h-72 w-full
-              object-cover"
-          />
-        )}
-        {!item.image && (
           <div
             className="h-72 w-full flex flex-col 
             items-center justify-center 

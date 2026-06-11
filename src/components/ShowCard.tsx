@@ -10,7 +10,7 @@ interface Props {
 
 export function ShowCard({ show, animate = false }: Props) {
   return (
-    <Link key={show.id} to={`/show/${show.id}`}>
+    <Link key={show.id} to={`/show/${show.id}`} state={{ fromCard: true }}>
       <div
         className="overflow-hidden rounded-lg 
         text-gray-950
@@ -22,9 +22,9 @@ export function ShowCard({ show, animate = false }: Props) {
         transition-transform 
         duration-300"
       >
-        {show.image && animate ? (
+        {show.image ? (
           <motion.img
-            layoutId={`show-${show.id}`}
+            layoutId={animate ? `show-${show.id}` : undefined}
             src={show.image}
             alt={show.name}
             style={{ zIndex: 9999 }}
@@ -35,16 +35,6 @@ export function ShowCard({ show, animate = false }: Props) {
               "
           />
         ) : (
-          <img
-            src={show.image}
-            alt={show.name}
-            className="
-              h-72 w-full
-              block
-              object-cover"
-          />
-        )}
-        {!show.image && (
           <div
             className="h-72 w-full flex flex-col 
             items-center justify-center 

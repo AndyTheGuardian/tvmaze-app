@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  // useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
 import { useShow } from "../hooks/useShow";
 import { useEpisodes } from "../hooks/useEpisodes";
@@ -58,6 +63,9 @@ export function ShowPage() {
 
   const [zoomed, setZoomed] = useState(false);
 
+  // const location = useLocation();
+  // const animate = location.state?.fromCard === true;
+
   const filteredEpisodes = useMemo(
     () => findEpisodes(episodes, episodeSearch),
     [episodes, episodeSearch],
@@ -87,8 +95,6 @@ export function ShowPage() {
     });
   }
 
-  console.log("layoutId", `show-bg-${show?.id}`);
-
   return (
     <div className="relative min-h-screen bg-black">
       <div className="fixed inset-0 z-10 bg-black/50 pointer-events-none" />
@@ -111,7 +117,9 @@ export function ShowPage() {
                 text-gray-100 text-2xl font-bold 
                 cursor-zoom-in"
               title="View image"
-              onClick={() => setZoomed(true)}
+              onClick={() => {
+                setZoomed(true);
+              }}
             >
               {show?.name}
             </h1>
@@ -257,6 +265,7 @@ export function ShowPage() {
                       key={member.person.id}
                       member={member}
                       showBirthday={showBirthday}
+                      animate={true}
                     />
                   ))}
                 </div>
@@ -362,7 +371,9 @@ export function ShowPage() {
               flex items-center justify-center
               bg-black/80
             "
-            onClick={() => setZoomed(false)}
+            onClick={() => {
+              setZoomed(false);
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

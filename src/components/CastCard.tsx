@@ -6,11 +6,16 @@ import { motion } from "framer-motion";
 interface Props {
   member: CastMember;
   showBirthday: boolean;
+  animate: boolean;
 }
 
-export function CastCard({ member, showBirthday }: Props) {
+export function CastCard({ member, showBirthday, animate }: Props) {
   return (
-    <Link key={member.person.id} to={`/person/${member.person.id}`}>
+    <Link
+      key={member.person.id}
+      to={`/person/${member.person.id}`}
+      state={{ fromCard: true }}
+    >
       <div
         key={member.person.id}
         className="
@@ -18,9 +23,9 @@ export function CastCard({ member, showBirthday }: Props) {
         backdrop-blur-sm"
       >
         <div id="imageContainer" className="relative">
-          {member.person.image && (
+          {member.person.image ? (
             <motion.img
-              layoutId={`person-${member.person.id}`}
+              layoutId={animate ? `person-${member.person.id}` : undefined}
               src={member.person.image.medium}
               alt={member.person.name}
               style={{ zIndex: 9999 }}
@@ -30,8 +35,7 @@ export function CastCard({ member, showBirthday }: Props) {
                 object-cover
                 "
             />
-          )}
-          {!member.person.image && (
+          ) : (
             <div
               className="
                 h-60 w-full rounded-t-lg bg-none 

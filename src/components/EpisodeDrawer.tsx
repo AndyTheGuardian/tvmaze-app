@@ -18,11 +18,15 @@ export function EpisodeDrawer({
   open,
   onOpenChange,
 }: EpisodeDrawerProps) {
-  const [activeImage, setActiveImage] = useState(true);
+  const [activeImage, setActiveImage] = useState(false);
   const episodeId = episode?.id ?? 0;
   const { data: guests } = useGuestCast(episodeId);
   return (
-    <Drawer.Root open={open} onOpenChange={onOpenChange}>
+    <Drawer.Root
+      open={open}
+      onOpenChange={onOpenChange}
+      onClose={() => setActiveImage(false)}
+    >
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-100 bg-black/50" />
 
@@ -44,7 +48,7 @@ export function EpisodeDrawer({
                     {episode.name}
                   </h2>
                   <span
-                    className="flex-none mt-1.5 text-gray-50/30"
+                    className="flex-none mt-1.5 text-gray-50/10"
                     onClick={(e) => {
                       const text =
                         (e.currentTarget as HTMLElement).textContent ?? "";

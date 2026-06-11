@@ -310,6 +310,7 @@ export function PersonPage() {
                     name: credit.name,
                     image: credit.image?.medium,
                   }}
+                  animate={false}
                 />
               );
             })}
