@@ -100,17 +100,27 @@ export function FavoritesPage() {
                   : "bg-gray-200/70"
               }`}
             >
-              Shows
+              <div className="flex-1 justify-center">
+                <span>Shows</span>
+                <span className="opacity-50">
+                  {` (${sortedFavoriteShows.length})`}
+                </span>
+              </div>
             </button>
             <button
               onClick={() => setSearchParams({ tab: "persons" })}
-              className={`flex-1 rounded px-2 py-1 ${
+              className={`flex-1 flex rounded px-2 py-1 ${
                 activeTab === "persons"
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200/70"
               }`}
             >
-              Cast
+              <div className="flex-1 justify-center">
+                <span>Cast</span>
+                <span className="opacity-50">
+                  {` (${sortedFavoritePersons.length})`}
+                </span>
+              </div>
             </button>
           </div>
 

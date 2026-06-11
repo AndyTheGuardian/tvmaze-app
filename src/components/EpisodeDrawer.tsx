@@ -60,7 +60,7 @@ export function EpisodeDrawer({
                 </div>
               </div>
               <div className="relative" />
-              {!activeImage && (
+              {episode.image && !activeImage && (
                 <motion.img
                   layoutId={`ep-${episode.id}`}
                   src={episode?.image?.original}
