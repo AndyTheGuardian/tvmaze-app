@@ -120,7 +120,8 @@ export function EpisodeDrawer({
                         sm:grid-cols-4
                         gap-x-2 
                         gap-y-1
-                        max-h-130
+                        max-h-[45vH]
+                        landscape:max-h-[20vH]
                         overflow-y-auto
                         pr-1
                       "
