@@ -31,10 +31,15 @@ export function EpisodeDrawer({
         <Drawer.Overlay className="fixed inset-0 z-100 bg-black/50" />
 
         <Drawer.Content
-          className="fixed bottom-0 left-0 right-0 max-h-[90vh]
-                       z-101 overflow-y-auto 
-                       rounded-t-xl bg-gray-200/60 
-                       backdrop-blur-sm p-6"
+          className="
+            fixed bottom-0 left-0 right-0 
+            max-h-[90vh]
+            z-101             
+            rounded-t-xl 
+            bg-gray-200/60 
+            backdrop-blur-sm 
+            p-6
+            flex flex-col"
         >
           <div
             className="mx-auto mb-4 h-1.5 w-12 
@@ -43,21 +48,19 @@ export function EpisodeDrawer({
           {episode && (
             <>
               <div className="flex">
-                <div className="flex-1 flex">
-                  <h2 className="flex-1 mb-2 text-2xl font-bold">
-                    {episode.name}
-                  </h2>
-                  <span
-                    className="flex-none mt-1.5 text-gray-50/10"
-                    onClick={(e) => {
-                      const text =
-                        (e.currentTarget as HTMLElement).textContent ?? "";
-                      navigator.clipboard.writeText(text);
-                    }}
-                  >
-                    {episode.id}
-                  </span>
-                </div>
+                <h2 className="flex-1 mb-2 text-2xl font-bold">
+                  {episode.name}
+                </h2>
+                <span
+                  className="flex-none mt-1.5 text-gray-50/10"
+                  onClick={(e) => {
+                    const text =
+                      (e.currentTarget as HTMLElement).textContent ?? "";
+                    navigator.clipboard.writeText(text);
+                  }}
+                >
+                  {episode.id}
+                </span>
               </div>
               <div className="relative" />
               {episode.image && !activeImage && (
@@ -117,7 +120,7 @@ export function EpisodeDrawer({
                         sm:grid-cols-4
                         gap-x-2 
                         gap-y-1
-                        max-h-140
+                        max-h-130
                         overflow-y-auto
                         pr-1
                       "
