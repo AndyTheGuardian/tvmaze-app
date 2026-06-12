@@ -69,9 +69,9 @@ export function EpisodeDrawer({
                   src={episode?.image?.original}
                   alt={episode.name}
                   className="
-                  absolute
-                  left-1/2 top-28 -translate-1/2
-                  h-18 rounded-lg shadow z-9999
+                    absolute
+                    left-1/2 top-28 -translate-1/2
+                    h-17 rounded-lg shadow z-9999
                   "
                   onClick={() => setActiveImage(true)}
                 />
@@ -94,14 +94,20 @@ export function EpisodeDrawer({
 
               <div className="mb-2 flex gap-2 opacity-60">
                 <div className="flex-1">{episode.runtime} min</div>
-
                 <div className="flex-none">{episode.airdate}</div>
               </div>
-              <p className="mb-3" onClick={() => setActiveImage(true)}>
-                {htmlToText(episode.summary)}
-              </p>
               <div
-                className={`
+                className="
+                        max-h-[80vH]
+                        landscape:max-h-[50vH]
+                        overflow-y-auto
+                        pr-1"
+              >
+                <p className="mb-3" onClick={() => setActiveImage(true)}>
+                  {htmlToText(episode.summary)}
+                </p>
+                <div
+                  className={`
                   transition-all duration-500 ease-in-out
                   ${
                     activeImage
@@ -109,45 +115,41 @@ export function EpisodeDrawer({
                       : "opacity-100 max-h-250"
                   }
                 `}
-              >
-                {guests.length > 0 && (
-                  <>
-                    <h2 className="mb-1 text-lg font-semibold">Guest cast</h2>
-                    <div
-                      className="
+                >
+                  {guests.length > 0 && (
+                    <>
+                      <h2 className="mb-1 text-lg font-semibold">Guest cast</h2>
+                      <div
+                        className="
                         grid
                         grid-cols-2
                         sm:grid-cols-4
                         gap-x-2 
-                        gap-y-1
-                        max-h-[45vH]
-                        landscape:max-h-[20vH]
-                        overflow-y-auto
-                        pr-1
                       "
-                    >
-                      {guests?.map((member: CastMember) => (
-                        <Link
-                          key={member.person.id}
-                          to={`/person/${member.person.id}`}
-                          className=""
-                        >
-                          <div
+                      >
+                        {guests?.map((member: CastMember) => (
+                          <Link
                             key={member.person.id}
-                            className={`text-sm mb-2  block break-inside-avoid`}
+                            to={`/person/${member.person.id}`}
+                            className=""
                           >
-                            <div className="opacity-70 font-semibold">
-                              {member.person.name}
+                            <div
+                              key={member.person.id}
+                              className={`text-sm mb-2  block break-inside-avoid`}
+                            >
+                              <div className="opacity-70 font-semibold">
+                                {member.person.name}
+                              </div>
+                              <p className="ml-3 opacity-100">
+                                {member.character.name}
+                              </p>
                             </div>
-                            <p className="ml-3 opacity-100">
-                              {member.character.name}
-                            </p>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </>
-                )}
+                          </Link>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             </>
           )}
