@@ -33,7 +33,7 @@ export function EpisodeDrawer({
         <Drawer.Content
           className="
             fixed bottom-0 left-0 right-0 
-            max-h-[90vh]
+            max-h-[90dvh]
             z-101             
             rounded-t-xl 
             bg-gray-200/60 
