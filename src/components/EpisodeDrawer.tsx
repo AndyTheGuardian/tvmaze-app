@@ -20,7 +20,7 @@ export function EpisodeDrawer({
 }: EpisodeDrawerProps) {
   const [activeImage, setActiveImage] = useState(false);
   const episodeId = episode?.id ?? 0;
-  const { data: guests } = useGuestCast(episodeId);
+  const { data: guests = [] } = useGuestCast(episodeId);
   return (
     <Drawer.Root
       open={open}
@@ -107,32 +107,43 @@ export function EpisodeDrawer({
                   }
                 `}
               >
-                <h2 className="mb-1 text-lg font-semibold">Guest cast</h2>
-                <div
-                  className="columns-2 sm:columns-4 
-                  lg:columns-4 gap-2 [column-fill:balance] 
-                 "
-                >
-                  {guests?.map((member: CastMember) => (
-                    <Link
-                      key={member.person.id}
-                      to={`/person/${member.person.id}`}
-                      className=""
+                {guests.length > 0 && (
+                  <>
+                    <h2 className="mb-1 text-lg font-semibold">Guest cast</h2>
+                    <div
+                      className="
+                        grid
+                        grid-cols-2
+                        sm:grid-cols-4
+                        gap-x-2 
+                        gap-y-1
+                        max-h-140
+                        overflow-y-auto
+                        pr-1
+                      "
                     >
-                      <div
-                        key={member.person.id}
-                        className={`text-sm mb-2  block break-inside-avoid`}
-                      >
-                        <div className="opacity-70 font-semibold">
-                          {member.person.name}
-                        </div>
-                        <p className="ml-3 opacity-100">
-                          {member.character.name}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
+                      {guests?.map((member: CastMember) => (
+                        <Link
+                          key={member.person.id}
+                          to={`/person/${member.person.id}`}
+                          className=""
+                        >
+                          <div
+                            key={member.person.id}
+                            className={`text-sm mb-2  block break-inside-avoid`}
+                          >
+                            <div className="opacity-70 font-semibold">
+                              {member.person.name}
+                            </div>
+                            <p className="ml-3 opacity-100">
+                              {member.character.name}
+                            </p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             </>
           )}
