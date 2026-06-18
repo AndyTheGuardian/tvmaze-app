@@ -137,3 +137,40 @@ export type Favorite = {
   name: string;
   image?: string;
 };
+
+// export type ShowCatalogEntry = Pick<
+//   Show,
+//   "id" | "name" | "genres" | "premiered" | "status" | "network" | "webChannel"
+// >;
+
+export interface TvMazeShow {
+  id: number;
+  name: string;
+  genres: string[];
+  premiered?: string;
+  status: string;
+  network?: {
+    name: string;
+  };
+  webChannel?: {
+    name: string;
+  };
+}
+
+export interface CatalogShow {
+  id: number;
+  name: string;
+  genres: string[];
+  premiered?: string;
+  status: string;
+  network?: string;
+  webChannel?: string;
+}
+
+export interface SurpriseFilters {
+  genres: string[];
+  decades: number[];
+  runningOnly: boolean;
+  // webChannel?: string[];
+  networks: string[];
+}
