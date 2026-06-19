@@ -162,7 +162,12 @@ export function HomePage() {
               Episode Guide
             </h1>
             <button
-              className="mt-2 flex gap-2 text-sm opacity-50 cursor-pointer"
+              className="
+                mt-2 flex gap-2 
+                text-sm opacity-50 
+                cursor-pointer
+                select-none
+                "
               onMouseDown={startLongPress}
               onMouseUp={cancelLongPress}
               onMouseLeave={cancelLongPress}
