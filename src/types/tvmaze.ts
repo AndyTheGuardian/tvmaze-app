@@ -138,11 +138,6 @@ export type Favorite = {
   image?: string;
 };
 
-// export type ShowCatalogEntry = Pick<
-//   Show,
-//   "id" | "name" | "genres" | "premiered" | "status" | "network" | "webChannel"
-// >;
-
 export interface TvMazeShow {
   id: number;
   name: string;
@@ -171,6 +166,5 @@ export interface SurpriseFilters {
   genres: string[];
   decades: number[];
   runningOnly: boolean;
-  // webChannel?: string[];
   networks: string[];
 }

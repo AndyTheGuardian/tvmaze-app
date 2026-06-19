@@ -2,7 +2,7 @@ import { useShows } from "../hooks/useShows";
 import { SearchBar } from "../components/SearchBar";
 import { ShowCard } from "../components/ShowCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 // import { getRandomShow } from "../utils/getRandomShow";
 import { Dices, X } from "lucide-react";
 import { useShowCatalog } from "../hooks/useShowCatalog";
@@ -12,6 +12,7 @@ import {
 } from "../utils/surpriseFilters";
 import { filterShows } from "../utils/filterShows";
 import { getRandomShow } from "../utils/getRandomShow";
+import Checkbox from "../components/CheckBox";
 
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -102,13 +103,16 @@ export function HomePage() {
     return [...counts.entries()].sort((a, b) => b[1] - a[1]);
   }, [catalog]);
 
+  useEffect(() => {
+    saveSurpriseFilters(filters);
+  }, [filters]);
+
   function startLongPress() {
     longPressTriggered.current = false;
 
     longPressTimer.current = window.setTimeout(() => {
       longPressTriggered.current = true;
       setShowSurpriseSettings(true);
-      // longPressTimer.current = null;
     }, 500);
   }
 
@@ -118,12 +122,6 @@ export function HomePage() {
       longPressTimer.current = null;
     }
   }
-  // console.log(
-  //   catalog
-  //     .flatMap((show) => [show.network, show.webChannel])
-  //     .filter(Boolean)
-  //     .sort(),
-  // );
 
   return (
     <div className="bg-gray-900 min-h-screen min-w-screen">
@@ -206,7 +204,7 @@ export function HomePage() {
                   "
                 >
                   <div className="select-none">
-                    <div className="flex gap-1 mb-1">
+                    <div className="flex gap-1 mb-3">
                       <span
                         className="
                         font-semibold 
@@ -273,7 +271,6 @@ export function HomePage() {
                                 decades: nextDecades,
                               };
                               setFilters(nextFilters);
-                              saveSurpriseFilters(nextFilters);
                             }}
                             className={`
                           rounded
@@ -312,7 +309,6 @@ export function HomePage() {
                                     networks: nextNetworks,
                                   };
                                   setFilters(nextFilters);
-                                  saveSurpriseFilters(nextFilters);
                                 }}
                                 className={`
                                   rounded
@@ -354,7 +350,6 @@ export function HomePage() {
                                     networks: nextNetworks,
                                   };
                                   setFilters(nextFilters);
-                                  saveSurpriseFilters(nextFilters);
                                 }}
                                 className={`
                                   rounded
@@ -393,7 +388,6 @@ export function HomePage() {
                                   genres: nextGenres,
                                 };
                                 setFilters(nextFilters);
-                                saveSurpriseFilters(nextFilters);
                               }}
                               className={`
                                 rounded
@@ -410,7 +404,19 @@ export function HomePage() {
                           ))}
                         </div>
                       </div>
-                      <label className="flex items-center gap-2">
+                      <Checkbox
+                        id="RunningOnly"
+                        label="Running shows only"
+                        boxposition="items-center"
+                        checked={filters.runningOnly}
+                        onChange={(e) =>
+                          setFilters({
+                            ...filters,
+                            runningOnly: e.target.checked,
+                          })
+                        }
+                      />
+                      {/* <label className="flex items-center gap-2">
                         <input
                           type="checkbox"
                           checked={filters.runningOnly}
@@ -422,7 +428,7 @@ export function HomePage() {
                           }
                         />
                         Running only
-                      </label>
+                      </label> */}
                     </div>
                   </div>
                 </div>
