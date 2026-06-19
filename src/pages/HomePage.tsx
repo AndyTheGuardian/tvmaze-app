@@ -11,6 +11,7 @@ import {
   saveSurpriseFilters,
 } from "../utils/surpriseFilters";
 import { filterShows } from "../utils/filterShows";
+import { getRandomShow } from "../utils/getRandomShow";
 
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -38,6 +39,21 @@ export function HomePage() {
   const handleSurpriseMe = async () => {
     setLoading(true);
 
+    if (
+      !filters.decades &&
+      !filters.genres &&
+      !filters.networks &&
+      !filters.runningOnly
+    ) {
+      try {
+        const show = await getRandomShow();
+
+        navigate(`/show/${show.id}`);
+      } finally {
+        setLoading(false);
+        return;
+      }
+    }
     const candidates = filterShows(catalog, filters);
 
     if (candidates.length === 0) {
@@ -175,7 +191,7 @@ export function HomePage() {
             >
               <div className="mb-3">
                 <h2 className="mb-1 font-semibold text-lg opacity-60">
-                  Suprise me with Filters!
+                  Surprise me with Filters!
                 </h2>
                 <h3 className="mb-1 font-semibold">Decades</h3>
                 <div className="flex flex-wrap gap-2">
