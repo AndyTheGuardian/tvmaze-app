@@ -3,7 +3,6 @@ import { SearchBar } from "../components/SearchBar";
 import { ShowCard } from "../components/ShowCard";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
-// import { getRandomShow } from "../utils/getRandomShow";
 import { Dices, X } from "lucide-react";
 import { useShowCatalog } from "../hooks/useShowCatalog";
 import {
@@ -14,7 +13,6 @@ import { filterShows } from "../utils/filterShows";
 import { getRandomShow } from "../utils/getRandomShow";
 import Checkbox from "../components/CheckBox";
 import { usePeopleSearch } from "../hooks/usePeopleSearch";
-import { CastCard } from "../components/CastCard";
 import { MediaCard } from "../components/MediaCard";
 
 export function HomePage() {
