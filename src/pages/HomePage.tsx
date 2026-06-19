@@ -13,6 +13,9 @@ import {
 import { filterShows } from "../utils/filterShows";
 import { getRandomShow } from "../utils/getRandomShow";
 import Checkbox from "../components/CheckBox";
+import { usePeopleSearch } from "../hooks/usePeopleSearch";
+import { CastCard } from "../components/CastCard";
+import { MediaCard } from "../components/MediaCard";
 
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -30,7 +33,10 @@ export function HomePage() {
     setSearchParams(value ? { q: value } : {});
   };
 
-  const { data = [], isLoading } = useShows(search);
+  const { data: shows = [], isLoading: showsLoading } = useShows(search);
+
+  const { data: people = [], isLoading: peopleLoading } =
+    usePeopleSearch(search);
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -441,24 +447,71 @@ export function HomePage() {
             active={true}
           />
 
-          {isLoading && <p className="mt-4">Loading...</p>}
+          {(showsLoading || peopleLoading) && (
+            <p className="mt-4">Loading...</p>
+          )}
 
-          <div
-            className="
-            md:mt-3 grid gap-4 grid-cols-2 md:grid-cols-4"
-          >
-            {data.map((show) => (
-              <ShowCard
-                key={show.id}
-                animate={true}
-                show={{
-                  id: show.id,
-                  name: show.name,
-                  image: show.image?.medium,
-                }}
-              />
-            ))}
-          </div>
+          {search.trim() && shows.length > 0 && (
+            <>
+              <h2
+                className="
+                    mt-3 mb-2 
+                    text-lg font-semibold 
+                    text-gray-100"
+              >
+                Shows
+              </h2>
+              <div
+                className="
+                  md:mt-3 
+                  grid gap-3 
+                  grid-cols-2 md:grid-cols-4"
+              >
+                {shows.map((show) => (
+                  <ShowCard
+                    key={show.id}
+                    animate={true}
+                    show={{
+                      id: show.id,
+                      name: show.name,
+                      image: show.image?.medium,
+                    }}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+          {search.trim() && people.length > 0 && (
+            <>
+              <h2
+                className="
+                  mt-3 mb-2 
+                  text-lg font-semibold 
+                  text-gray-100"
+              >
+                Cast
+              </h2>
+
+              <div
+                className="
+                  grid grid-cols-2 
+                  md:grid-cols-4 
+                  gap-3"
+              >
+                {people.map(({ person }) => (
+                  <MediaCard
+                    type="person"
+                    item={{
+                      id: person.id,
+                      name: person.name,
+                      image: person.image?.medium,
+                    }}
+                    to={`/person/${person.id}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </main>
     </div>
