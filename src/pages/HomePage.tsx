@@ -245,11 +245,22 @@ export function HomePage() {
                         <X size={18} />
                       </button>
                     </div>
+                    <Checkbox
+                      label="Running shows only"
+                      boxposition="items-center"
+                      checked={filters.runningOnly}
+                      onChange={(e) =>
+                        setFilters({
+                          ...filters,
+                          runningOnly: e.target.checked,
+                        })
+                      }
+                    />
                     <div
                       className="  
                         overflow-y-auto 
                         pr-2
-                        max-h-[85vh]
+                        max-h-[80vh]
                         "
                     >
                       <h3 className="mb-1 font-semibold">Decades</h3>
@@ -404,18 +415,6 @@ export function HomePage() {
                           ))}
                         </div>
                       </div>
-                      <Checkbox
-                        id="RunningOnly"
-                        label="Running shows only"
-                        boxposition="items-center"
-                        checked={filters.runningOnly}
-                        onChange={(e) =>
-                          setFilters({
-                            ...filters,
-                            runningOnly: e.target.checked,
-                          })
-                        }
-                      />
                       {/* <label className="flex items-center gap-2">
                         <input
                           type="checkbox"
