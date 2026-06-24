@@ -1,7 +1,7 @@
 import { useShows } from "../hooks/useShows";
 import { SearchBar } from "../components/SearchBar";
 import { ShowCard } from "../components/ShowCard";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Dices, X } from "lucide-react";
 import { useShowCatalog } from "../hooks/useShowCatalog";
@@ -14,6 +14,9 @@ import { getRandomShow } from "../utils/getRandomShow";
 import Checkbox from "../components/CheckBox";
 import { usePeopleSearch } from "../hooks/usePeopleSearch";
 import { MediaCard } from "../components/MediaCard";
+import { useFavoriteShows } from "../hooks/useFavoriteShows";
+import { formatEpisode } from "../utils/formatEpisode";
+import { getRelativeDay } from "../utils/getRelativeDay";
 
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -40,6 +43,8 @@ export function HomePage() {
   const [loading, setLoading] = useState(false);
 
   const { data: catalog = [] } = useShowCatalog();
+
+  const favoriteShows = useFavoriteShows();
 
   const handleSurpriseMe = async () => {
     setLoading(true);
@@ -106,6 +111,22 @@ export function HomePage() {
 
     return [...counts.entries()].sort((a, b) => b[1] - a[1]);
   }, [catalog]);
+
+  const runningFavorites = useMemo(() => {
+    return favoriteShows
+      .filter((query) => query.data)
+      .map((query) => query.data)
+      .filter((show) => show.status === "Running")
+      .sort((a, b) => {
+        const aDate = a._embedded?.nextepisode?.airdate;
+        const bDate = b._embedded?.nextepisode?.airdate;
+
+        if (!aDate) return 1;
+        if (!bDate) return -1;
+
+        return new Date(aDate).getTime() - new Date(bDate).getTime();
+      });
+  }, [favoriteShows]);
 
   useEffect(() => {
     saveSurpriseFilters(filters);
@@ -448,6 +469,77 @@ export function HomePage() {
           {(showsLoading || peopleLoading) && (
             <p className="mt-4">Loading...</p>
           )}
+
+          {shows.length === 0 &&
+            people.length === 0 &&
+            runningFavorites.length > 0 && (
+              <>
+                <h2 className="my-2 text-lg font-bold">Upcoming Episodes</h2>
+
+                <div className="grid gap-3 mb-6">
+                  {runningFavorites.map((show) => {
+                    const nextEpisode = show._embedded?.nextepisode;
+                    const previousEpisode = show._embedded?.previousepisode;
+
+                    return (
+                      <Link
+                        key={show.id}
+                        to={`/show/${show.id}`}
+                        className="
+                        rounded-lg
+                        bg-gray-200/60
+                        backdrop-blur-sm
+                        p-3
+                        block
+                      "
+                      >
+                        <div className="font-semibold text-gray-950">
+                          {show.name}
+                        </div>
+                        {nextEpisode ? (
+                          <div className="flex gap-2 mt-1 text-gray-950 font-semibold">
+                            <span className="text-sm opacity-70">Next:</span>
+                            <span className="text-sm">
+                              {formatEpisode(
+                                nextEpisode.season,
+                                nextEpisode.number,
+                              )}
+                            </span>
+                            <span className="italic text-sm">
+                              {nextEpisode.name}
+                            </span>
+                            <span className="text-sm opacity-80">
+                              {getRelativeDay(nextEpisode.airdate)}
+                            </span>
+                            <span className="text-sm opacity-60">
+                              ({nextEpisode.airdate})
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="flex gap-2 mt-1 text-gray-950 font-semibold">
+                            <span className="text-sm opacity-70">
+                              Last aired:
+                            </span>
+                            <span className="text-sm">
+                              {formatEpisode(
+                                previousEpisode.season,
+                                previousEpisode.number,
+                              )}
+                            </span>
+                            <span className="italic text-sm">
+                              {previousEpisode.name}
+                            </span>
+                            <span className="text-sm opacity-60">
+                              ({previousEpisode.airdate})
+                            </span>
+                          </div>
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </>
+            )}
 
           {search.trim() && shows.length > 0 && (
             <>
