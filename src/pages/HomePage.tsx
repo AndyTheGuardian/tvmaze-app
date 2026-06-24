@@ -497,42 +497,52 @@ export function HomePage() {
                           {show.name}
                         </div>
                         {nextEpisode ? (
-                          <div className="flex gap-2 mt-1 text-gray-950 font-semibold">
-                            <span className="text-sm opacity-70">Next:</span>
-                            <span className="text-sm">
-                              {formatEpisode(
-                                nextEpisode.season,
-                                nextEpisode.number,
-                              )}
-                            </span>
-                            <span className="italic text-sm">
-                              {nextEpisode.name}
-                            </span>
-                            <span className="text-sm opacity-80">
-                              {getRelativeDay(nextEpisode.airdate)}
-                            </span>
-                            <span className="text-sm opacity-60">
-                              ({nextEpisode.airdate})
-                            </span>
-                          </div>
+                          <>
+                            <div className="flex gap-1 mt-1 text-gray-950 font-semibold">
+                              <span className="text-sm font-medium opacity-70">
+                                Next:
+                              </span>
+                              <span className="text-sm">
+                                {formatEpisode(
+                                  nextEpisode.season,
+                                  nextEpisode.number,
+                                )}
+                              </span>
+                              <span className="italic text-sm">
+                                {nextEpisode.name}
+                              </span>
+                            </div>
+                            <div className="flex gap-2 mt-1 text-gray-950 font-semibold">
+                              <span className="text-sm opacity-80">
+                                {getRelativeDay(nextEpisode.airdate)}
+                              </span>
+                              <span className="text-sm opacity-60">
+                                ({nextEpisode.airdate})
+                              </span>
+                            </div>
+                          </>
                         ) : (
-                          <div className="flex gap-2 mt-1 text-gray-950 font-semibold">
-                            <span className="text-sm opacity-70">
-                              Last aired:
-                            </span>
-                            <span className="text-sm">
-                              {formatEpisode(
-                                previousEpisode.season,
-                                previousEpisode.number,
-                              )}
-                            </span>
-                            <span className="italic text-sm">
-                              {previousEpisode.name}
-                            </span>
-                            <span className="text-sm opacity-60">
-                              ({previousEpisode.airdate})
-                            </span>
-                          </div>
+                          <>
+                            <div className="flex gap-1 mt-1 text-gray-950 font-semibold">
+                              <span className="text-sm font-medium opacity-70">
+                                Last aired:
+                              </span>
+                              <span className="text-sm">
+                                {formatEpisode(
+                                  previousEpisode.season,
+                                  previousEpisode.number,
+                                )}
+                              </span>
+                              <span className="italic text-sm">
+                                {previousEpisode.name}
+                              </span>
+                            </div>
+                            <div className="flex gap-2 mt-1 text-gray-950 font-semibold">
+                              <span className="text-sm opacity-60">
+                                {previousEpisode.airdate}
+                              </span>
+                            </div>
+                          </>
                         )}
                       </Link>
                     );
