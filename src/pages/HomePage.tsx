@@ -536,7 +536,7 @@ export function HomePage() {
                         )}
                         {previousEpisode && !showNext && (
                           <>
-                            <div className="flex gap-1 mt-1 text-gray-950 font-semibold">
+                            <div className="flex gap-1 mt-0.5 text-gray-950 font-semibold">
                               <span className="text-sm font-medium opacity-70">
                                 Last aired:
                               </span>
@@ -550,7 +550,7 @@ export function HomePage() {
                                 {previousEpisode.name}
                               </span>
                             </div>
-                            <div className="flex gap-2 mt-1 text-gray-950 font-semibold">
+                            <div className="flex gap-2 mt-0.5 text-gray-950 font-semibold">
                               <span className="text-sm opacity-60">
                                 {previousEpisode.airdate}
                               </span>
