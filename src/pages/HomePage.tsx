@@ -30,6 +30,8 @@ export function HomePage() {
 
   const [showSurpriseSettings, setShowSurpriseSettings] = useState(false);
 
+  const [showNext, setShowNext] = useState(true);
+
   const handleSearchChange = (value: string) => {
     setSearchParams(value ? { q: value } : {});
   };
@@ -474,7 +476,12 @@ export function HomePage() {
             people.length === 0 &&
             runningFavorites.length > 0 && (
               <>
-                <h2 className="my-2 text-lg font-bold">Upcoming Episodes</h2>
+                <h2
+                  className="my-2 text-lg font-bold cursor-pointer"
+                  onClick={() => setShowNext(!showNext)}
+                >
+                  {showNext ? "Upcoming Episodes" : "Latest Episodes"}
+                </h2>
 
                 <div className="grid gap-3 mb-6">
                   {runningFavorites.map((show) => {
@@ -493,12 +500,12 @@ export function HomePage() {
                         block
                       "
                       >
-                        <div className="font-semibold text-gray-950">
+                        <div className="font-semibold text-gray-950 -mt-0.5">
                           {show.name}
                         </div>
-                        {nextEpisode ? (
-                          <>
-                            <div className="flex gap-1 mt-1 text-gray-950 font-semibold">
+                        {nextEpisode && showNext && (
+                          <div className="md:flex md:gap-2">
+                            <div className="flex gap-1 mt-0.5 text-gray-950 font-semibold">
                               <span className="text-sm font-medium opacity-70">
                                 Next:
                               </span>
@@ -512,7 +519,7 @@ export function HomePage() {
                                 {nextEpisode.name}
                               </span>
                             </div>
-                            <div className="flex gap-2 mt-1 text-gray-950 font-semibold">
+                            <div className="flex gap-2 mt-0.5 text-gray-950 font-semibold">
                               <span className="text-sm opacity-80">
                                 {getRelativeDay(nextEpisode.airdate)}
                               </span>
@@ -520,8 +527,14 @@ export function HomePage() {
                                 ({nextEpisode.airdate})
                               </span>
                             </div>
-                          </>
-                        ) : (
+                          </div>
+                        )}
+                        {!nextEpisode && showNext && (
+                          <div className="mt-0.5 text-sm opacity-80 italic font-semi-bold text-gray-950">
+                            * No date yet *
+                          </div>
+                        )}
+                        {previousEpisode && !showNext && (
                           <>
                             <div className="flex gap-1 mt-1 text-gray-950 font-semibold">
                               <span className="text-sm font-medium opacity-70">
