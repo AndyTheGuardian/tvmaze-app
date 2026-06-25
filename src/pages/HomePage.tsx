@@ -1,9 +1,9 @@
 import { useShows } from "../hooks/useShows";
 import { SearchBar } from "../components/SearchBar";
 import { ShowCard } from "../components/ShowCard";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Dices, X } from "lucide-react";
+import { Dices } from "lucide-react";
 import { useShowCatalog } from "../hooks/useShowCatalog";
 import {
   getSurpriseFilters,
@@ -11,12 +11,11 @@ import {
 } from "../utils/surpriseFilters";
 import { filterShows } from "../utils/filterShows";
 import { getRandomShow } from "../utils/getRandomShow";
-import Checkbox from "../components/CheckBox";
 import { usePeopleSearch } from "../hooks/usePeopleSearch";
 import { MediaCard } from "../components/MediaCard";
 import { useFavoriteShows } from "../hooks/useFavoriteShows";
-import { formatEpisode } from "../utils/formatEpisode";
-import { getRelativeDay } from "../utils/getRelativeDay";
+import { SurpriseMeFilter } from "../components/SurpriseMeFilter";
+import { UpcomingEpisodes } from "../components/UpcomingEpisodes";
 
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,8 +28,6 @@ export function HomePage() {
   const longPressTriggered = useRef(false);
 
   const [showSurpriseSettings, setShowSurpriseSettings] = useState(false);
-
-  const [showNext, setShowNext] = useState(true);
 
   const handleSearchChange = (value: string) => {
     setSearchParams(value ? { q: value } : {});
@@ -212,254 +209,15 @@ export function HomePage() {
             </button>
           </div>
           {showSurpriseSettings && (
-            <>
-              <div
-                className="
-                  fixed inset-0
-                  z-10000
-                bg-black/50
-                  flex items-center justify-center
-                "
-              >
-                <div
-                  className="
-                    p-3 m-3 mb-16
-                    w-full max-w-xl
-                  bg-black/30 
-                    backdrop-blur-sm 
-                    rounded-lg 
-                  "
-                >
-                  <div className="select-none">
-                    <div className="flex gap-1 mb-3">
-                      <span
-                        className="
-                        font-semibold 
-                        text-xl
-                        shadow-sm"
-                      >
-                        Surprise me
-                      </span>
-                      <span
-                        className="
-                        flex-1 
-                        font-semibold 
-                        text-xl italic
-                        shadow-sm"
-                      >
-                        with Filters!
-                      </span>
-                      <button
-                        className="
-                          rounded 
-                          px-2 py-1 mr-3
-                          bg-blue-600 
-                          text-white 
-                        "
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSurpriseMe();
-                        }}
-                      >
-                        Go!
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowSurpriseSettings(false);
-                        }}
-                      >
-                        <X size={18} />
-                      </button>
-                    </div>
-                    <Checkbox
-                      label="Running shows only"
-                      boxposition="items-center"
-                      checked={filters.runningOnly}
-                      onChange={(e) =>
-                        setFilters({
-                          ...filters,
-                          runningOnly: e.target.checked,
-                        })
-                      }
-                    />
-                    <div
-                      className="  
-                        overflow-y-auto 
-                        pr-2
-                        max-h-[80vh]
-                        "
-                    >
-                      <h3 className="mb-1 font-semibold">Decades</h3>
-                      <div className="mb-3 not-odd:flex flex-wrap gap-2">
-                        {[
-                          1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020,
-                        ].map((decade) => (
-                          <button
-                            key={decade}
-                            onClick={() => {
-                              const selected = filters.decades.includes(decade);
-
-                              const nextDecades = selected
-                                ? filters.decades.filter((d) => d !== decade)
-                                : [...filters.decades, decade];
-
-                              const nextFilters = {
-                                ...filters,
-                                decades: nextDecades,
-                              };
-                              setFilters(nextFilters);
-                            }}
-                            className={`
-                          rounded
-                          px-3 py-1
-                          ${
-                            filters.decades.includes(decade)
-                              ? "bg-blue-600 text-white"
-                              : "bg-gray-200/60 backdrop-blur-sm text-gray-950"
-                          }                          
-                          `}
-                          >
-                            {decade}s
-                          </button>
-                        ))}
-                      </div>
-                      <div className="mb-3">
-                        <h3 className="mb-1 font-semibold">Streaming</h3>
-                        <div className="mb-3 flex flex-wrap gap-2">
-                          {webChannelCounts
-                            .slice(0, 30)
-                            .map(([network, count]) => (
-                              <button
-                                key={network}
-                                onClick={() => {
-                                  const selected =
-                                    filters.networks.includes(network);
-
-                                  const nextNetworks = selected
-                                    ? filters.networks.filter(
-                                        (n) => n !== network,
-                                      )
-                                    : [...filters.networks, network];
-
-                                  const nextFilters = {
-                                    ...filters,
-                                    networks: nextNetworks,
-                                  };
-                                  setFilters(nextFilters);
-                                }}
-                                className={`
-                                  rounded
-                                  px-3 py-1
-                                  ${
-                                    filters.networks &&
-                                    filters.networks.includes(network)
-                                      ? "bg-blue-600 text-white"
-                                      : "bg-gray-200/60 backdrop-blur-sm text-gray-950"
-                                  }                          
-                                  `}
-                              >
-                                <span>{network} </span>
-                                <span className="italic text-sm opacity-40">
-                                  ({count})
-                                </span>
-                              </button>
-                            ))}
-                        </div>
-                        <h3 className="mb-1 font-semibold">Networks</h3>
-                        <div className="mb-3 flex flex-wrap gap-2">
-                          {networkCounts
-                            .slice(0, 30)
-                            .map(([network, count]) => (
-                              <button
-                                key={network}
-                                onClick={() => {
-                                  const selected =
-                                    filters.networks.includes(network);
-
-                                  const nextNetworks = selected
-                                    ? filters.networks.filter(
-                                        (n) => n !== network,
-                                      )
-                                    : [...filters.networks, network];
-
-                                  const nextFilters = {
-                                    ...filters,
-                                    networks: nextNetworks,
-                                  };
-                                  setFilters(nextFilters);
-                                }}
-                                className={`
-                                  rounded
-                                  px-3 py-1
-                                  ${
-                                    filters.networks &&
-                                    filters.networks.includes(network)
-                                      ? "bg-blue-600 text-white"
-                                      : "bg-gray-200/60 backdrop-blur-sm text-gray-950"
-                                  }                          
-                                `}
-                              >
-                                <span>{network} </span>
-                                <span className="italic text-sm opacity-50">
-                                  ({count})
-                                </span>
-                              </button>
-                            ))}
-                        </div>
-                      </div>
-                      <div className="mb-3">
-                        <h3 className="mb-1 font-semibold">Genres</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {genres.map((genre) => (
-                            <button
-                              key={genre}
-                              onClick={() => {
-                                const selected = filters.genres.includes(genre);
-
-                                const nextGenres = selected
-                                  ? filters.genres.filter((g) => g !== genre)
-                                  : [...filters.genres, genre];
-
-                                const nextFilters = {
-                                  ...filters,
-                                  genres: nextGenres,
-                                };
-                                setFilters(nextFilters);
-                              }}
-                              className={`
-                                rounded
-                                px-3 py-1
-                                ${
-                                  filters.genres.includes(genre)
-                                    ? "bg-blue-600 text-white"
-                                    : "bg-gray-200/60 backdrop-blur-sm text-gray-950"
-                                }                          
-                              `}
-                            >
-                              {genre}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      {/* <label className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={filters.runningOnly}
-                          onChange={(e) =>
-                            setFilters({
-                              ...filters,
-                              runningOnly: e.target.checked,
-                            })
-                          }
-                        />
-                        Running only
-                      </label> */}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
+            <SurpriseMeFilter
+              handleSurpriseMe={handleSurpriseMe}
+              setShowSurpriseSettings={setShowSurpriseSettings}
+              filters={filters}
+              setFilters={setFilters}
+              webChannelCounts={webChannelCounts}
+              networkCounts={networkCounts}
+              genres={genres}
+            />
           )}
           <SearchBar
             value={search}
@@ -475,110 +233,7 @@ export function HomePage() {
           {shows.length === 0 &&
             people.length === 0 &&
             runningFavorites.length > 0 && (
-              <>
-                <h2
-                  className="my-2 text-lg font-bold cursor-pointer"
-                  onClick={() => setShowNext(!showNext)}
-                >
-                  {showNext ? "Upcoming Episodes" : "Latest Episodes"}
-                </h2>
-
-                <div className="grid gap-3 mb-6">
-                  {runningFavorites.map((show) => {
-                    const nextEpisode = show._embedded?.nextepisode;
-                    const previousEpisode = show._embedded?.previousepisode;
-
-                    return (
-                      <Link
-                        key={show.id}
-                        to={`/show/${show.id}`}
-                        className="
-                        rounded-lg
-                        bg-gray-200/60
-                        backdrop-blur-sm
-                        p-3
-                        block
-                      "
-                      >
-                        <div className="flex gap-3">
-                          {show.image?.medium && (
-                            <img
-                              src={show.image.medium}
-                              alt={show.name}
-                              className="
-                                -my-3 -ml-3                                
-                                w-14 md:w-16
-                                rounded-l
-                                object-cover
-                                shrink-0
-                              "
-                            />
-                          )}
-                          <div className="min-w-0 flex-1">
-                            <div className="font-semibold text-gray-950 -mt-0.5">
-                              {show.name}
-                            </div>
-                            {nextEpisode && showNext && (
-                              <div className="md:flex md:gap-2">
-                                <div className="flex gap-1 mt-0.5 text-gray-950 font-semibold">
-                                  <span className="text-sm font-medium opacity-70">
-                                    Next:
-                                  </span>
-                                  <span className="text-sm">
-                                    {formatEpisode(
-                                      nextEpisode.season,
-                                      nextEpisode.number,
-                                    )}
-                                  </span>
-                                  <span className="italic text-sm">
-                                    {nextEpisode.name}
-                                  </span>
-                                </div>
-                                <div className="flex gap-2 mt-0.5 text-gray-950 font-semibold">
-                                  <span className="text-sm opacity-80">
-                                    {getRelativeDay(nextEpisode.airdate)}
-                                  </span>
-                                  <span className="text-sm opacity-60">
-                                    ({nextEpisode.airdate})
-                                  </span>
-                                </div>
-                              </div>
-                            )}
-                            {!nextEpisode && showNext && (
-                              <div className="mt-0.5 text-sm opacity-80 italic font-semi-bold text-gray-950">
-                                * No date yet *
-                              </div>
-                            )}
-                            {previousEpisode && !showNext && (
-                              <>
-                                <div className="flex gap-1 mt-0.5 text-gray-950 font-semibold">
-                                  <span className="text-sm font-medium opacity-70">
-                                    Last aired:
-                                  </span>
-                                  <span className="text-sm">
-                                    {formatEpisode(
-                                      previousEpisode.season,
-                                      previousEpisode.number,
-                                    )}
-                                  </span>
-                                  <span className="italic text-sm">
-                                    {previousEpisode.name}
-                                  </span>
-                                </div>
-                                <div className="flex gap-2 mt-0.5 text-gray-950 font-semibold">
-                                  <span className="text-sm opacity-60">
-                                    {previousEpisode.airdate}
-                                  </span>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </>
+              <UpcomingEpisodes runningFavorites={runningFavorites} />
             )}
 
           {search.trim() && shows.length > 0 && (
