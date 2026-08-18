@@ -16,6 +16,7 @@ import { MediaCard } from "../components/MediaCard";
 import { useFavoriteShows } from "../hooks/useFavoriteShows";
 import { SurpriseMeFilter } from "../components/SurpriseMeFilter";
 import { UpcomingEpisodes } from "../components/UpcomingEpisodes";
+import { resetTutorial } from "../utils/tutorial";
 
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -147,6 +148,15 @@ export function HomePage() {
     }
   }
 
+  function startLongPressTutorial() {
+    longPressTriggered.current = false;
+
+    longPressTimer.current = window.setTimeout(() => {
+      longPressTriggered.current = true;
+      resetTutorial();
+    }, 500);
+  }
+
   return (
     <div className="bg-gray-900 min-h-screen min-w-screen">
       <div
@@ -177,13 +187,20 @@ export function HomePage() {
         >
           <div className="mb-3 md:mb-6  flex">
             <h1
+              id="tutorial-rewatch"
               className="
               flex-1 
               text-2xl font-bold"
+              onMouseDown={startLongPressTutorial}
+              onMouseUp={cancelLongPress}
+              onMouseLeave={cancelLongPress}
+              onTouchStart={startLongPressTutorial}
+              onTouchEnd={cancelLongPress}
             >
               Episode Guide
             </h1>
             <button
+              id="tutorial-surprise"
               className="
                 mt-2 flex gap-2 
                 text-sm opacity-50 
@@ -219,22 +236,26 @@ export function HomePage() {
               genres={genres}
             />
           )}
-          <SearchBar
-            value={search}
-            onChange={handleSearchChange}
-            placeholder="Search TV shows..."
-            active={true}
-          />
+          <div id="tutorial-search">
+            <SearchBar
+              value={search}
+              onChange={handleSearchChange}
+              placeholder="Search TV shows..."
+              active={true}
+            />
+          </div>
 
           {(showsLoading || peopleLoading) && (
             <p className="mt-4">Loading...</p>
           )}
 
-          {shows.length === 0 &&
-            people.length === 0 &&
-            runningFavorites.length > 0 && (
-              <UpcomingEpisodes runningFavorites={runningFavorites} />
-            )}
+          <div id="tutorial-upcoming">
+            {shows.length === 0 &&
+              people.length === 0 &&
+              runningFavorites.length > 0 && (
+                <UpcomingEpisodes runningFavorites={runningFavorites} />
+              )}
+          </div>
 
           {search.trim() && shows.length > 0 && (
             <>

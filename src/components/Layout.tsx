@@ -6,6 +6,7 @@ export function Layout() {
       <Outlet />
 
       <nav
+        id="tutorial-nav"
         className="
             fixed 
             bottom-0
@@ -18,8 +19,12 @@ export function Layout() {
             p-4
             "
       >
-        <Link to="/">Shows</Link>
-        <Link to="/favorites">Favorites</Link>
+        <Link id="tutorial-shows" to="/">
+          Shows
+        </Link>
+        <Link id="tutorial-favorites" to="/favorites">
+          Favorites
+        </Link>
       </nav>
     </div>
   );
