@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Link,
   // useLocation,
@@ -22,6 +22,9 @@ import { SearchBar } from "../components/SearchBar";
 import { EpisodeCard } from "../components/EpisodeCard";
 import { CastCard } from "../components/CastCard";
 import { AnimatePresence, motion } from "framer-motion";
+import { Tutorial } from "../components/Tutorial/Tutorial";
+import { showTutorialSteps } from "../components/Tutorial/showTutorialSteps";
+import { resetTutorial } from "../utils/tutorial";
 
 export function ShowPage() {
   const { id } = useParams();
@@ -79,6 +82,11 @@ export function ShowPage() {
 
   const [imageSrc, setImgageSrc] = useState(show?.image?.medium);
 
+  const longPressTimer = useRef<number | null>(null);
+  const longPressTriggered = useRef(false);
+
+  const STORAGE_KEY = "tutorial-show";
+
   useEffect(() => {
     const img = new Image();
     img.src = show?.image?.original ?? show?.image?.medium!;
@@ -93,6 +101,22 @@ export function ShowPage() {
       next.set(key, value);
       return next;
     });
+  }
+
+  function cancelLongPress() {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }
+
+  function startLongPressTutorial() {
+    longPressTriggered.current = false;
+
+    longPressTimer.current = window.setTimeout(() => {
+      longPressTriggered.current = true;
+      resetTutorial(STORAGE_KEY);
+    }, 500);
   }
 
   return (
@@ -110,46 +134,54 @@ export function ShowPage() {
       )}
       <main className="relative z-20 mx-auto max-w-5xl p-3 md:p-6">
         <div className="rounded-2xl bg-black/50 p-3 md:p-6">
-          <div className="flex gap-2">
-            <h1
-              className="
+          <div id="tutorial-show-header">
+            <div className="flex gap-2">
+              <h1
+                id="tutorial-title"
+                className="
                 flex-1 mb-3 
                 text-gray-100 text-2xl font-bold 
                 cursor-zoom-in"
-              title="View image"
-              onClick={() => {
-                setZoomed(true);
-              }}
-            >
-              {show?.name}
-            </h1>
-            <div className="mt-2 mr-1 text-sm font-semibold">
-              {show?.rating?.average}
+                title="View image"
+                onMouseDown={startLongPressTutorial}
+                onMouseUp={cancelLongPress}
+                onMouseLeave={cancelLongPress}
+                onTouchStart={startLongPressTutorial}
+                onTouchEnd={cancelLongPress}
+                onClick={() => {
+                  setZoomed(true);
+                }}
+              >
+                {show?.name}
+              </h1>
+              <div className="mt-2 mr-1 text-sm font-semibold">
+                {show?.rating?.average}
+              </div>
+              <Heart
+                id="tutorial-show-favorite"
+                size={20}
+                fill={favorite ? "white" : "none"}
+                stroke="white"
+                className="mt-1.5 cursor-pointer"
+                onClick={() => {
+                  if (!show) return;
+
+                  toggleFavoriteShow({
+                    id: show.id,
+                    name: show.name,
+                    image: show.image?.medium,
+                  });
+
+                  setFavorite(!favorite);
+                }}
+              />
             </div>
-            <Heart
-              size={20}
-              fill={favorite ? "white" : "none"}
-              stroke="white"
-              className="mt-1.5 cursor-pointer"
-              onClick={() => {
-                if (!show) return;
-
-                toggleFavoriteShow({
-                  id: show.id,
-                  name: show.name,
-                  image: show.image?.medium,
-                });
-
-                setFavorite(!favorite);
-              }}
-            />
-          </div>
-          <div className="flex gap-1">
-            <div className="flex-1 mb-4 flex gap-2">
-              {show?.genres.map((genre) => (
-                <span
-                  key={genre}
-                  className="
+            <div className="flex gap-1">
+              <div className="flex-1 mb-4 flex gap-2">
+                {show?.genres.map((genre) => (
+                  <span
+                    key={genre}
+                    className="
                   rounded-full 
                   flex 
                   bg-gray-200/60 
@@ -159,62 +191,64 @@ export function ShowPage() {
                   text-sm 
                   items-center 
                   text-center"
-                >
-                  {genre === "Science-Fiction" && genreCount > 2
-                    ? "Sci-Fi"
-                    : genre}
-                </span>
-              ))}
-            </div>
-            {show?.externals.imdb && (
-              <Link
-                className="text-sm font-semibold"
-                to={`https://www.imdb.com/title/${show?.externals.imdb}`}
-              >
-                <div className="flex mt-1 text-gray-300/70">
-                  IMDB
-                  <ExternalLink size={14} className="ml-0.5 mt-0.5" />
-                </div>
-              </Link>
-            )}
-          </div>
-          <div className="mb-4 flex gap-2">
-            <div className="flex-none text-sm font-semibold">
-              {getStation(show?.network?.name, show?.webChannel?.name)}
-            </div>
-            <div className="flex-1 flex gap-2 overflow-hiodden">
-              {show?.schedule.days && show?.schedule.days.length > 6 ? (
-                <span className="text-gray-300 mt-1 text-xs">All week</span>
-              ) : show?.schedule.days && show?.schedule.days.length > 3 ? (
-                <span className="text-gray-300 mt-1 text-xs">
-                  {show?.schedule.days[0]}s to{" "}
-                  {show?.schedule.days[show?.schedule.days.length - 1]}s
-                </span>
-              ) : (
-                show?.schedule.days.map((day) => (
-                  <span
-                    key={day}
-                    className="text-gray-300 mt-0.75 text-xs text-ellipsis"
                   >
-                    {day}s
+                    {genre === "Science-Fiction" && genreCount > 2
+                      ? "Sci-Fi"
+                      : genre}
                   </span>
-                ))
+                ))}
+              </div>
+              {show?.externals.imdb && (
+                <Link
+                  className="text-sm font-semibold"
+                  to={`https://www.imdb.com/title/${show?.externals.imdb}`}
+                >
+                  <div className="flex mt-1 text-gray-300/70">
+                    IMDB
+                    <ExternalLink size={14} className="ml-0.5 mt-0.5" />
+                  </div>
+                </Link>
               )}
             </div>
-            {show?.premiered && (
-              <div className="text-sm font-semibold">
-                {getYear(show?.premiered)}-{getYear(show?.ended)}
+            <div className="mb-4 flex gap-2">
+              <div className="flex-none text-sm font-semibold">
+                {getStation(show?.network?.name, show?.webChannel?.name)}
               </div>
-            )}
-            <div className="text-sm font-semibold">{show?.status}</div>
+              <div className="flex-1 flex gap-2 overflow-hiodden">
+                {show?.schedule.days && show?.schedule.days.length > 6 ? (
+                  <span className="text-gray-300 mt-1 text-xs">All week</span>
+                ) : show?.schedule.days && show?.schedule.days.length > 3 ? (
+                  <span className="text-gray-300 mt-1 text-xs">
+                    {show?.schedule.days[0]}s to{" "}
+                    {show?.schedule.days[show?.schedule.days.length - 1]}s
+                  </span>
+                ) : (
+                  show?.schedule.days.map((day) => (
+                    <span
+                      key={day}
+                      className="text-gray-300 mt-0.75 text-xs text-ellipsis"
+                    >
+                      {day}s
+                    </span>
+                  ))
+                )}
+              </div>
+              {show?.premiered && (
+                <div className="text-sm font-semibold">
+                  {getYear(show?.premiered)}-{getYear(show?.ended)}
+                </div>
+              )}
+              <div className="text-sm font-semibold">{show?.status}</div>
+            </div>
+            <p className="mb-1 text-gray-100">{htmlToText(show?.summary)}</p>
           </div>
-          <p className="mb-1 text-gray-100">{htmlToText(show?.summary)}</p>
           <div className="flex justify-end gap-3 text-sm font-semibold mb-3">
             <div
               className="flex-1"
               onClick={() => setShowBirthday(!showBirthday)}
             />
             <button
+              id="tutorial-search-episodes"
               className="
                 justify-end text-sm 
                 font-semibold text-left 
@@ -230,6 +264,7 @@ export function ShowPage() {
             </button>
             <p className="text-gray-500">|</p>
             <button
+              id="tutorial-show-cast"
               className="justify-end text-sm font-semibold cursor-pointer"
               onClick={() => {
                 if (showSearch) setShowSeach(false);
@@ -291,7 +326,10 @@ export function ShowPage() {
               </div>
             )}
             {!showSearch && (
-              <div className="md:sticky md:top-0 z-50 mb-3 flex flex-wrap gap-2">
+              <div
+                id="tutorial-season-picker"
+                className="md:sticky md:top-0 z-50 mb-3 flex flex-wrap gap-2"
+              >
                 {seasonNumbers.map((season) => (
                   <button
                     key={season}
@@ -311,7 +349,7 @@ export function ShowPage() {
             )}
           </div>
 
-          <div className="space-y-3">
+          <div id="tutorial-episode-list" className="space-y-3">
             {!showSearch &&
               seasons[activeSeason!]?.map((episode: Episode) => (
                 <EpisodeCard
@@ -391,6 +429,7 @@ export function ShowPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      <Tutorial steps={showTutorialSteps} storageKey={STORAGE_KEY} />
     </div>
   );
 }

@@ -17,6 +17,8 @@ import { useFavoriteShows } from "../hooks/useFavoriteShows";
 import { SurpriseMeFilter } from "../components/SurpriseMeFilter";
 import { UpcomingEpisodes } from "../components/UpcomingEpisodes";
 import { resetTutorial } from "../utils/tutorial";
+import { Tutorial } from "../components/Tutorial/Tutorial";
+import { homeTutorialSteps } from "../components/Tutorial/homeTutorialSteps";
 
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,6 +29,8 @@ export function HomePage() {
 
   const longPressTimer = useRef<number | null>(null);
   const longPressTriggered = useRef(false);
+
+  const STORAGE_KEY = "tutorial-home";
 
   const [showSurpriseSettings, setShowSurpriseSettings] = useState(false);
 
@@ -153,7 +157,7 @@ export function HomePage() {
 
     longPressTimer.current = window.setTimeout(() => {
       longPressTriggered.current = true;
-      resetTutorial();
+      resetTutorial(STORAGE_KEY);
     }, 500);
   }
 
@@ -236,13 +240,16 @@ export function HomePage() {
               genres={genres}
             />
           )}
-          <div id="tutorial-search">
+          <div id="tutorial-search" className="flex-row">
             <SearchBar
               value={search}
               onChange={handleSearchChange}
               placeholder="Search TV shows..."
               active={true}
             />
+            <p className="-mt-2 text-xs text-gray-500 text-end">
+              Data provided by TVmaze
+            </p>
           </div>
 
           {(showsLoading || peopleLoading) && (
@@ -320,6 +327,7 @@ export function HomePage() {
           )}
         </div>
       </main>
+      <Tutorial steps={homeTutorialSteps} storageKey={STORAGE_KEY} />
     </div>
   );
 }

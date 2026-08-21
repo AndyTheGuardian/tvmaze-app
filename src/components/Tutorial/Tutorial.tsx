@@ -1,6 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { completeTutorial, hasCompletedTutorial } from "../../utils/tutorial";
-import { tutorialSteps } from "./tutorialSteps";
+import type { TutorialStep } from "./homeTutorialSteps";
+
+interface TutorialProps {
+  steps: TutorialStep[];
+  storageKey: string;
+}
 
 interface Rect {
   top: number;
@@ -9,14 +14,14 @@ interface Rect {
   height: number;
 }
 
-export function Tutorial() {
-  const [open, setOpen] = useState(() => !hasCompletedTutorial());
-
+export function Tutorial({ steps, storageKey }: TutorialProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(() => !hasCompletedTutorial(storageKey));
   const [step, setStep] = useState(0);
   const [targetRect, setTargetRect] = useState<Rect | null>(null);
   const [cardStyle, setCardStyle] = useState<React.CSSProperties>({});
 
-  const currentStep = tutorialSteps[step];
+  const currentStep = steps[step];
 
   useEffect(() => {
     if (!open || !currentStep.target) {
@@ -36,7 +41,7 @@ export function Tutorial() {
       block: "center",
     });
 
-    const updateRect = () => {
+    const updatePosition = () => {
       const rect = element.getBoundingClientRect();
 
       setTargetRect({
@@ -46,39 +51,74 @@ export function Tutorial() {
         height: rect.height,
       });
 
-      const cardHeight = 220;
+      const cardHeight = cardRef.current?.getBoundingClientRect().height ?? 220;
       const gap = 20;
+      const margin = 16;
 
-      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top - margin;
+      const spaceBelow = window.innerHeight - rect.bottom - margin;
 
-      const showBelow = spaceBelow > cardHeight + gap;
+      let top: number;
+
+      // Prefer below
+      if (spaceBelow >= cardHeight + gap) {
+        top = rect.bottom + gap;
+      }
+      // Otherwise use above
+      else if (spaceAbove >= cardHeight + gap) {
+        top = rect.top - cardHeight - gap;
+      }
+      // Neither side is large enough
+      else if (spaceBelow >= spaceAbove) {
+        top = rect.bottom + gap;
+      }
+      // More space above
+      else {
+        top = margin;
+      }
+
+      // Keep the card inside the viewport
+      top = Math.max(
+        margin,
+        Math.min(top, window.innerHeight - cardHeight - margin),
+      );
 
       setCardStyle({
-        top: showBelow ? rect.bottom + gap : rect.top - cardHeight - gap,
+        top,
       });
     };
 
-    updateRect();
+    updatePosition();
 
-    window.addEventListener("resize", updateRect);
-    window.addEventListener("scroll", updateRect);
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition);
 
     return () => {
-      window.removeEventListener("resize", updateRect);
-      window.removeEventListener("scroll", updateRect);
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition);
     };
   }, [open, step, currentStep.target]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const frame = requestAnimationFrame(() => {
+      setCardStyle((style) => ({ ...style }));
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [step, open]);
 
   if (!open) {
     return null;
   }
 
   const isFirst = step === 0;
-  const isLast = step === tutorialSteps.length - 1;
+  const isLast = step === steps.length - 1;
 
   function next() {
     if (isLast) {
-      completeTutorial();
+      completeTutorial(storageKey);
       setOpen(false);
       return;
     }
@@ -87,7 +127,7 @@ export function Tutorial() {
   }
 
   function skip() {
-    completeTutorial();
+    completeTutorial(storageKey);
     setOpen(false);
   }
 
@@ -124,6 +164,7 @@ export function Tutorial() {
 
       {/* Tutorial card */}
       <div
+        ref={cardRef}
         className="
             pointer-events-auto
             absolute
@@ -136,11 +177,12 @@ export function Tutorial() {
             p-5
             shadow-2xl
             text-white
+            overflow-y-auto
             "
-        style={cardStyle}
+        style={{ ...cardStyle, maxHeight: "calc(100vh - 2rem)" }}
       >
         <div className="mb-1 text-sm text-gray-400">
-          Step {step + 1} of {tutorialSteps.length}
+          Step {step + 1} of {steps.length}
         </div>
 
         <h2 className="mb-2 text-xl font-bold text-gray-50">

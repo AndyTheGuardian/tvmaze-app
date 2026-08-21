@@ -1,13 +1,11 @@
-const TUTORIAL_KEY = "episodeGuideTutorialCompleted";
-
-export function hasCompletedTutorial(): boolean {
-  return localStorage.getItem(TUTORIAL_KEY) === "true";
+export function hasCompletedTutorial(key: string): boolean {
+  return localStorage.getItem(key) === "true";
 }
 
-export function completeTutorial(): void {
-  localStorage.setItem(TUTORIAL_KEY, "true");
+export function completeTutorial(key: string): void {
+  localStorage.setItem(key, "true");
 }
 
-export function resetTutorial(): void {
-  localStorage.removeItem(TUTORIAL_KEY);
+export function resetTutorial(key: string): void {
+  localStorage.removeItem(key);
 }

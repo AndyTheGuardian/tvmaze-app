@@ -7,7 +7,6 @@ import { PersonPage } from "./pages/PersonPage";
 import { Layout } from "./components/Layout";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { LayoutGroup } from "framer-motion";
-import { Tutorial } from "./components/Tutorial/Tutorial";
 
 export default function App() {
   return (
@@ -26,7 +25,6 @@ export default function App() {
           </Route>
         </Routes>
       </LayoutGroup>
-      <Tutorial />
     </>
   );
 }
