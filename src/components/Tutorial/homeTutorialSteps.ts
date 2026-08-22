@@ -71,13 +71,13 @@ export const homeTutorialSteps: TutorialStep[] = [
   {
     id: "lastest",
     title: "Latest episodes",
-    text: "Latest Episodes lists the most recent aired episodes of your favorite running shows.",
+    text: "Latest Episodes lists the most recently aired episodes of your favorite running shows.",
     target: "tutorial-upcoming",
   },
   {
     id: "lastest-header",
     title: "Switch to Upcoming Episodes",
-    text: "Tap on Latest Episodes to switch to back to Upcoming Episodes.",
+    text: "Tap on Latest Episodes to switch back to Upcoming Episodes.",
     target: "tutorial-upcoming-latest",
     waitFor: "tutorial-latest-off",
     clickThrough: true,
