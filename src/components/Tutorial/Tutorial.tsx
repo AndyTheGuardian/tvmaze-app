@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { completeTutorial, hasCompletedTutorial } from "../../utils/tutorial";
 import type { TutorialStep } from "./homeTutorialSteps";
 
@@ -23,7 +23,7 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
 
   const currentStep = steps[step];
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!open || !currentStep.target) {
       setTargetRect(null);
       return;
@@ -41,7 +41,7 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
       block: "center",
     });
 
-    const updatePosition = () => {
+    const updateRect = () => {
       const rect = element.getBoundingClientRect();
 
       setTargetRect({
@@ -88,14 +88,19 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
       });
     };
 
-    updatePosition();
+    updateRect();
 
-    window.addEventListener("resize", updatePosition);
-    window.addEventListener("scroll", updatePosition);
+    const observer = new ResizeObserver(() => {
+      updateRect();
+    });
+
+    observer.observe(element);
+
+    window.addEventListener("scroll", updateRect);
 
     return () => {
-      window.removeEventListener("resize", updatePosition);
-      window.removeEventListener("scroll", updatePosition);
+      observer.disconnect();
+      window.removeEventListener("scroll", updateRect);
     };
   }, [open, step, currentStep.target]);
 
