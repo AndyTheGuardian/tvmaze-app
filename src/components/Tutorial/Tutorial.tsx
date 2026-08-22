@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { completeTutorial, hasCompletedTutorial } from "../../utils/tutorial";
 import type { TutorialStep } from "./homeTutorialSteps";
 
@@ -20,7 +21,6 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
   const [step, setStep] = useState(0);
   const [targetRect, setTargetRect] = useState<Rect | null>(null);
   const [cardStyle, setCardStyle] = useState<React.CSSProperties>({});
-
   const currentStep = steps[step];
 
   useLayoutEffect(() => {
@@ -96,11 +96,15 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
 
     observer.observe(element);
 
-    window.addEventListener("scroll", updateRect);
+    window.addEventListener("scroll", updateRect, true);
+
+    const interval = window.setInterval(updateRect, 1000);
 
     return () => {
       observer.disconnect();
-      window.removeEventListener("scroll", updateRect);
+      window.removeEventListener("scroll", updateRect, true);
+
+      clearInterval(interval);
     };
   }, [open, step, currentStep.target]);
 
@@ -114,7 +118,28 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
     return () => cancelAnimationFrame(frame);
   }, [step, open]);
 
-  if (!open) {
+  useEffect(() => {
+    if (!currentStep.waitFor) {
+      return;
+    }
+
+    const handler = () => {
+      if (step === steps.length - 1) {
+        completeTutorial(storageKey);
+        setOpen(false);
+        return;
+      }
+      setStep((value) => value + 1);
+    };
+
+    window.addEventListener(currentStep.waitFor, handler);
+
+    return () => {
+      window.removeEventListener(currentStep.waitFor!, handler);
+    };
+  }, [currentStep]);
+
+  if (!open || !currentStep) {
     return null;
   }
 
@@ -136,13 +161,19 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
     setOpen(false);
   }
 
-  return (
+  return createPortal(
     <div
-      className="
+      data-tutorial
+      className={`
         fixed inset-0
-        z-20000
-        pointer-events-none
-        "
+        z-99999
+        ${
+          currentStep.clickThrough
+            ? "pointer-events-none"
+            : "pointer-events-auto"
+        }
+        `}
+      // onPointerDown={(e) => e.stopPropagation()}
     >
       {!targetRect && <div className="absolute inset-0 bg-black/70" />}
 
@@ -151,6 +182,7 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
         <div
           className="
                 absolute
+                pointer-events-none
                 rounded-lg
                 ring-4
                 ring-white/80
@@ -185,6 +217,8 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
             overflow-y-auto
             "
         style={{ ...cardStyle, maxHeight: "calc(100vh - 2rem)" }}
+        // onPointerDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-1 text-sm text-gray-400">
           Step {step + 1} of {steps.length}
@@ -199,12 +233,16 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
         <div className="flex items-center gap-2">
           {!isFirst && (
             <button
-              onClick={() => setStep((value) => value - 1)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setStep((value) => value - 1);
+              }}
               className="
                 rounded-lg
                 px-4 py-2
                 text-gray-300
                 hover:bg-gray-800
+                pointer-events-auto
                 "
             >
               Back
@@ -212,21 +250,31 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
           )}
 
           <button
-            onClick={skip}
+            onClick={(e) => {
+              e.stopPropagation();
+              skip();
+            }}
             className="
                 ml-auto
                 rounded-lg
                 px-4 py-2
                 text-gray-400
                 hover:bg-gray-800
+                pointer-events-auto
                 "
           >
             Skip
           </button>
 
-          <button
-            onClick={next}
-            className="
+          {currentStep.waitFor ? (
+            <span className="text-gray-400">Tap the highlighted element</span>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                next();
+              }}
+              className="
                 rounded-lg
                 bg-blue-600
                 px-4 py-2
@@ -234,11 +282,13 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
                 text-white
                 hover:bg-blue-500
                 "
-          >
-            {isLast ? "Finish" : "Next"}
-          </button>
+            >
+              {isLast ? "Finish" : "Next"}
+            </button>
+          )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

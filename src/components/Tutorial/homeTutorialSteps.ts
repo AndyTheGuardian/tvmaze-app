@@ -3,6 +3,8 @@ export interface TutorialStep {
   title: string;
   text: string;
   target?: string;
+  waitFor?: string;
+  clickThrough?: boolean;
 }
 
 export const homeTutorialSteps: TutorialStep[] = [
