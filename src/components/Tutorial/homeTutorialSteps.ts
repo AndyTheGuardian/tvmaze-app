@@ -4,7 +4,12 @@ export interface TutorialStep {
   text: string;
   target?: string;
   waitFor?: string;
+
+  // Allows the highlighted element to receive clicks
   clickThrough?: boolean;
+
+  // Keeps the tutorial UI clickable
+  // interactive?: boolean;
 }
 
 export const homeTutorialSteps: TutorialStep[] = [
@@ -54,6 +59,28 @@ export const homeTutorialSteps: TutorialStep[] = [
     title: "Upcoming episodes",
     text: "Your running favorite shows can appear here with their next episode and the number of days until it airs.",
     target: "tutorial-upcoming",
+  },
+  {
+    id: "upcoming-header",
+    title: "Switch to Latest Episodes",
+    text: "Tap on Upcoming Episodes to switch to Latest episodes.",
+    target: "tutorial-upcoming-latest",
+    waitFor: "tutorial-latest-on",
+    clickThrough: true,
+  },
+  {
+    id: "lastest",
+    title: "Latest episodes",
+    text: "Latest Episodes lists the most recent aired episodes of your favorite running shows.",
+    target: "tutorial-upcoming",
+  },
+  {
+    id: "lastest-header",
+    title: "Switch to Upcoming Episodes",
+    text: "Tap on Latest Episodes to switch to back to Upcoming Episodes.",
+    target: "tutorial-upcoming-latest",
+    waitFor: "tutorial-latest-off",
+    clickThrough: true,
   },
   {
     id: "rewatch",

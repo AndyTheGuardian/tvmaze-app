@@ -2,6 +2,7 @@ import { useState } from "react";
 import { formatEpisode } from "../utils/formatEpisode";
 import { getRelativeDay } from "../utils/getRelativeDay";
 import { Link } from "react-router-dom";
+import { emitTutorialEvent } from "../utils/tutorialEvents";
 
 interface Props {
   runningFavorites: any[];
@@ -12,8 +13,14 @@ export function UpcomingEpisodes({ runningFavorites }: Props) {
   return (
     <>
       <h2
+        id="tutorial-upcoming-latest"
         className="my-2 text-lg font-bold cursor-pointer"
-        onClick={() => setShowNext(!showNext)}
+        onClick={() => {
+          setShowNext(!showNext);
+          showNext
+            ? emitTutorialEvent("tutorial-latest-on")
+            : emitTutorialEvent("tutorial-latest-off");
+        }}
       >
         {showNext ? "Upcoming Episodes" : "Latest Episodes"}
       </h2>

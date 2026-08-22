@@ -12,6 +12,16 @@ export const drawerTutorialSteps: TutorialStep[] = [
     title: "Episode image",
     text: "A screenshot from the episode is presented here. Tap it to see a larger version.",
     target: "tutorial-drawer-image",
+    waitFor: "tutorial-image-opened",
+    clickThrough: true,
+  },
+  {
+    id: "episode-image-large",
+    title: "Episode image detail",
+    text: "Tap image again to minimize it and see the guest cast.",
+    target: "tutorial-drawer-largeimage",
+    waitFor: "tutorial-image-closed",
+    clickThrough: true,
   },
   {
     id: "cast",

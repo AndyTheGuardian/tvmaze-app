@@ -5,10 +5,11 @@ import { formatEpisode } from "../utils/formatEpisode";
 import { useGuestCast } from "../hooks/useGuestCast";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { hasCompletedTutorial } from "../utils/tutorial";
+import { useEffect, useRef, useState } from "react";
+import { hasCompletedTutorial, resetTutorial } from "../utils/tutorial";
 import { Tutorial } from "./Tutorial/Tutorial";
 import { drawerTutorialSteps } from "./Tutorial/drawerTutorialSteps";
+import { emitTutorialEvent } from "../utils/tutorialEvents";
 
 interface EpisodeDrawerProps {
   episode: Episode | null;
@@ -21,6 +22,8 @@ export function EpisodeDrawer({
   open,
   onOpenChange,
 }: EpisodeDrawerProps) {
+  const longPressTimer = useRef<number | null>(null);
+  const longPressTriggered = useRef(false);
   const DRAWER_TUTORIAL_KEY = "tutorial-drawer";
   const [activeImage, setActiveImage] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
@@ -37,6 +40,22 @@ export function EpisodeDrawer({
       return () => clearTimeout(timer);
     }
   }, [open]);
+
+  function cancelLongPress() {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }
+
+  function startLongPressTutorial() {
+    longPressTriggered.current = false;
+
+    longPressTimer.current = window.setTimeout(() => {
+      longPressTriggered.current = true;
+      resetTutorial(DRAWER_TUTORIAL_KEY);
+    }, 500);
+  }
 
   return (
     <>
@@ -75,7 +94,14 @@ export function EpisodeDrawer({
               <>
                 <div id="tutorial-drawer-info">
                   <div className="flex">
-                    <h2 className="flex-1 mb-2 text-2xl font-bold">
+                    <h2
+                      className="flex-1 mb-2 text-2xl font-bold"
+                      onMouseDown={startLongPressTutorial}
+                      onMouseUp={cancelLongPress}
+                      onMouseLeave={cancelLongPress}
+                      onTouchStart={startLongPressTutorial}
+                      onTouchEnd={cancelLongPress}
+                    >
                       {episode.name}
                     </h2>
                     <span
@@ -101,7 +127,10 @@ export function EpisodeDrawer({
                     left-1/2 top-28 -translate-1/2
                     h-17 rounded-lg shadow z-9999
                   "
-                      onClick={() => setActiveImage(true)}
+                      onClick={() => {
+                        setActiveImage(true);
+                        emitTutorialEvent("tutorial-image-opened");
+                      }}
                     />
                   )}
                   <div className="relative flex gap-2 mb-2 opacity-60">
@@ -112,11 +141,15 @@ export function EpisodeDrawer({
                   </div>
                   {episode.image && activeImage && (
                     <motion.img
+                      id="tutorial-drawer-largeimage"
                       layoutId={`ep-${episode.id}`}
                       src={episode?.image?.original}
                       alt={episode.name}
                       className="mb-2 w-full rounded-xl shadow"
-                      onClick={() => setActiveImage(false)}
+                      onClick={() => {
+                        setActiveImage(false);
+                        emitTutorialEvent("tutorial-image-closed");
+                      }}
                     />
                   )}
 
