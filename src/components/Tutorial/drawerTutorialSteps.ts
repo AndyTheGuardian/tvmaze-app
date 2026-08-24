@@ -25,13 +25,13 @@ export const drawerTutorialSteps: TutorialStep[] = [
   },
   {
     id: "cast",
-    title: "Guest Cast",
+    title: "Guest cast",
     text: "Shows actors appearing in this episode. Tap on a name to get to this persons page.",
     target: "tutorial-drawer-cast",
   },
   {
     id: "exit",
-    title: "Close Card",
+    title: "Close card",
     text: "To close this card pull it down or tap somewhere outside of it.",
   },
 ];

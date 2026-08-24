@@ -35,12 +35,17 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
       const timer = window.setTimeout(() => {
         const retryElement = document.getElementById(currentStep.target!);
 
-        if (!retryElement) {
-          const nextStep = findNextAvailableStep(step + 1);
+        if (retryElement) {
+          return;
+        }
 
-          if (nextStep !== -1) {
-            setStep(nextStep);
-          }
+        const nextStep = findNextAvailableStep(step + 1);
+
+        if (nextStep !== -1) {
+          setStep(nextStep);
+        } else {
+          completeTutorial(storageKey);
+          setOpen(false);
         }
       }, 300);
 
@@ -155,16 +160,17 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
   }
 
   const isFirst = step === 0;
-  const isLast = step === steps.length - 1;
+
+  const nextAvailableStep = findNextAvailableStep(step + 1);
+  const isLastAvailableStep = nextAvailableStep === -1;
 
   function next() {
-    if (isLast) {
-      completeTutorial(storageKey);
-      setOpen(false);
+    if (nextAvailableStep !== -1) {
+      setStep(nextAvailableStep);
       return;
     }
-
-    setStep((value) => value + 1);
+    completeTutorial(storageKey);
+    setOpen(false);
   }
 
   function skip() {
@@ -323,7 +329,7 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
                 hover:bg-blue-500
                 "
             >
-              {isLast ? "Finish" : "Next"}
+              {isLastAvailableStep ? "Finish" : "Next"}
             </button>
           )}
         </div>
