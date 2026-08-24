@@ -29,4 +29,9 @@ export const drawerTutorialSteps: TutorialStep[] = [
     text: "Shows actors appearing in this episode. Tap on a name to get to this persons page.",
     target: "tutorial-drawer-cast",
   },
+  {
+    id: "exit",
+    title: "Close Card",
+    text: "To close this card pull it down or tap somewhere outside of it.",
+  },
 ];

@@ -32,8 +32,19 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
     const element = document.getElementById(currentStep.target);
 
     if (!element) {
-      setTargetRect(null);
-      return;
+      const timer = window.setTimeout(() => {
+        const retryElement = document.getElementById(currentStep.target!);
+
+        if (!retryElement) {
+          const nextStep = findNextAvailableStep(step + 1);
+
+          if (nextStep !== -1) {
+            setStep(nextStep);
+          }
+        }
+      }, 300);
+
+      return () => clearTimeout(timer);
     }
 
     element.scrollIntoView({
@@ -161,6 +172,34 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
     setOpen(false);
   }
 
+  function back() {
+    const previousStep = findPreviousAvailableStep(step - 1);
+
+    if (previousStep !== -1) {
+      setStep(previousStep);
+    }
+  }
+
+  function findNextAvailableStep(startIndex: number): number {
+    for (let i = startIndex; i < steps.length; i++) {
+      const target = steps[i].target;
+      if (!target || document.getElementById(target)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  function findPreviousAvailableStep(startIndex: number): number {
+    for (let i = startIndex; i >= 0; i--) {
+      const target = steps[i].target;
+      if (!target || document.getElementById(target)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   return createPortal(
     <div
       data-tutorial
@@ -235,7 +274,8 @@ export function Tutorial({ steps, storageKey }: TutorialProps) {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setStep((value) => value - 1);
+                back();
+                // setStep((value) => value - 1);
               }}
               className="
                 rounded-lg

@@ -256,13 +256,11 @@ export function HomePage() {
             <p className="mt-4">Loading...</p>
           )}
 
-          <div id="tutorial-upcoming">
-            {shows.length === 0 &&
-              people.length === 0 &&
-              runningFavorites.length > 0 && (
-                <UpcomingEpisodes runningFavorites={runningFavorites} />
-              )}
-          </div>
+          {shows.length === 0 &&
+            people.length === 0 &&
+            runningFavorites.length > 0 && (
+              <UpcomingEpisodes runningFavorites={runningFavorites} />
+            )}
 
           {search.trim() && shows.length > 0 && (
             <>

@@ -11,7 +11,7 @@ interface Props {
 export function UpcomingEpisodes({ runningFavorites }: Props) {
   const [showNext, setShowNext] = useState(true);
   return (
-    <>
+    <div id="tutorial-upcoming">
       <h2
         id="tutorial-upcoming-latest"
         className="my-2 text-lg font-bold cursor-pointer"
@@ -121,6 +121,6 @@ export function UpcomingEpisodes({ runningFavorites }: Props) {
           }
         })}
       </div>
-    </>
+    </div>
   );
 }
