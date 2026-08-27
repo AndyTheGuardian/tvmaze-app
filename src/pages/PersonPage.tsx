@@ -4,12 +4,16 @@ import { usePerson } from "../hooks/usePerson";
 import { ShowCard } from "../components/ShowCard";
 import { Heart, VenetianMask } from "lucide-react";
 import { groupedCastCreditsByShow } from "../utils/groupedCastCreditsByShow";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { isFavoritePerson, toggleFavoritePerson } from "../utils/favorites";
 import { AnimatePresence, motion } from "framer-motion";
 import { getAge } from "../utils/getAge";
 import type { PersonCredit } from "../types/tvmaze";
 import { getGuestCastCredits } from "../utils/getGuestCastCredits";
+import { Tutorial } from "../components/Tutorial/Tutorial";
+import { personTutorialSteps } from "../components/Tutorial/personTutorialSteps";
+import { emitTutorialEvent } from "../utils/tutorialEvents";
+import { resetTutorial } from "../utils/tutorial";
 
 export function PersonPage() {
   const { id } = useParams();
@@ -60,6 +64,27 @@ export function PersonPage() {
     };
   }, [person?.image?.original]);
 
+  const STORAGE_KEY = "tutorial-person";
+
+  const longPressTimer = useRef<number | null>(null);
+  const longPressTriggered = useRef(false);
+
+  function cancelLongPress() {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }
+
+  function startLongPressTutorial() {
+    longPressTriggered.current = false;
+
+    longPressTimer.current = window.setTimeout(() => {
+      longPressTriggered.current = true;
+      resetTutorial(STORAGE_KEY);
+    }, 500);
+  }
+
   return (
     <div className="relative min-h-screen bg-black">
       <div
@@ -91,13 +116,20 @@ export function PersonPage() {
         >
           <div className="flex">
             <h1
+              id="tutorial-person-name"
               className="
                 flex-1 mb-2 text-wrap
                 text-2xl font-bold"
+              onMouseDown={startLongPressTutorial}
+              onMouseUp={cancelLongPress}
+              onMouseLeave={cancelLongPress}
+              onTouchStart={startLongPressTutorial}
+              onTouchEnd={cancelLongPress}
             >
               {person?.name}
             </h1>
             <Heart
+              id="tutorial-person-favorite"
               size={20}
               fill={favorite ? "white" : "none"}
               stroke="white"
@@ -137,6 +169,7 @@ export function PersonPage() {
               >
                 {person?.image && (
                   <motion.img
+                    id="tutorial-person-image"
                     layoutId={`person-${person.id}`}
                     src={person.image.medium}
                     alt={person.name}
@@ -147,7 +180,10 @@ export function PersonPage() {
                       cursor-pointer
                       z-999
                     "
-                    onClick={() => setZoomed(true)}
+                    onClick={() => {
+                      setZoomed(true);
+                      emitTutorialEvent("tutorial-image-opened");
+                    }}
                   />
                 )}
                 {!person?.image && (
@@ -170,7 +206,10 @@ export function PersonPage() {
                     text-gray-50
                     "
                 >
-                  <div className="grid grid-cols-[52px_1fr] gap-x-2 gap-y-1">
+                  <div
+                    id="tutorial-person-details"
+                    className="grid grid-cols-[52px_1fr] gap-x-2 gap-y-1"
+                  >
                     {person?.birthday && (
                       <>
                         <p className="opacity-60 font-semibold w-15">Born</p>
@@ -212,6 +251,7 @@ export function PersonPage() {
               </div>
             </div>
             <div
+              id="tutorial-person-credits"
               className="p-3 w-full
               text-gray-950 
               bg-gray-200/60
@@ -301,7 +341,10 @@ export function PersonPage() {
             </div>
           </div>
           <div className="mb-2 font-bold text-xl">Known for</div>
-          <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+          <div
+            id="tutorial-person-knownfor"
+            className="grid gap-4 grid-cols-2 md:grid-cols-4"
+          >
             {uniqueShows?.map((credit) => {
               return (
                 <ShowCard
@@ -334,12 +377,16 @@ export function PersonPage() {
               flex items-center justify-center
               bg-black/80
             "
-            onClick={() => setZoomed(false)}
+            onClick={() => {
+              setZoomed(false);
+              emitTutorialEvent("tutorial-image-closed");
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.img
+              id="tutorial-person-imagelarge"
               layoutId={`person-${person.id}`}
               src={person.image.original ?? person.image.medium}
               alt={person.name}
@@ -375,6 +422,7 @@ export function PersonPage() {
           />
         </div>
       )} */}
+      <Tutorial steps={personTutorialSteps} storageKey={STORAGE_KEY} />
     </div>
   );
 }

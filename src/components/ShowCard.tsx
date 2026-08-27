@@ -12,6 +12,7 @@ export function ShowCard({ show, animate = false }: Props) {
   return (
     <Link key={show.id} to={`/show/${show.id}`} state={{ fromCard: true }}>
       <div
+        id="tutorial-showcard"
         className="overflow-hidden rounded-lg 
         text-gray-950
         shadow-sm backdrop-blur-sm

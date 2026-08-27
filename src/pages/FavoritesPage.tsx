@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SquareArrowRightExit, SquareArrowRightEnter } from "lucide-react";
 
 import { getFavoriteShows, getFavoritePersons } from "../utils/favorites";
 import type { CardData } from "../types/tvmaze";
 import { MediaCard } from "../components/MediaCard";
 import { useSearchParams } from "react-router-dom";
+import { Tutorial } from "../components/Tutorial/Tutorial";
+import { favoritesTutorialSteps } from "../components/Tutorial/favoritesTutorialSteps";
+import { resetTutorial } from "../utils/tutorial";
 
 export function FavoritesPage() {
   const [favoriteShows, setFavoriteShows] = useState<CardData[]>([]);
@@ -30,6 +33,27 @@ export function FavoritesPage() {
 
   const favorites =
     activeTab === "shows" ? sortedFavoriteShows : sortedFavoritePersons;
+
+  const STORAGE_KEY = "tutorial-favorites";
+
+  const longPressTimer = useRef<number | null>(null);
+  const longPressTriggered = useRef(false);
+
+  function cancelLongPress() {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }
+
+  function startLongPressTutorial() {
+    longPressTriggered.current = false;
+
+    longPressTimer.current = window.setTimeout(() => {
+      longPressTriggered.current = true;
+      resetTutorial(STORAGE_KEY);
+    }, 500);
+  }
 
   return (
     <div className="bg-gray-900 min-h-screen min-w-screen">
@@ -62,9 +86,15 @@ export function FavoritesPage() {
         >
           <div className="flex gap-4">
             <h1
+              id="tutorial-rewatch"
               className="
               mb-3 md:mb-6 flex-1
               text-2xl font-bold"
+              onMouseDown={startLongPressTutorial}
+              onMouseUp={cancelLongPress}
+              onMouseLeave={cancelLongPress}
+              onTouchStart={startLongPressTutorial}
+              onTouchEnd={cancelLongPress}
             >
               Favorites
             </h1>
@@ -77,7 +107,7 @@ export function FavoritesPage() {
               }}
               className="-mt-3.5 md:-mt-6 opacity-50"
             >
-              <SquareArrowRightExit size={17} />
+              <SquareArrowRightExit id="tutorial-favorites-copy" size={17} />
             </button>
             <p className="text-sm text-gray-500/80 mt-1.25">|</p>
             <button
@@ -88,11 +118,12 @@ export function FavoritesPage() {
               }}
               className="-mt-3.25 md:-mt-6 opacity-50"
             >
-              <SquareArrowRightEnter size={18} />
+              <SquareArrowRightEnter id="tutorial-favorites-paste" size={18} />
             </button>
           </div>
           <div className="mb-4 flex gap-4 text-sm text-gray-950">
             <button
+              id="tutorial-favorites-shows"
               onClick={() => setSearchParams({ tab: "shows" })}
               className={`flex-1 rounded px-2 py-1 ${
                 activeTab === "shows"
@@ -108,6 +139,7 @@ export function FavoritesPage() {
               </div>
             </button>
             <button
+              id="tutorial-favorites-cast"
               onClick={() => setSearchParams({ tab: "persons" })}
               className={`flex-1 flex rounded px-2 py-1 ${
                 activeTab === "persons"
@@ -124,28 +156,31 @@ export function FavoritesPage() {
             </button>
           </div>
 
-          {favorites.length === 0 ? (
-            <div className="rounded-lg bg-black/40 p-6 text-center">
-              No favorites yet.
-            </div>
-          ) : (
-            <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
-              {favorites.map((favorite) => (
-                <MediaCard
-                  item={favorite}
-                  to={
-                    activeTab === "shows"
-                      ? `/show/${favorite.id}`
-                      : `/person/${favorite.id}`
-                  }
-                  type={activeTab === "shows" ? "show" : "person"}
-                  animate
-                />
-              ))}
-            </div>
-          )}
+          <div id="tutorial-favorites-elements">
+            {favorites.length === 0 ? (
+              <div className="rounded-lg bg-black/40 p-6 text-center">
+                No favorites yet.
+              </div>
+            ) : (
+              <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+                {favorites.map((favorite) => (
+                  <MediaCard
+                    item={favorite}
+                    to={
+                      activeTab === "shows"
+                        ? `/show/${favorite.id}`
+                        : `/person/${favorite.id}`
+                    }
+                    type={activeTab === "shows" ? "show" : "person"}
+                    animate
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </main>
+      <Tutorial steps={favoritesTutorialSteps} storageKey={STORAGE_KEY} />
     </div>
   );
 }

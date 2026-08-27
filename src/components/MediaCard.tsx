@@ -19,6 +19,7 @@ export function MediaCard({
   return (
     <Link key={item.id} to={to} state={{ fromCard: true }}>
       <div
+        id="tutorial-mediacard"
         className="overflow-hidden rounded-lg 
         text-gray-950
         shadow-sm backdrop-blur-sm
