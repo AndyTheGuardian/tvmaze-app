@@ -9,7 +9,7 @@ export const personTutorialSteps: TutorialStep[] = [
   {
     id: "person-name",
     title: "Person name",
-    text: "You get all availible details about this person.",
+    text: "You get all available details about this person.",
     target: "tutorial-person-name",
   },
   {
@@ -37,7 +37,7 @@ export const personTutorialSteps: TutorialStep[] = [
   {
     id: "person-details",
     title: "Personal details",
-    text: "Details about the person are shown here. Depending on their availability, not all details show all infos.",
+    text: "Biographical details about the person are shown here.",
     target: "tutorial-person-details",
   },
   {
@@ -49,7 +49,7 @@ export const personTutorialSteps: TutorialStep[] = [
   {
     id: "person-knownfor",
     title: "Known for",
-    text: "In addidtion to the credits, you can browse credited shows in this section. Tap a show to get to it's page.",
+    text: "In addition to the credits, you can browse credited shows in this section. Tap a show to get to it's page.",
     target: "tutorial-person-knownfor",
   },
   {
